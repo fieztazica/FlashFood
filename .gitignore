@@ -10,7 +10,8 @@
 *.userosscache
 *.sln.docstates
 connectionStrings.config
-secrest.config
+secrets.config
+.vscode/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
