@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import AppLayout from '@/components/layouts/appLayout'
 import { Box, Button, Heading } from '@chakra-ui/react'
-//
+
 function Home() {
     return (
         <>
