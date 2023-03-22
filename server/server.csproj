@@ -294,7 +294,6 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
-    <Content Include="secrets.config" />
     <Content Include="connectionStrings.config" />
     <None Include="Properties\PublishProfiles\server20230321160155 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
@@ -322,6 +321,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="secrets.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
