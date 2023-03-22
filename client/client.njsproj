@@ -21,14 +21,13 @@
   <ItemGroup>
     <Content Include=".eslintrc.json" />
     <None Include="jsconfig.json" />
-    <Content Include="lib\gateway.js">
-      <SubType>Code</SubType>
-    </Content>
     <Content Include="package-lock.json" />
     <Content Include="package.json" />
     <Content Include="pages\login.js">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="pages\register.js" />
+    <Content Include="lib\serverInstance.js" />
     <Content Include="README.md" />
     <Content Include="next.config.js" />
     <Content Include="pages\index.js" />
@@ -44,12 +43,13 @@
     <Content Include="components\shared\footer.js" />
     <Content Include="components\shared\header.js" />
     <Content Include="lib\index.js" />
-    <Content Include="lib\useAuth.js" />
+    <Content Include="lib\AppContext.js" />
     <Content Include="pages\api\hello.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="components" />
     <Folder Include="components\layouts" />
+    <Folder Include="components\form\" />
     <Folder Include="components\shared" />
     <Folder Include="lib" />
     <Folder Include="pages" />
