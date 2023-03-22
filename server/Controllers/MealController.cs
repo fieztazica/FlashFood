@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace server.Controllers
 {
+    [System.Web.Http.Authorize]
     public class MealController : ApiController
     {
 
