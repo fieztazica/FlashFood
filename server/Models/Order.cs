@@ -7,8 +7,8 @@ using System.Web;
 
 namespace server.Models
 {
-    [Table("Oder")]
-    public class Oder
+    [Table("Order")]
+    public class Order
     {
         [Key]
         public int Id { get; set; }
@@ -31,9 +31,9 @@ namespace server.Models
 
         public ApplicationUser User { get; set; }
         public ApplicationUser Seller { get; set; }
-        public ICollection<OderItem> oderItems { get; set; }
+        public ICollection<OrderItem> oderItems { get; set; }
 
-        public Oder()
+        public Order()
         {
             OderAt = DateTime.Now;
         }

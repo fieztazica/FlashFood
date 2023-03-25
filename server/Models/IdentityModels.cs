@@ -28,7 +28,7 @@ namespace server.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
-        public ICollection<Oder> Oders { get; set; }
+        public ICollection<Order> Orders { get; set; }
         public ICollection<CartItem> CartItems { get; set; }
     }
 
@@ -36,8 +36,8 @@ namespace server.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Meal> meals { get; set; }
-        public DbSet<Oder> Oder { get; set; }
-        public DbSet<OderItem> oderitem { get; set; }
+        public DbSet<Order> Order { get; set; }
+        public DbSet<OrderItem> Orderitem { get; set; }
         public DbSet<CartItem> cartitem { get; set; }
 
         public ApplicationDbContext()
@@ -60,24 +60,24 @@ namespace server.Models
 
 
 
-            modelBuilder.Entity<Oder>()
+            modelBuilder.Entity<Order>()
             .HasRequired<ApplicationUser>(s => s.Seller)
-            .WithMany(g => g.Oders)
+            .WithMany(g => g.Orders)
             .HasForeignKey<string>(s => s.SellerId);
 
-            modelBuilder.Entity<Oder>()
+            modelBuilder.Entity<Order>()
             .HasRequired<ApplicationUser>(s => s.Seller)
-            .WithMany(g => g.Oders)
+            .WithMany(g => g.Orders)
             .HasForeignKey<string>(s => s.SellerId);
 
-            modelBuilder.Entity<OderItem>()
-            .HasKey(e => new { e.MealId, e.OderId })
-            .HasRequired<Oder>(s => s.Oder)
+            modelBuilder.Entity<OrderItem>()
+            .HasKey(e => new { e.MealId, e.OrderId })
+            .HasRequired<Order>(s => s.Order)
             .WithMany(g => g.oderItems)
-            .HasForeignKey<int>(s => s.OderId);
+            .HasForeignKey<int>(s => s.OrderId);
 
-            modelBuilder.Entity<OderItem>()
-            .HasKey(e => new { e.MealId, e.OderId })
+            modelBuilder.Entity<OrderItem>()
+            .HasKey(e => new { e.MealId, e.OrderId })
             .HasRequired<Meal>(s => s.Meal)
             .WithMany(g => g.oderItems)
             .HasForeignKey<int>(s => s.MealId);

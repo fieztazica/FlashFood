@@ -9,34 +9,34 @@ using System.Web.Http;
 
 namespace server.Controllers
 {
-    public class OderItemController : ApiController
+    public class OrderItemController : ApiController
     {
         private readonly ApplicationDbContext _context;
 
-        public OderItemController()
+        public OrderItemController()
         {
             _context = new ApplicationDbContext();
         }
         // GET api/<controller>
         public IHttpActionResult Get()
         {
-            var Oderitem = _context.oderitem.ToList();
-            if (Oderitem == null || Oderitem.Count == 0)
+            var Orderitem = _context.Orderitem.ToList();
+            if (Orderitem == null || Orderitem.Count == 0)
             {
                 return NotFound();
             }
-            return (IHttpActionResult)Ok(Oderitem);
+            return (IHttpActionResult)Ok(Orderitem);
         }
 
         // GET api/<controller>/5
         public IHttpActionResult Get(int id)
         {
-            var Oderitem = _context.oderitem.Where(s => s.OderId == id).ToList();
-            if (Oderitem == null || Oderitem.Count == 0)
+            var Orderitem = _context.Orderitem.Where(s => s.OrderId == id).ToList();
+            if (Orderitem == null || Orderitem.Count == 0)
             {
                 return NotFound();
             }
-            return (IHttpActionResult)Ok(Oderitem);
+            return (IHttpActionResult)Ok(Orderitem);
         }
 
         // POST api/<controller>

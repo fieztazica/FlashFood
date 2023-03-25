@@ -8,46 +8,46 @@ using System.Web.Http;
 
 namespace server.Controllers
 {
-    public class OderController : ApiController
+    public class OrderController : ApiController
     {
         private readonly ApplicationDbContext _context;
 
 
-        public OderController()
+        public OrderController()
         {
             _context = new ApplicationDbContext();
         }
         // GET api/<controller>
         public IHttpActionResult Get()
         {
-            var Oder = _context.Oder.ToList();
-            if (Oder == null || Oder.Count == 0)
+            var Order = _context.Order.ToList();
+            if (Order == null || Order.Count == 0)
             {
                 return NotFound();
             }
-            return (IHttpActionResult)Ok(Oder);
+            return (IHttpActionResult)Ok(Order);
         }
         //Get by UserID
         // GET api/<controller>/5
         [HttpGet]
         public IHttpActionResult GetByUser(string Userid)
         {
-            var Oder_User = _context.Oder.Where(a => a.UserId == Userid).ToList();
+            var Order_User = _context.Order.Where(a => a.UserId == Userid).ToList();
             if (Userid == null)
             {
                 return NotFound();
             }
-            return (IHttpActionResult) Ok(Oder_User);
+            return (IHttpActionResult) Ok(Order_User);
         }
         [HttpGet]
         public IHttpActionResult GetBySeller(string Sellerid)
         {
-            var Oder_Seller = _context.Oder.Where(a => a.SellerId == Sellerid).ToList();
+            var Order_Seller = _context.Order.Where(a => a.SellerId == Sellerid).ToList();
             if (Sellerid == null)
             {
                 return NotFound();
             }
-            return (IHttpActionResult)Ok(Oder_Seller);
+            return (IHttpActionResult)Ok(Order_Seller);
         }
         // POST api/<controller>
         public void Post([FromBody] string value)

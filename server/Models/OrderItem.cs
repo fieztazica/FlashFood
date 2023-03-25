@@ -6,14 +6,14 @@ using System.Web;
 
 namespace server.Models
 {
-    public class OderItem
+    public class OrderItem
     {
-        public int OderId { get; set; }
+        public int OrderId { get; set; }
         public int MealId { get; set; }
         [Required]
         public double Amount { get; set; }
 
-        public Oder Oder { get; set; }
+        public Order Order { get; set; }
         public Meal Meal { get; set; }
     }
 }
