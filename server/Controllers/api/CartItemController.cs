@@ -26,7 +26,7 @@ namespace server.Controllers
             {
                 return NotFound();
             }
-            return (IHttpActionResult)Ok(Cartitem);
+            return Ok(Cartitem);
         }
 
         // GET api/<controller>/5
@@ -37,7 +37,7 @@ namespace server.Controllers
             {
                 return NotFound();
             }
-            return (IHttpActionResult)Ok(Cartitem);
+            return Ok(Cartitem);
         }
 
         // POST api/<controller>
