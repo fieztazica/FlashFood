@@ -72,7 +72,7 @@ namespace server.Controllers.api
         }
         // POST api/<controller>/id
         [Authorize(Roles = "Admin, Manager")]
-        public IHttpActionResult Post(int id,MealEditBindingModel model)
+        public IHttpActionResult Post(int id, MealEditBindingModel model)
         {
             if (!ModelState.IsValid)
             {
