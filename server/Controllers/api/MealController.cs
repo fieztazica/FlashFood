@@ -7,11 +7,10 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using System.Web.Mvc;
 
 namespace server.Controllers.api
 {
-    [System.Web.Http.Authorize]
+    [Authorize]
     public class MealController : ApiController
     {
 
@@ -22,7 +21,9 @@ namespace server.Controllers.api
         {
             _context = new ApplicationDbContext();
         }
+
         // GET api/<controller>
+        [AllowAnonymous]
         public IHttpActionResult Get()
         {
             var meals = _context.meals.ToList();
@@ -35,6 +36,7 @@ namespace server.Controllers.api
 
 
         // GET api/<controller>/5
+        [AllowAnonymous]
         public IHttpActionResult Get(int id)
         {
             var meals_Id = _context.meals.FirstOrDefault(a => a.Id == id);
@@ -46,6 +48,7 @@ namespace server.Controllers.api
         }
 
         // POST api/<controller>
+        [Authorize(Roles = "Admin, Manager")]
         public IHttpActionResult Post(MealBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -62,6 +65,7 @@ namespace server.Controllers.api
             return Ok("Has Save");
         }
         // POST api/<controller>/id
+        [Authorize(Roles = "Admin, Manager")]
         public IHttpActionResult Post(int id,MealEditBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -79,9 +83,11 @@ namespace server.Controllers.api
             _context.SaveChanges();
             return Ok("Has Save");
         }
+
         // PUT api/<controller>
 
         // DELETE api/<controller>/5
+        [Authorize(Roles = "Admin, Manager")]
         public IHttpActionResult Delete(int id)
         {
             var DeleteMeal = _context.meals.FirstOrDefault(a => a.Id == id);
