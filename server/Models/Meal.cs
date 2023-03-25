@@ -14,7 +14,19 @@ namespace server.Models
         public int Id { get; set; }
         [Required]
         public int Price { get; set; }
+
+        [Required]
+        [StringLength(250)]
+        public string Name { get; set; }
         [Required]
         public int AmountLeft { get; set; }
+        [Required]
+        [StringLength(250)]
+        public string ImageURL { get; set; }
+        [Required]
+        public string Type { get; set;}
+
+        public ICollection<OderItem> oderItems { get; set; }
+        public ICollection<CartItem> cartItems { get; set; }
     }
 }

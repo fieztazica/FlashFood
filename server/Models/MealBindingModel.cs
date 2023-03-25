@@ -17,9 +17,18 @@ namespace server.Models
         [Required]
         [Display(Name = "AmountLeft")]
         public int AmountLeft { get; set; }
+        [Required]
+        [Display(Name = "Name")]
+        public string Name { get; set; }
+        [Required]
+        [Display(Name = "ImageURL")]
+        public string ImageURL { get; set; }
+        [Required]
+        [Display(Name = "Type")]
+        public string Type { get; set; }
     }
 
-    public class MealEditBindingModel
+    public class MealEditBlindingModel
     {
         [Required]
         [Display(Name = "Price")]
@@ -27,5 +36,14 @@ namespace server.Models
         [Required]
         [Display(Name = "AmountLeft")]
         public int AmountLeft { get; set; }
+        [Required]
+        [Display(Name = "Name")]
+        public string Name { get; set; }
+        [Required]
+        [Display(Name = "ImageURL")]
+        public string ImageURL { get; set; }
+        [Required]
+        [Display(Name = "Type")]
+        public string Type { get; set; }
     }
 }

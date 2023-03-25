@@ -59,7 +59,13 @@ namespace server.Controllers.api
             {
                 return BadRequest();
             }
-            var New_meal = new Meal() {AmountLeft = model.AmountLeft, Price = model.Price };
+            var New_meal = new Meal() {
+                AmountLeft = model.AmountLeft,
+                Price = model.Price,
+                Name = model.Name,
+                ImageURL = model.ImageURL,
+                Type = model.Type,
+            };
             _context.meals.Add(New_meal);
             _context.SaveChanges();
             return Ok("Has Save");
@@ -79,6 +85,9 @@ namespace server.Controllers.api
             }
             EditMeal.AmountLeft = model.AmountLeft;
             EditMeal.Price = model.Price;
+            EditMeal.Name = model.Name;
+            EditMeal.ImageURL = model.ImageURL;
+            EditMeal.Type = model.Type;
             _context.meals.AddOrUpdate(EditMeal);
             _context.SaveChanges();
             return Ok("Has Save");
