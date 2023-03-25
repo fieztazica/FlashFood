@@ -68,7 +68,7 @@ namespace server.Controllers.api
             };
             _context.meals.Add(New_meal);
             _context.SaveChanges();
-            return Ok("Has Save");
+            return Ok("Saved");
         }
         // POST api/<controller>/id
         [Authorize(Roles = "Admin, Manager")]
@@ -90,7 +90,7 @@ namespace server.Controllers.api
             EditMeal.Type = model.Type;
             _context.meals.AddOrUpdate(EditMeal);
             _context.SaveChanges();
-            return Ok("Has Save");
+            return Ok("Saved");
         }
 
         // PUT api/<controller>
@@ -106,7 +106,7 @@ namespace server.Controllers.api
             }
             _context.meals.Remove(DeleteMeal);
             _context.SaveChanges();
-            return Ok("Has Save");
+            return Ok("Saved");
         }
     }
 }

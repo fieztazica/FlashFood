@@ -43,7 +43,7 @@ namespace server.Controllers.api
         public IHttpActionResult Post(int id)
         {
             
-            return Ok("Has Save");
+            return Ok("Saved");
         }
 
         // PUT api/<controller>/5

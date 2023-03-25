@@ -61,7 +61,7 @@ namespace server.Controllers.api
             };
             _context.cartitem.Add(New_cart);
             _context.SaveChanges();
-            return Ok("Has Save");
+            return Ok("Saved");
         }
         [HttpPost]
         public IHttpActionResult PostUpdate(CartDeleteBlidingModel model)
@@ -79,7 +79,7 @@ namespace server.Controllers.api
             EditCart.Amount = model.Amount;
             _context.cartitem.AddOrUpdate(EditCart);
             _context.SaveChanges();
-            return Ok("Has Save");
+            return Ok("Saved");
         }
 
         // DELETE api/<controller>/5
@@ -93,7 +93,7 @@ namespace server.Controllers.api
             }
             _context.cartitem.Remove(DeleteCart);
             _context.SaveChanges();
-            return Ok("Has Save");
+            return Ok("Saved");
         }
     }
 }
