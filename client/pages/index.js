@@ -1,7 +1,6 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import AppLayout from '@/components/layouts/appLayout'
-import { Box, Button, Heading } from '@chakra-ui/react'
+import { Box, Button, Heading, Image } from '@chakra-ui/react'
 import { useAppStates } from '../lib/AppContext'
 
 function Home() {
@@ -12,6 +11,7 @@ function Home() {
                 <Heading>
                     {user?.["Email"]}
                 </Heading>
+                <Image src="https://cdn.discordapp.com/attachments/854996766154817559/1089082539056050197/image.png"></Image>
                 <Button>
                     nut
                 </Button>

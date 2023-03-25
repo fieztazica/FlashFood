@@ -12,13 +12,7 @@ export const controllers = {
 export default function api(instance) {
     instance.defaults.headers.post["Content-Type"] = 'application/json';
 
-    /**
-     * 
-     * @param {string} email
-     * @param {string} password
-     * @param {boolean} rememberMe
-     */
-    const login = async (email, password, rememberMe = false) => {
+    const login = async ({ email, password, rememberMe = false, ...props }) => {
         const { data } = await instance.post(`${controllers.account}/Login`, {
             "Email": email,
             "Password": password
@@ -37,8 +31,12 @@ export default function api(instance) {
         delete instance.defaults.headers.common['Authorization']
     }
 
-    const register = () => {
-
+    const register = async ({ email, password, confirmPassword, ...props }) => {
+        const res = await instance.post(`${controllers.account}/Register`, {
+            "Email": email,
+            "Password": password,
+            "ConfirmPassword": confirmPassword
+        });
     }
 
     const logout = () => {

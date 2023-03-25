@@ -20,15 +20,14 @@ function Login() {
     const { api, user } = useAppStates();
     const toast = useToast();
     const [loading, setLoading] = useState(false);
-    const pushTo = redirectTo ? `${decodeURIComponent(redirectTo)}` : `/`
 
     const formik = useFormik({
         initialValues,
         onSubmit: async (values) => {
             try {
                 setLoading(true);
-                await api.login(values.email, values.password);
-                router.push(pushTo)
+                await api.login(values);
+                router.push(redirectTo ? `${decodeURIComponent(redirectTo)}` : `/`)
                 toast({
                     title: 'Success!',
                     status: 'success',
@@ -47,7 +46,7 @@ function Login() {
 
     useEffect(() => {
         if (!!user) {
-            router.push(pushTo);
+            router.push(redirectTo ? `${decodeURIComponent(redirectTo)}` : `/`);
         }
     }, [user]);
 

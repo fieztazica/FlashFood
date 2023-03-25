@@ -324,7 +324,6 @@ namespace server.Controllers.api
             return logins;
         }
 
-
         // POST api/Account/Login
         [AllowAnonymous]
         [Route("Login")]
