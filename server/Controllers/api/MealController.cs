@@ -30,7 +30,7 @@ namespace server.Controllers.api
             {
                 return NotFound();
             }
-            return (IHttpActionResult)Ok(meals);
+            return Ok(meals);
         }
 
 
@@ -42,7 +42,7 @@ namespace server.Controllers.api
             {
                 return NotFound();
             }
-            return (IHttpActionResult)Ok(meals_Id);
+            return Ok(meals_Id);
         }
 
         // POST api/<controller>
