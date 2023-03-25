@@ -6,7 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
-namespace server.Controllers
+namespace server.Controllers.api
 {
     public class OrderController : ApiController
     {
@@ -25,7 +25,7 @@ namespace server.Controllers
             {
                 return NotFound();
             }
-            return (IHttpActionResult)Ok(Order);
+            return Ok(Order);
         }
         //Get by UserID
         // GET api/<controller>/5
@@ -37,7 +37,7 @@ namespace server.Controllers
             {
                 return NotFound();
             }
-            return (IHttpActionResult) Ok(Order_User);
+            return Ok(Order_User);
         }
         [HttpGet]
         public IHttpActionResult GetBySeller(string Sellerid)
@@ -47,7 +47,7 @@ namespace server.Controllers
             {
                 return NotFound();
             }
-            return (IHttpActionResult)Ok(Order_Seller);
+            return Ok(Order_Seller);
         }
         // POST api/<controller>
         public void Post([FromBody] string value)

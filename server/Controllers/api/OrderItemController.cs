@@ -7,7 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
-namespace server.Controllers
+namespace server.Controllers.api
 {
     public class OrderItemController : ApiController
     {
@@ -25,7 +25,7 @@ namespace server.Controllers
             {
                 return NotFound();
             }
-            return (IHttpActionResult)Ok(Orderitem);
+            return Ok(Orderitem);
         }
 
         // GET api/<controller>/5
@@ -36,7 +36,7 @@ namespace server.Controllers
             {
                 return NotFound();
             }
-            return (IHttpActionResult)Ok(Orderitem);
+            return Ok(Orderitem);
         }
 
         // POST api/<controller>
