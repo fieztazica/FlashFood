@@ -231,6 +231,7 @@
     <Compile Include="Controllers\CartItemController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MealController.cs" />
+    <Compile Include="Controllers\OderController.cs" />
     <Compile Include="Controllers\OderItemController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
@@ -252,9 +253,14 @@
     <Compile Include="Migrations\202303241329090_updateAlldata.designer.cs">
       <DependentUpon>202303241329090_updateAlldata.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202303250752048_updateUser.cs" />
+    <Compile Include="Migrations\202303250752048_updateUser.designer.cs">
+      <DependentUpon>202303250752048_updateUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\CartBlidingModel.cs" />
     <Compile Include="Models\CartItem.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Meal.cs" />
@@ -428,6 +434,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202303241329090_updateAlldata.resx">
       <DependentUpon>202303241329090_updateAlldata.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202303250752048_updateUser.resx">
+      <DependentUpon>202303250752048_updateUser.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -68,7 +68,7 @@ namespace server.Controllers
             return Ok("Has Save");
         }
         // POST api/<controller>/id
-        public IHttpActionResult Post(int id,MealEditBindingModel model)
+        public IHttpActionResult Post(int id, MealEditBlindingModel model)
         {
             if (!ModelState.IsValid)
             {

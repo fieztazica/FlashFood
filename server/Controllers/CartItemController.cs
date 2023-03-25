@@ -1,6 +1,7 @@
 ﻿using server.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -30,7 +31,7 @@ namespace server.Controllers
         // GET api/<controller>/5
         public IHttpActionResult Get(string id)
         {
-            var Cartitem = _context.cartitem.Where(s => s.UserId == id).ToList();
+            List<CartItem> Cartitem = _context.cartitem.Where(s => s.UserId == id).ToList();
             if (Cartitem == null || Cartitem.Count == 0)
             {
                 return NotFound();
@@ -39,18 +40,59 @@ namespace server.Controllers
         }
 
         // POST api/<controller>
-        public void Post([FromBody] string value)
+        public IHttpActionResult Post(CartBlidingModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            if (_context.meals.FirstOrDefault(a => a.Id == model.MealId) == null)
+            {
+                return BadRequest();
+            }
+            var New_cart = new CartItem()
+            {
+                MealId = model.MealId,
+                UserId = model.UserId,
+                Amount = model.Amount,
+                //Meal = _context.meals.FirstOrDefault(a => a.Id == model.MealId),
+                //User = _context.Users.FirstOrDefault(a => a.Id == model.UserId)
+            };
+            _context.cartitem.Add(New_cart);
+            _context.SaveChanges();
+            return Ok("Has Save");
         }
-
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody] string value)
+        [HttpPost]
+        public IHttpActionResult PostUpdate(CartDeleteBlidingModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            if (_context.meals.FirstOrDefault(a => a.Id == model.MealId) == null)
+            {
+                return BadRequest();
+            }
+            List<CartItem> Cartitem = _context.cartitem.Where(s => s.UserId == model.UserId).ToList();
+            CartItem EditCart = Cartitem.Find(a => a.MealId == model.MealId);
+            EditCart.Amount = model.Amount;
+            _context.cartitem.AddOrUpdate(EditCart);
+            _context.SaveChanges();
+            return Ok("Has Save");
         }
 
         // DELETE api/<controller>/5
-        public void Delete(int id)
+        public IHttpActionResult Delete(CartDeleteBlidingModel model)
         {
+            List<CartItem> Cartitem = _context.cartitem.Where(s => s.UserId == model.UserId).ToList();
+            CartItem DeleteCart = Cartitem.Find(a => a.MealId == model.MealId);
+            if (DeleteCart == null)
+            {
+                return BadRequest();
+            }
+            _context.cartitem.Remove(DeleteCart);
+            _context.SaveChanges();
+            return Ok("Has Save");
         }
     }
 }

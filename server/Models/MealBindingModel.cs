@@ -28,7 +28,7 @@ namespace server.Models
         public string Type { get; set; }
     }
 
-    public class MealEditBindingModel
+    public class MealEditBlindingModel
     {
         [Required]
         [Display(Name = "Price")]

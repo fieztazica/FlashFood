@@ -25,6 +25,8 @@ namespace server.Models
         {
             throw new NotImplementedException();
         }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
 
         public ICollection<Oder> Oders { get; set; }
         public ICollection<CartItem> CartItems { get; set; }
