@@ -375,6 +375,8 @@ namespace server.Controllers.api
                 return GetErrorResult(result);
             }
 
+            UserManager.AddToRole(user.Id, "Customer");
+
             return Ok();
         }
 
@@ -408,6 +410,9 @@ namespace server.Controllers.api
             {
                 return GetErrorResult(result); 
             }
+
+            UserManager.AddToRole(user.Id, "Customer");
+
             return Ok();
         }
 

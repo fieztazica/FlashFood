@@ -50,7 +50,7 @@
 
         $.ajax({
             type: 'GET',
-            url: '/api/values',
+            url: '/api/values/get/5',
             headers: headers
         }).done(function (data) {
             self.result(data);

@@ -6,12 +6,12 @@ using System.Web.Mvc;
 
 namespace server.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin, Manager, Employee")]
     public class StaffController : Controller
     {
         public ActionResult Index()
         {
-            return View();
+            return RedirectToAction("Index", "Home");
         }
 
         [AllowAnonymous]
@@ -19,7 +19,7 @@ namespace server.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index");
             }
 
             return View();
@@ -30,7 +30,7 @@ namespace server.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index");
             }
 
             return View();

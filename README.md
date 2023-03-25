@@ -14,5 +14,7 @@ Add 2 more files to run correctly:
 ```xml
 <appSettings>
 	<add key ="TokenKey" value="(Random JWT Key Value)"/>
+	<add key ="AdminEmail" value="(Your Admin Email)"/>
+	<add key ="AdminPwd" value="(Your Admin Password)"/>
 </appSettings>
 ```
