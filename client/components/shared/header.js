@@ -1,33 +1,78 @@
-import { Box, HStack } from '@chakra-ui/react'
-import NextLink from 'next/link'
+import { ReactNode } from 'react'
+import {
+    Box,
+    Flex,
+    Avatar,
+    HStack,
+    Link,
+    IconButton,
+    Button,
+    Menu,
+    MenuButton,
+    MenuList,
+    MenuItem,
+    MenuDivider,
+    useDisclosure,
+    useColorModeValue,
+    Stack,
+    Spacer,
+} from '@chakra-ui/react'
+import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons'
 
-const navLinks = [
-    {
-        name: 'trang chu',
-        link: '/home',
-    },
-    {
-        name: 'tai khoan',
-        link: '/account',
-    },
-    {
-        name: 'chinh sach',
-        link: '/policy',
-    },
-]
+const Links = ['Home', 'Account', 'Contact', 'Sign In', 'Sign Up']
 
-function Header() {
+const NavLink = ({ children }) => (
+    <Link
+        px={2}
+        py={1}
+        rounded={'md'}
+        _hover={{
+            textDecoration: 'none',
+            bg: useColorModeValue('gray.200', 'gray.700'),
+        }}
+        href={'#'}
+    >
+        {children}
+    </Link>
+)
+
+export default function Simple() {
+    const { isOpen, onOpen, onClose } = useDisclosure()
+
     return (
         <>
-            <HStack>
-                {navLinks.map((navLink) => (
-                    <Box as={NextLink} key={navLink.link} href={navLink.link}>
-                        {navLink.name}
+            <Box padding={[0, 4.8]}>
+                <Flex
+                    h={16}
+                    alignItems={'center'}
+                    justifyContent={'space-between'}
+                >
+                    <IconButton
+                        size={'md'}
+                        icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
+                        aria-label={'Open Menu'}
+                        display={{ md: 'none' }}
+                        onClick={isOpen ? onClose : onOpen}
+                    />
+
+                    <Box color={'#333'} fontSize={30}>
+                        FlashFood
                     </Box>
-                ))}
-            </HStack>
+                    <Flex alignItems={'center'}>
+                        <HStack
+                            as={'nav'}
+                            spacing={4}
+                            display={{ base: 'none', md: 'flex' }}
+                            color={'#333'}
+                            fontWeight={100}
+                        >
+                            {Links.map((link) => (
+                                <NavLink key={link}>{link}</NavLink>
+                            ))}
+                        </HStack>
+                    </Flex>
+                </Flex>
+            </Box>
         </>
     )
 }
-
-export default Header
