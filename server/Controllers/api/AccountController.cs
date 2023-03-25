@@ -22,7 +22,7 @@ using server.Models;
 using server.Providers;
 using server.Results;
 
-namespace server.Controllers
+namespace server.Controllers.api
 {
     [Authorize]
     [RoutePrefix("api/Account")]
