@@ -29,7 +29,8 @@ namespace server.Controllers
         }
         //Get by UserID
         // GET api/<controller>/5
-        public IHttpActionResult Get(string Userid)
+        [HttpGet]
+        public IHttpActionResult GetByUser(string Userid)
         {
             var Oder_User = _context.Oder.Where(a => a.UserId == Userid).ToList();
             if (Userid == null)
@@ -38,7 +39,16 @@ namespace server.Controllers
             }
             return (IHttpActionResult) Ok(Oder_User);
         }
-
+        [HttpGet]
+        public IHttpActionResult GetBySeller(string Sellerid)
+        {
+            var Oder_Seller = _context.Oder.Where(a => a.SellerId == Sellerid).ToList();
+            if (Sellerid == null)
+            {
+                return NotFound();
+            }
+            return (IHttpActionResult)Ok(Oder_Seller);
+        }
         // POST api/<controller>
         public void Post([FromBody] string value)
         {

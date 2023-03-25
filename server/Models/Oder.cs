@@ -32,5 +32,10 @@ namespace server.Models
         public ApplicationUser User { get; set; }
         public ApplicationUser Seller { get; set; }
         public ICollection<OderItem> oderItems { get; set; }
+
+        public Oder()
+        {
+            OderAt = DateTime.Now;
+        }
     }
 }
