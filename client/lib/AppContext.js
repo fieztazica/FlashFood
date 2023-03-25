@@ -7,25 +7,28 @@ const AppContext = createContext();
 export function AppContextProvider({ children }) {
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [user, setUser] = useState(null);
+    const [api, setApi] = useState(null);
 
     const instance = axios.create({
         baseURL: `${process.env.apiBaseUrl}`,
     });
 
-    const api = instanceApi(instance);
-
     useEffect(() => {
         (async () => {
-            api.setTokenToInstance(localStorage.getItem(tokenKey))
-            api.getUserInfo().then(u => {
-                setUser(u)
-                setIsAuthorized(true)
-            }).catch((e) => {
-                console.error(e)
-                setIsAuthorized(false)
-            });
+            if (!api)
+                setApi(instanceApi(instance));
+            if (api) {
+                api.setTokenToInstance(localStorage.getItem(tokenKey))
+                api.getUserInfo().then(u => {
+                    setUser(u)
+                    setIsAuthorized(true)
+                }).catch((e) => {
+                    console.error(e)
+                    setIsAuthorized(false)
+                });
+            }
         })()
-    }, [])
+    }, [api])
 
     useEffect(() => {
         console.log(user)

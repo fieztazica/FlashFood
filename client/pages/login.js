@@ -88,7 +88,7 @@ function Login() {
                                         direction={{ base: 'column', sm: 'row' }}
                                         align={'start'}
                                         justify={'space-between'}>
-                                        <Link as={NextLink} color={'blue.400'} href={redirectTo ? `/register?redirect=${redirectTo}` : `/redirect`}>Don't have an account?</Link>
+                                        <Link as={NextLink} color={'blue.400'} href={redirectTo ? `/register?redirect=${redirectTo}` : `/register`}>Don&#39;t have an account?</Link>
                                         <Link color={'blue.400'}>Forgot password?</Link>
                                     </Stack>
                                     <Button
