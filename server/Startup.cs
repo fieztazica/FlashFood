@@ -23,6 +23,7 @@ namespace server
         private void createRoleAndUsers()
         {
             ApplicationDbContext context = new ApplicationDbContext();
+            
 
             if (context.Roles.Any()) return;
 

@@ -3,7 +3,7 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class init_DB : DbMigration
+    public partial class initall : DbMigration
     {
         public override void Up()
         {
@@ -17,7 +17,7 @@
                     })
                 .PrimaryKey(t => new { t.MealId, t.UserId })
                 .ForeignKey("dbo.Meals", t => t.MealId, cascadeDelete: true)
-                .ForeignKey("dbo.AspNetUsers", t => t.UserId, cascadeDelete: true)
+                .ForeignKey("dbo.ApplicationUsers", t => t.UserId, cascadeDelete: true)
                 .Index(t => t.MealId)
                 .Index(t => t.UserId);
             
@@ -53,7 +53,7 @@
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        OrderAt = c.DateTime(nullable: false),
+                        OderAt = c.DateTime(nullable: false),
                         PaidAt = c.DateTime(nullable: false),
                         Total_money = c.Double(nullable: false),
                         Paid = c.Double(nullable: false),
@@ -61,14 +61,14 @@
                         SellerId = c.String(nullable: false, maxLength: 128),
                         UserId = c.String(nullable: false, maxLength: 128),
                     })
-                 .PrimaryKey(t => t.Id)
+                .PrimaryKey(t => t.Id)
                 .Index(t => t.SellerId)
                 .Index(t => t.UserId);
-            AddForeignKey("dbo.Order", "SellerId", "dbo.AspNetUsers", "Id");
-            AddForeignKey("dbo.Order", "UserId", "dbo.AspNetUsers", "Id");
+            AddForeignKey("dbo.Order", "SellerId", "dbo.ApplicationUsers", "Id");
+            AddForeignKey("dbo.Order", "UserId", "dbo.ApplicationUsers", "Id");
 
             CreateTable(
-                "dbo.AspNetUsers",
+                "dbo.ApplicationUsers",
                 c => new
                     {
                         Id = c.String(nullable: false, maxLength: 128),
@@ -89,49 +89,49 @@
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
-                "dbo.AspNetUserClaims",
+                "dbo.IdentityUserClaims",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
                         UserId = c.String(),
                         ClaimType = c.String(),
                         ClaimValue = c.String(),
-                        AspNetUser_Id = c.String(maxLength: 128),
+                        ApplicationUser_Id = c.String(maxLength: 128),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.AspNetUsers", t => t.AspNetUser_Id)
-                .Index(t => t.AspNetUser_Id);
+                .ForeignKey("dbo.ApplicationUsers", t => t.ApplicationUser_Id)
+                .Index(t => t.ApplicationUser_Id);
             
             CreateTable(
-                "dbo.AspNetUserLogins",
+                "dbo.IdentityUserLogins",
                 c => new
                     {
                         UserId = c.String(nullable: false, maxLength: 128),
                         LoginProvider = c.String(nullable: false, maxLength: 128),
                         ProviderKey = c.String(),
-                        AspNetUser_Id = c.String(maxLength: 128),
+                        ApplicationUser_Id = c.String(maxLength: 128),
                     })
                 .PrimaryKey(t => new { t.UserId, t.LoginProvider })
-                .ForeignKey("dbo.AspNetUsers", t => t.AspNetUser_Id)
-                .Index(t => t.AspNetUser_Id);
+                .ForeignKey("dbo.ApplicationUsers", t => t.ApplicationUser_Id)
+                .Index(t => t.ApplicationUser_Id);
             
             CreateTable(
-                "dbo.AspNetUserRoles",
+                "dbo.IdentityUserRoles",
                 c => new
                     {
                         UserId = c.String(nullable: false, maxLength: 128),
                         RoleId = c.String(nullable: false, maxLength: 128),
-                        AspNetUser_Id = c.String(maxLength: 128),
-                        AspNetRole_Id = c.String(maxLength: 128),
+                        ApplicationUser_Id = c.String(maxLength: 128),
+                        IdentityRole_Id = c.String(maxLength: 128),
                     })
                 .PrimaryKey(t => new { t.UserId, t.RoleId })
-                .ForeignKey("dbo.AspNetUsers", t => t.AspNetUser_Id)
-                .ForeignKey("dbo.AspNetRoles", t => t.AspNetRole_Id)
-                .Index(t => t.AspNetUser_Id)
-                .Index(t => t.AspNetRole_Id);
+                .ForeignKey("dbo.ApplicationUsers", t => t.ApplicationUser_Id)
+                .ForeignKey("dbo.IdentityRoles", t => t.IdentityRole_Id)
+                .Index(t => t.ApplicationUser_Id)
+                .Index(t => t.IdentityRole_Id);
             
             CreateTable(
-                "dbo.AspNetRoles",
+                "dbo.IdentityRoles",
                 c => new
                     {
                         Id = c.String(nullable: false, maxLength: 128),
@@ -143,31 +143,31 @@
         
         public override void Down()
         {
-            DropForeignKey("dbo.AspNetUserRoles", "AspNetRole_Id", "dbo.AspNetRoles");
-            DropForeignKey("dbo.CartItems", "UserId", "dbo.AspNetUsers");
+            DropForeignKey("dbo.IdentityUserRoles", "IdentityRole_Id", "dbo.IdentityRoles");
+            DropForeignKey("dbo.CartItems", "UserId", "dbo.ApplicationUsers");
             DropForeignKey("dbo.CartItems", "MealId", "dbo.Meals");
             DropForeignKey("dbo.OrderItems", "OrderId", "dbo.Order");
-            DropForeignKey("dbo.Order", "UserId", "dbo.AspNetUsers");
-            DropForeignKey("dbo.Order", "SellerId", "dbo.AspNetUsers");
-            DropForeignKey("dbo.AspNetUserRoles", "AspNetUser_Id", "dbo.AspNetUsers");
-            DropForeignKey("dbo.AspNetUserLogins", "AspNetUser_Id", "dbo.AspNetUsers");
-            DropForeignKey("dbo.AspNetUserClaims", "AspNetUser_Id", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Order", "UserId", "dbo.ApplicationUsers");
+            DropForeignKey("dbo.Order", "SellerId", "dbo.ApplicationUsers");
+            DropForeignKey("dbo.IdentityUserRoles", "ApplicationUser_Id", "dbo.ApplicationUsers");
+            DropForeignKey("dbo.IdentityUserLogins", "ApplicationUser_Id", "dbo.ApplicationUsers");
+            DropForeignKey("dbo.IdentityUserClaims", "ApplicationUser_Id", "dbo.ApplicationUsers");
             DropForeignKey("dbo.OrderItems", "MealId", "dbo.Meals");
-            DropIndex("dbo.AspNetUserRoles", new[] { "AspNetRole_Id" });
-            DropIndex("dbo.AspNetUserRoles", new[] { "AspNetUser_Id" });
-            DropIndex("dbo.AspNetUserLogins", new[] { "AspNetUser_Id" });
-            DropIndex("dbo.AspNetUserClaims", new[] { "AspNetUser_Id" });
+            DropIndex("dbo.IdentityUserRoles", new[] { "IdentityRole_Id" });
+            DropIndex("dbo.IdentityUserRoles", new[] { "ApplicationUser_Id" });
+            DropIndex("dbo.IdentityUserLogins", new[] { "ApplicationUser_Id" });
+            DropIndex("dbo.IdentityUserClaims", new[] { "ApplicationUser_Id" });
             DropIndex("dbo.Order", new[] { "UserId" });
             DropIndex("dbo.Order", new[] { "SellerId" });
             DropIndex("dbo.OrderItems", new[] { "OrderId" });
             DropIndex("dbo.OrderItems", new[] { "MealId" });
             DropIndex("dbo.CartItems", new[] { "UserId" });
             DropIndex("dbo.CartItems", new[] { "MealId" });
-            DropTable("dbo.AspNetRoles");
-            DropTable("dbo.AspNetUserRoles");
-            DropTable("dbo.AspNetUserLogins");
-            DropTable("dbo.AspNetUserClaims");
-            DropTable("dbo.AspNetUsers");
+            DropTable("dbo.IdentityRoles");
+            DropTable("dbo.IdentityUserRoles");
+            DropTable("dbo.IdentityUserLogins");
+            DropTable("dbo.IdentityUserClaims");
+            DropTable("dbo.ApplicationUsers");
             DropTable("dbo.Order");
             DropTable("dbo.OrderItems");
             DropTable("dbo.Meals");
