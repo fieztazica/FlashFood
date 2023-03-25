@@ -233,24 +233,14 @@
     <Compile Include="Controllers\api\ValuesController.cs" />
     <Compile Include="Controllers\MealsController.cs" />
     <Compile Include="Controllers\StaffController.cs" />
+	  <Compile Include="Controllers\OrderController.cs" />
+	  <Compile Include="Controllers\OrderItemController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202303221613435_init.cs" />
-    <Compile Include="Migrations\202303221613435_init.designer.cs">
-      <DependentUpon>202303221613435_init.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202303240733075_updateMeal.cs" />
-    <Compile Include="Migrations\202303240733075_updateMeal.designer.cs">
-      <DependentUpon>202303240733075_updateMeal.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202303241329090_updateAlldata.cs" />
-    <Compile Include="Migrations\202303241329090_updateAlldata.designer.cs">
-      <DependentUpon>202303241329090_updateAlldata.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202303250752048_updateUser.cs" />
-    <Compile Include="Migrations\202303250752048_updateUser.designer.cs">
-      <DependentUpon>202303250752048_updateUser.cs</DependentUpon>
+    <Compile Include="Migrations\202303251444565_init_DB.cs" />
+    <Compile Include="Migrations\202303251444565_init_DB.designer.cs">
+      <DependentUpon>202303251444565_init_DB.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
@@ -260,8 +250,9 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Meal.cs" />
     <Compile Include="Models\MealBindingModel.cs" />
-    <Compile Include="Models\Oder.cs" />
-    <Compile Include="Models\OderItem.cs" />
+    <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\OrderBidingModel.cs" />
+    <Compile Include="Models\OrderItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
@@ -385,17 +376,8 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202303221613435_init.resx">
-      <DependentUpon>202303221613435_init.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202303240733075_updateMeal.resx">
-      <DependentUpon>202303240733075_updateMeal.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202303241329090_updateAlldata.resx">
-      <DependentUpon>202303241329090_updateAlldata.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202303250752048_updateUser.resx">
-      <DependentUpon>202303250752048_updateUser.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202303251444565_init_DB.resx">
+      <DependentUpon>202303251444565_init_DB.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

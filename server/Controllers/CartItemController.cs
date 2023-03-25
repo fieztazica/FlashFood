@@ -9,6 +9,7 @@ using System.Web.Http;
 
 namespace server.Controllers
 {
+    [Authorize]
     public class CartItemController : ApiController
     {
         private readonly ApplicationDbContext _context;
