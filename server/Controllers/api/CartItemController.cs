@@ -26,7 +26,7 @@ namespace server.Controllers
             {
                 return NotFound();
             }
-            return (IHttpActionResult)Ok(Cartitem);
+            return Ok(Cartitem);
         }
 
         // GET api/<controller>/5
@@ -37,7 +37,7 @@ namespace server.Controllers
             {
                 return NotFound();
             }
-            return (IHttpActionResult)Ok(Cartitem);
+            return Ok(Cartitem);
         }
 
         // POST api/<controller>
@@ -51,6 +51,11 @@ namespace server.Controllers
             {
                 return BadRequest();
             }
+            Meal meal = _context.meals.FirstOrDefault(a => a.Id == model.MealId);
+            if(meal.AmountLeft < model.Amount)
+            {
+                return BadRequest();
+            }
             var New_cart = new CartItem()
             {
                 MealId = model.MealId,
@@ -59,9 +64,11 @@ namespace server.Controllers
                 //Meal = _context.meals.FirstOrDefault(a => a.Id == model.MealId),
                 //User = _context.Users.FirstOrDefault(a => a.Id == model.UserId)
             };
+            meal.AmountLeft -= (int)model.Amount;
+            _context.Entry(meal).CurrentValues.SetValues(meal);
             _context.cartitem.Add(New_cart);
             _context.SaveChanges();
-            return Ok("Has Save");
+            return Ok("");
         }
         [HttpPost]
         public IHttpActionResult PostUpdate(CartDeleteBlidingModel model)
@@ -74,12 +81,21 @@ namespace server.Controllers
             {
                 return BadRequest();
             }
+            Meal meal = _context.meals.FirstOrDefault(a => a.Id == model.MealId);
+            if (meal.AmountLeft < model.Amount)
+            {
+                return BadRequest();
+            }
+            meal.AmountLeft -= (int)model.Amount;
+            _context.Entry(meal).CurrentValues.SetValues(meal);
             List<CartItem> Cartitem = _context.cartitem.Where(s => s.UserId == model.UserId).ToList();
             CartItem EditCart = Cartitem.Find(a => a.MealId == model.MealId);
             EditCart.Amount = model.Amount;
+            meal.AmountLeft -= (int)model.Amount;
+            _context.Entry(meal).CurrentValues.SetValues(meal);
             _context.cartitem.AddOrUpdate(EditCart);
             _context.SaveChanges();
-            return Ok("Has Save");
+            return Ok("");
         }
 
         // DELETE api/<controller>/5
@@ -93,7 +109,7 @@ namespace server.Controllers
             }
             _context.cartitem.Remove(DeleteCart);
             _context.SaveChanges();
-            return Ok("Has Save");
+            return Ok("");
         }
     }
 }
