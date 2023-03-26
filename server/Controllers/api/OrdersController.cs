@@ -8,12 +8,12 @@ using System.Web.Http;
 
 namespace server.Controllers.api
 {
-    public class OrderController : ApiController
+    public class OrdersController : ApiController
     {
         private readonly ApplicationDbContext _context;
 
 
-        public OrderController()
+        public OrdersController()
         {
             _context = new ApplicationDbContext();
         }

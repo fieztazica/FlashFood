@@ -10,18 +10,18 @@ using System.Web.Http;
 namespace server.Controllers.api
 {
     [Authorize]
-    public class CartItemController : ApiController
+    public class CartItemsController : ApiController
     {
         private readonly ApplicationDbContext _context;
 
-        public CartItemController()
+        public CartItemsController()
         {
             _context = new ApplicationDbContext();
         }
         // GET api/<controller>
         public IHttpActionResult Get()
         {
-            var Cartitem = _context.cartitem.ToList();
+            var Cartitem = _context.Cartitems.ToList();
             if (Cartitem == null || Cartitem.Count == 0)
             {
                 return NotFound();
@@ -32,7 +32,7 @@ namespace server.Controllers.api
         // GET api/<controller>/5
         public IHttpActionResult Get(string id)
         {
-            List<CartItem> Cartitem = _context.cartitem.Where(s => s.UserId == id).ToList();
+            List<CartItem> Cartitem = _context.Cartitems.Where(s => s.UserId == id).ToList();
             if (Cartitem == null || Cartitem.Count == 0)
             {
                 return NotFound();
@@ -47,7 +47,7 @@ namespace server.Controllers.api
             {
                 return BadRequest(ModelState);
             }
-            if (_context.meals.FirstOrDefault(a => a.Id == model.MealId) == null)
+            if (_context.Meals.FirstOrDefault(a => a.Id == model.MealId) == null)
             {
                 return BadRequest();
             }
@@ -59,7 +59,7 @@ namespace server.Controllers.api
                 //Meal = _context.meals.FirstOrDefault(a => a.Id == model.MealId),
                 //User = _context.Users.FirstOrDefault(a => a.Id == model.UserId)
             };
-            _context.cartitem.Add(New_cart);
+            _context.Cartitems.Add(New_cart);
             _context.SaveChanges();
             return Ok("Saved");
         }
@@ -70,14 +70,14 @@ namespace server.Controllers.api
             {
                 return BadRequest(ModelState);
             }
-            if (_context.meals.FirstOrDefault(a => a.Id == model.MealId) == null)
+            if (_context.Meals.FirstOrDefault(a => a.Id == model.MealId) == null)
             {
                 return BadRequest();
             }
-            List<CartItem> Cartitem = _context.cartitem.Where(s => s.UserId == model.UserId).ToList();
+            List<CartItem> Cartitem = _context.Cartitems.Where(s => s.UserId == model.UserId).ToList();
             CartItem EditCart = Cartitem.Find(a => a.MealId == model.MealId);
             EditCart.Amount = model.Amount;
-            _context.cartitem.AddOrUpdate(EditCart);
+            _context.Cartitems.AddOrUpdate(EditCart);
             _context.SaveChanges();
             return Ok("Saved");
         }
@@ -85,13 +85,13 @@ namespace server.Controllers.api
         // DELETE api/<controller>/5
         public IHttpActionResult Delete(CartDeleteBlidingModel model)
         {
-            List<CartItem> Cartitem = _context.cartitem.Where(s => s.UserId == model.UserId).ToList();
+            List<CartItem> Cartitem = _context.Cartitems.Where(s => s.UserId == model.UserId).ToList();
             CartItem DeleteCart = Cartitem.Find(a => a.MealId == model.MealId);
             if (DeleteCart == null)
             {
                 return BadRequest();
             }
-            _context.cartitem.Remove(DeleteCart);
+            _context.Cartitems.Remove(DeleteCart);
             _context.SaveChanges();
             return Ok("Saved");
         }

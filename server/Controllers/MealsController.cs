@@ -19,7 +19,7 @@ namespace server.Controllers
         [AllowAnonymous]
         public ActionResult Index()
         {
-            return View(db.meals.ToList());
+            return View(db.Meals.ToList());
         }
 
         // GET: Meals/Details/5
@@ -29,7 +29,7 @@ namespace server.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Meal meal = db.meals.Find(id);
+            Meal meal = db.Meals.Find(id);
             if (meal == null)
             {
                 return HttpNotFound();
@@ -52,7 +52,7 @@ namespace server.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.meals.Add(meal);
+                db.Meals.Add(meal);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -67,7 +67,7 @@ namespace server.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Meal meal = db.meals.Find(id);
+            Meal meal = db.Meals.Find(id);
             if (meal == null)
             {
                 return HttpNotFound();
@@ -98,7 +98,7 @@ namespace server.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Meal meal = db.meals.Find(id);
+            Meal meal = db.Meals.Find(id);
             if (meal == null)
             {
                 return HttpNotFound();
@@ -111,8 +111,8 @@ namespace server.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Meal meal = db.meals.Find(id);
-            db.meals.Remove(meal);
+            Meal meal = db.Meals.Find(id);
+            db.Meals.Remove(meal);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
