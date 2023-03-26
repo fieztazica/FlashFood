@@ -72,6 +72,15 @@ export default function Simple() {
                         </HStack>
                     </Flex>
                 </Flex>
+                {isOpen ? (
+                    <Box pb={4} display={{ md: 'none' }}>
+                        <Stack as={'nav'} spacing={4}>
+                            {Links.map((link) => (
+                                <NavLink key={link}>{link}</NavLink>
+                            ))}
+                        </Stack>
+                    </Box>
+                ) : null}
             </Box>
         </>
     )
