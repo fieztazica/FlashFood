@@ -74,13 +74,13 @@ namespace server.Models
             modelBuilder.Entity<OrderItem>()
             .HasKey(e => new { e.MealId, e.OrderId })
             .HasRequired<Meal>(s => s.Meal)
-            .WithMany(g => g.oderItems)
+            .WithMany(g => g.OrderItems)
             .HasForeignKey<int>(s => s.MealId);
 
             modelBuilder.Entity<CartItem>()
             .HasKey(e => new { e.MealId, e.UserId })
             .HasRequired<Meal>(s => s.Meal)
-            .WithMany(g => g.cartItems)
+            .WithMany(g => g.CartItems)
             .HasForeignKey<int>(s => s.MealId);
 
             modelBuilder.Entity<CartItem>()
