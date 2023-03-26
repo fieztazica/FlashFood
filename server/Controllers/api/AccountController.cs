@@ -22,7 +22,7 @@ using server.Models;
 using server.Providers;
 using server.Results;
 
-namespace server.Controllers
+namespace server.Controllers.api
 {
     [Authorize]
     [RoutePrefix("api/Account")]
@@ -324,7 +324,6 @@ namespace server.Controllers
             return logins;
         }
 
-
         // POST api/Account/Login
         [AllowAnonymous]
         [Route("Login")]
@@ -366,7 +365,7 @@ namespace server.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
+            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email ,FirstName = model.FirstName, LastName = model.LastName };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
@@ -374,6 +373,8 @@ namespace server.Controllers
             {
                 return GetErrorResult(result);
             }
+
+            UserManager.AddToRole(user.Id, "Customer");
 
             return Ok();
         }
@@ -408,6 +409,9 @@ namespace server.Controllers
             {
                 return GetErrorResult(result); 
             }
+
+            UserManager.AddToRole(user.Id, "Customer");
+
             return Ok();
         }
 

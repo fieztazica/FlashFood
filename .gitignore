@@ -370,3 +370,9 @@ FodyWeavers.xsd
 /server/Web.config
 /server/secrets.config
 /server/connectionStrings.config
+/server/.config/dotnet-tools.json
+/server/Properties/ServiceDependencies/local/compute.appService1.arm.json
+/server/Properties/ServiceDependencies/server20230321160155 - Web Deploy/profile.arm.json
+/server/Properties/serviceDependencies.server20230321160155 - Web Deploy.json
+/server/Properties/serviceDependencies.local.json
+/server/Properties/serviceDependencies.json
