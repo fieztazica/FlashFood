@@ -13,7 +13,7 @@ namespace server.Models
         [Key]
         public int Id { get; set; }
         [Required]
-        public DateTime OderAt { get; set; }
+        public DateTime OrderAt { get; set; }
         [Required]
         public DateTime PaidAt { get; set; }
         [Required]
@@ -30,12 +30,11 @@ namespace server.Models
         public string UserId { get; set; }
 
         public ApplicationUser User { get; set; }
-        public ApplicationUser Seller { get; set; }
-        public ICollection<OrderItem> oderItems { get; set; }
+        public ICollection<OrderItem> OrderItems { get; set; }
 
         public Order()
         {
-            OderAt = DateTime.Now;
+            OrderAt = DateTime.Now;
         }
     }
 }

@@ -228,20 +228,20 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\api\AccountController.cs" />
-    <Compile Include="Controllers\api\CartItemController.cs" />
+    <Compile Include="Controllers\api\CartItemsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\api\MealController.cs" />
+    <Compile Include="Controllers\api\MealsController.cs" />
     <Compile Include="Controllers\api\ValuesController.cs" />
     <Compile Include="Controllers\MealsController.cs" />
     <Compile Include="Controllers\StaffController.cs" />
-    <Compile Include="Controllers\api\OrderController.cs" />
-    <Compile Include="Controllers\api\OrderItemController.cs" />
+    <Compile Include="Controllers\api\OrdersController.cs" />
+    <Compile Include="Controllers\api\OrderItemsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202303251444565_init_DB.cs" />
-    <Compile Include="Migrations\202303251444565_init_DB.designer.cs">
-      <DependentUpon>202303251444565_init_DB.cs</DependentUpon>
+    <Compile Include="Migrations\202303260453427_init.cs" />
+    <Compile Include="Migrations\202303260453427_init.designer.cs">
+      <DependentUpon>202303260453427_init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
@@ -377,12 +377,12 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202303251444565_init_DB.resx">
-      <DependentUpon>202303251444565_init_DB.cs</DependentUpon>
-    </EmbeddedResource>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+    <EmbeddedResource Include="Migrations\202303260453427_init.resx">
+      <DependentUpon>202303260453427_init.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
