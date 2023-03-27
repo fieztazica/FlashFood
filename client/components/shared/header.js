@@ -17,16 +17,31 @@ import {
     Stack,
     Spacer,
     Switch,
+    Heading,
 } from '@chakra-ui/react'
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons'
 import react from 'react'
-import { ShoppingCart } from 'phosphor-react'
+import { FiShoppingCart } from 'react-icons/fi'
 import NextLink from 'next/link'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-const Links = ['Home', 'Account', 'Contact', 'Sign In', 'Sign Up']
+import NavLink from '../NavLink'
 
-const NavLink = ({ href, children }) => (
-    <Link
+const navLinks = [
+    {
+        text: "Home",
+        href: "/"
+    },
+    {
+        text: "Account",
+        href: "#"
+    },
+    {
+        text: "Orders",
+        href: "/orders"
+    }
+]
+
+const StyledNavLink = ({ href, children }) => (
+    <NavLink
         px={2}
         py={1}
         rounded={'md'}
@@ -34,11 +49,10 @@ const NavLink = ({ href, children }) => (
             textDecoration: 'none',
             bg: useColorModeValue('gray.200', 'gray.700'),
         }}
-        as={NextLink}
         href={href}
     >
         {children}
-    </Link>
+    </NavLink>
 )
 
 export default function Simple() {
@@ -60,34 +74,42 @@ export default function Simple() {
                         onClick={isOpen ? onClose : onOpen}
                     />
 
-                    <Box color={'#333'} fontSize={30}>
-                        FlashFood
+                    <Box as={NextLink} href="/" color={'#333'} fontSize={30}>
+                        <Heading>
+                            FlashFood
+                        </Heading>
                     </Box>
                     <Flex alignItems={'center'}>
                         <HStack
                             as={'nav'}
-                            spacing={4}
                             display={{ base: 'none', md: 'flex' }}
                             color={'#333'}
                             fontWeight={100}
                         >
-                            {Links.map((link) => (
-                                <NavLink key={link} href={`/${link}`}>
-                                    {link}
-                                </NavLink>
+                            {navLinks.map((navLink, i) => (
+                                <StyledNavLink key={"navlink-" + i} href={`${navLink.href}`}>
+                                    {navLink.text}
+                                </StyledNavLink>
                             ))}
-                            <NavLink href="/shop">Shop</NavLink>
-                            <NavLink href={'/cart'}>
-                                <ShoppingCart size={32} />
-                            </NavLink>
+                            <StyledNavLink href={'/cart'}>
+                                <FiShoppingCart size={32} />
+                            </StyledNavLink>
                         </HStack>
+                        <Box display={{ base: 'flex', md: 'none' }}>
+                            <StyledNavLink
+                                href={'/cart'}
+                            >
+                                <FiShoppingCart size={32} />
+                            </StyledNavLink>
+                        </Box>
+
                     </Flex>
                 </Flex>
                 {isOpen ? (
                     <Box pb={4} display={{ md: 'none' }}>
                         <Stack as={'nav'} spacing={4}>
-                            {Links.map((link) => (
-                                <NavLink key={link}>{link}</NavLink>
+                            {navLinks.map((navLink, i) => (
+                                <StyledNavLink key={"mb-navlink-" + i} href={navLink.href}>{navLink.text}</StyledNavLink>
                             ))}
                         </Stack>
                     </Box>
