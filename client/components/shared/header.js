@@ -4,8 +4,8 @@ import {
     Flex,
     Avatar,
     HStack,
-    Link,
     IconButton,
+    Link,
     Button,
     Menu,
     MenuButton,
@@ -16,12 +16,16 @@ import {
     useColorModeValue,
     Stack,
     Spacer,
+    Switch,
 } from '@chakra-ui/react'
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons'
-
+import react from 'react'
+import { ShoppingCart } from 'phosphor-react'
+import NextLink from 'next/link'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 const Links = ['Home', 'Account', 'Contact', 'Sign In', 'Sign Up']
 
-const NavLink = ({ children }) => (
+const NavLink = ({ href, children }) => (
     <Link
         px={2}
         py={1}
@@ -30,7 +34,8 @@ const NavLink = ({ children }) => (
             textDecoration: 'none',
             bg: useColorModeValue('gray.200', 'gray.700'),
         }}
-        href={'#'}
+        as={NextLink}
+        href={href}
     >
         {children}
     </Link>
@@ -67,8 +72,14 @@ export default function Simple() {
                             fontWeight={100}
                         >
                             {Links.map((link) => (
-                                <NavLink key={link}>{link}</NavLink>
+                                <NavLink key={link} href={`/${link}`}>
+                                    {link}
+                                </NavLink>
                             ))}
+                            <NavLink href="/shop">Shop</NavLink>
+                            <NavLink href={'/cart'}>
+                                <ShoppingCart size={32} />
+                            </NavLink>
                         </HStack>
                     </Flex>
                 </Flex>
