@@ -50,8 +50,9 @@ namespace server.Controllers.api
             return Ok(Order_Seller);
         }
         // POST api/<controller>
-        public void Post([FromBody] string value)
+        public void Post(OrderBidingModel oder)
         {
+
         }
 
         // PUT api/<controller>/5

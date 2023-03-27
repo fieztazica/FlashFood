@@ -1,10 +1,12 @@
-﻿using server.Models;
+﻿using Newtonsoft.Json;
+using server.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 
 namespace server.Controllers
@@ -19,25 +21,62 @@ namespace server.Controllers
             _context = new ApplicationDbContext();
         }
         // GET api/<controller>
-        public IHttpActionResult Get()
+        [AllowAnonymous]
+        [HttpGet]
+        public IEnumerable<CartItem> GetCart([FromUri] PagingParameterModel pagingparametermodel)
         {
-            var Cartitem = _context.cartitem.ToList();
-            if (Cartitem == null || Cartitem.Count == 0)
+            var source = (from cart in _context.cartitem.
+                            OrderBy(a => a.MealId)
+                          select cart).AsQueryable();
+            int count = source.Count();
+            int CurrentPage = pagingparametermodel.pageNumber;
+            int PageSize = pagingparametermodel.pageSize;
+            int TotalCount = count;
+            int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
+            var items = source.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
+            var previousPage = CurrentPage > 1 ? "Yes" : "No";
+            var nextPage = CurrentPage < TotalPages ? "Yes" : "No"; 
+            var paginationMetadata = new
             {
-                return NotFound();
-            }
-            return Ok(Cartitem);
+                totalCount = TotalCount,
+                pageSize = PageSize,
+                currentPage = CurrentPage,
+                totalPages = TotalPages,
+                previousPage,
+                nextPage
+            };
+            HttpContext.Current.Response.Headers.Add("Paging-Headers", JsonConvert.SerializeObject(paginationMetadata));
+            return items;
         }
 
+        [AllowAnonymous]
         // GET api/<controller>/5
-        public IHttpActionResult Get(string id)
+        public IHttpActionResult Get(string id, [FromUri] PagingParameterModel pagingparametermodel)
         {
-            List<CartItem> Cartitem = _context.cartitem.Where(s => s.UserId == id).ToList();
-            if (Cartitem == null || Cartitem.Count == 0)
+            List<CartItem> source = _context.cartitem.Where(s => s.UserId == id).ToList();
+            if (source == null || source.Count == 0)
             {
                 return NotFound();
             }
-            return Ok(Cartitem);
+            int count = source.Count();
+            int CurrentPage = pagingparametermodel.pageNumber;
+            int PageSize = pagingparametermodel.pageSize;
+            int TotalCount = count;
+            int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
+            var items = source.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
+            var previousPage = CurrentPage > 1 ? "Yes" : "No";
+            var nextPage = CurrentPage < TotalPages ? "Yes" : "No";
+            var paginationMetadata = new
+            {
+                totalCount = TotalCount,
+                pageSize = PageSize,
+                currentPage = CurrentPage,
+                totalPages = TotalPages,
+                previousPage,
+                nextPage
+            };
+            HttpContext.Current.Response.Headers.Add("Paging-Headers", JsonConvert.SerializeObject(paginationMetadata));
+            return Ok(items);
         }
 
         // POST api/<controller>
