@@ -1,6 +1,6 @@
 import { ChakraProvider } from '@chakra-ui/react'
-
 import { extendTheme } from '@chakra-ui/react'
+import { AppContextProvider } from '../lib/AppContext'
 
 const colors = {
     brand: {
@@ -13,12 +13,14 @@ const colors = {
 const theme = extendTheme({ colors })
 
 export default function App({ Component, pageProps }) {
-    const getLayout = Component.getLayout || ((page) => page)
+    const getLayout = Component.getLayout || ((page) => page);
 
     return (
         <>
             <ChakraProvider theme={theme}>
-                {getLayout(<Component {...pageProps} />)}
+                <AppContextProvider>
+                    {getLayout(<Component {...pageProps} />)}
+                </AppContextProvider>
             </ChakraProvider>
         </>
     )

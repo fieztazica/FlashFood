@@ -11,7 +11,30 @@ import {
     GridItem,
 } from '@chakra-ui/react'
 
+const navs = [
+    {
+        text: 'Home',
+        link: '/',
+    },
+    {
+        text: 'Cart',
+        link: '/cart',
+    },
+    {
+        text: 'Order',
+        link: '/orders',
+    },
+]
+
+const NavLink = ({ text, link, ...props }) => (
+    <Link as={NextLink} href={link} {...props}>
+        {text}
+    </Link>
+)
+
 function Home() {
+    const { user } = useAppStates()
+    const { isOpen, onOpen, onClose, onToggle } = useDisclosure()
     return (
         <>
             <Box
@@ -65,7 +88,7 @@ function Home() {
 }
 
 Home.getLayout = function getLayout(page) {
-    return <AppLayout bg={'red'}>{page}</AppLayout>
+    return <AppLayout>{page}</AppLayout>
 }
 
 export default Home
