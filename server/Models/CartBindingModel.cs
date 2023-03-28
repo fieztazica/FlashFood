@@ -20,7 +20,7 @@ namespace server.Models
         public double Amount { get; set; }
     }
 
-    public class CartDeleteBlidingModel
+    public class CartDeleteBindingModel
     {
         [Required]
         [Display(Name = "MealId")]
