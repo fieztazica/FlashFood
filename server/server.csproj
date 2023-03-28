@@ -231,7 +231,6 @@
     <Compile Include="Controllers\api\CartItemsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\api\MealsController.cs" />
-    <Compile Include="Controllers\api\ValuesController.cs" />
     <Compile Include="Controllers\MealsController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\StaffController.cs" />
