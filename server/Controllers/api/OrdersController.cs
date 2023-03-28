@@ -51,40 +51,25 @@ namespace server.Controllers.api
             return Ok(Order_Seller);
         }
         // POST api/<controller>
-        public async Task<IHttpActionResult> Post(OrderBindingModel oder)
+        public IHttpActionResult Post(OrderBindingModel o)
         {
-            var Total_money = _context.Cartitems.Where(a => a.UserId == oder.UserId).ToList();
+            var Total_money = _context.Cartitems.Where(a => a.UserId == o.UserId).ToList();
             double money = 0;
             foreach (var t in Total_money)
             {
                 money += t.Money();
             }
-            var Oder = new Order()
+            var Change = o.Paid - money;
+            Order order = new Order()
             {
-                UserId = oder.UserId,
-                SellerId = oder.SellerId,
-                Paid = oder.Paid,
-                PaidAt = oder.PaidAt,
-                Change = oder.Change,
+                UserId = o.UserId,
+                SellerId = o.SellerId,
+                PaidAt = o.PaidAt,
+                Change = Change,
                 Total_money = money,
             };
-            _context.Orders.Add(Oder);
+            _context.Orders.Add(order);
             _context.SaveChanges();
-            string Href = "http://localhost:/api/OderItem/Post";
-            Href += Oder.Id.ToString();
-            using (HttpClient client = new HttpClient())
-            {
-                HttpResponseMessage response = await client.GetAsync(Href);
-                if (response.IsSuccessStatusCode)
-                {
-                    string responseBody = await response.Content.ReadAsStringAsync();
-                    // process the response body
-                }
-                else
-                {
-                    // handle the error
-                }
-            }
             return Ok();
         }
 

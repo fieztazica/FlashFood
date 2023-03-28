@@ -32,7 +32,7 @@ namespace server.Controllers.api
 
         public IEnumerable<OrderItem> GetOderItem([FromUri] PagingParameterModel pagingparametermodel)
         {
-            var source = (from cart in _context.Orderitem.
+            var source = (from cart in _context.OrderItems.
                             OrderBy(a => a.OrderId)
                           select cart).AsQueryable();
             int count = source.Count();
@@ -70,8 +70,8 @@ namespace server.Controllers.api
         // POST api/<controller>
         public IHttpActionResult Post(int Orderid)
         {
-            var Order = _context.Order.FirstOrDefault(a => a.Id == Orderid);
-            var CartItem = _context.cartitem.Where(a => a.UserId == Order.UserId).ToList();
+            var Order = _context.Orders.FirstOrDefault(a => a.Id == Orderid);
+            var CartItem = _context.Cartitems.Where(a => a.UserId == Order.UserId).ToList();
             foreach(var item in CartItem)
             {
                 OrderItem orderItem = new OrderItem()
@@ -80,7 +80,7 @@ namespace server.Controllers.api
                     OrderId = Orderid,
                     Amount = item.Amount,
                 };
-                _context.Orderitem.Add(orderItem);
+                _context.OrderItems.Add(orderItem);
                 _context.SaveChanges();
             }
             return Ok();
