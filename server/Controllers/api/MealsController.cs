@@ -55,7 +55,7 @@ namespace server.Controllers.api
         public IEnumerable<Meal> GetMeal([FromUri] PagingParameterModel pagingparametermodel)
         {
             // Return List of Customer  
-            var source = (from meal in _context.meals.
+            var source = (from meal in _context.Meals.
                             OrderBy(a => a.Id)
                           select meal).AsQueryable();
             int count = source.Count();
