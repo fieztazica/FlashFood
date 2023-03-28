@@ -4,11 +4,14 @@ import { Box, Button, Heading, Image } from '@chakra-ui/react'
 import { useAppStates } from '../lib/AppContext'
 
 function Cart() {
-    const { user } = useAppStates();
+    const { user, cart } = useAppStates();
     return (
         <>
             <Box>
                 
+            </Box>
+            <Box>
+
             </Box>
         </>
     )

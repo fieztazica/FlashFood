@@ -18,26 +18,28 @@ import {
     Spacer,
     Switch,
     Heading,
+    AvatarBadge,
 } from '@chakra-ui/react'
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons'
 import react from 'react'
 import { FiShoppingCart } from 'react-icons/fi'
 import NextLink from 'next/link'
 import NavLink from '../NavLink'
+import CartIconButton from '../CartIconButton'
 
 const navLinks = [
     {
-        text: "Home",
-        href: "/"
+        text: 'Home',
+        href: '/',
     },
     {
-        text: "Account",
-        href: "#"
+        text: 'Account',
+        href: '#',
     },
     {
-        text: "Orders",
-        href: "/orders"
-    }
+        text: 'Orders',
+        href: '/orders',
+    },
 ]
 
 const StyledNavLink = ({ href, children }) => (
@@ -75,9 +77,7 @@ export default function Simple() {
                     />
 
                     <Box as={NextLink} href="/" color={'#333'} fontSize={30}>
-                        <Heading>
-                            FlashFood
-                        </Heading>
+                        <Heading>FlashFood</Heading>
                     </Box>
                     <Flex alignItems={'center'}>
                         <HStack
@@ -87,29 +87,30 @@ export default function Simple() {
                             fontWeight={100}
                         >
                             {navLinks.map((navLink, i) => (
-                                <StyledNavLink key={"navlink-" + i} href={`${navLink.href}`}>
+                                <StyledNavLink
+                                    key={'navlink-' + i}
+                                    href={`${navLink.href}`}
+                                >
                                     {navLink.text}
                                 </StyledNavLink>
                             ))}
-                            <StyledNavLink href={'/cart'}>
-                                <FiShoppingCart size={32} />
-                            </StyledNavLink>
+                            <CartIconButton />
                         </HStack>
                         <Box display={{ base: 'flex', md: 'none' }}>
-                            <StyledNavLink
-                                href={'/cart'}
-                            >
-                                <FiShoppingCart size={32} />
-                            </StyledNavLink>
+                            <CartIconButton  />
                         </Box>
-
                     </Flex>
                 </Flex>
                 {isOpen ? (
                     <Box pb={4} display={{ md: 'none' }}>
                         <Stack as={'nav'} spacing={4}>
                             {navLinks.map((navLink, i) => (
-                                <StyledNavLink key={"mb-navlink-" + i} href={navLink.href}>{navLink.text}</StyledNavLink>
+                                <StyledNavLink
+                                    key={'mb-navlink-' + i}
+                                    href={navLink.href}
+                                >
+                                    {navLink.text}
+                                </StyledNavLink>
                             ))}
                         </Stack>
                     </Box>

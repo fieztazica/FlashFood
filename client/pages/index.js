@@ -16,7 +16,7 @@ import { useAppStates } from '../lib/AppContext'
 import Item from '../components/Item'
 
 function Home() {
-    const { user } = useAppStates()
+    const { user, addToCart } = useAppStates()
     const { isOpen, onOpen, onClose, onToggle } = useDisclosure()
     return (
 
@@ -26,7 +26,9 @@ function Home() {
                 San pham Noi bat
                 </Heading>
                 <SimpleGrid columns={[2, null, 4]} spacing={5}>
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num, i) => <Item />)}
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num, i) => <Item id={`${num}`} onClick={() => addToCart({
+                        id: num
+                    })} />)}
                 </SimpleGrid>
             </Box>
         </Box>

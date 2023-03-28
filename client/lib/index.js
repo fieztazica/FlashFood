@@ -5,7 +5,7 @@ export const controllers = {
 }
 
 /**
- * 
+ *
  * @param {import("axios").AxiosInstance} instance
  * @returns
  */
@@ -49,9 +49,13 @@ export default function api(instance) {
         return data;
     }
 
+    const addToCart = async (item) => {
+
+    }
+
     const routes = {
         /**
-         * 
+         *
          * @param {string} redirectTo
          * @returns
          */
@@ -69,4 +73,3 @@ export default function api(instance) {
         routes
     }
 }
-
