@@ -1,31 +1,43 @@
 import Head from 'next/head'
 import AppLayout from '@/components/layouts/appLayout'
-import { Box, Button, Heading, Image } from '@chakra-ui/react'
+import {
+    Box,
+    Button,
+    Container,
+    Grid,
+    Heading,
+    Text,
+    Image,
+    GridItem,
+    useDisclosure,
+    SimpleGrid,
+} from '@chakra-ui/react'
 import { useAppStates } from '../lib/AppContext'
+import Item from '../components/Item'
 
 function Home() {
-    const { user } = useAppStates();
+    const { user, addToCart } = useAppStates()
+    const { isOpen, onOpen, onClose, onToggle } = useDisclosure()
     return (
-        <>
-            <Box>
-                <Heading>
-                    {user?.["Email"]}
+
+        <Box>
+            <Box id="san pham noi bat" py={5}>
+                <Heading size={"md"} mb={2 }>
+                San pham Noi bat
                 </Heading>
-                <Image src="https://cdn.discordapp.com/attachments/854996766154817559/1089082539056050197/image.png"></Image>
-                <Button>
-                    nut
-                </Button>
+                <SimpleGrid columns={[2, null, 4]} spacing={5}>
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num, i) => <Item id={`${num}`} onClick={() => addToCart({
+                        id: num
+                    })} />)}
+                </SimpleGrid>
             </Box>
-        </>
+        </Box>
+
     )
 }
 
 Home.getLayout = function getLayout(page) {
-    return (
-        <AppLayout>
-            {page}
-        </AppLayout>
-    )
+    return <AppLayout>{page}</AppLayout>
 }
 
 export default Home

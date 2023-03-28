@@ -5,13 +5,21 @@ import Header from '../shared/header'
 function AppLayout({ children }) {
     return (
         <>
-                <Container as="header">
+            <Box bg={'gray.100'}>
+                <Container as="header" maxWidth="container.xl">
                     <Header />
                 </Container>
-                <Container as="main">{children}</Container>
-                <Container as="footer">
+            </Box>
+            <Box>
+                <Container as="main" maxWidth="container.xl">
+                    {children}
+                </Container>
+            </Box>
+            <Box bg={'gray.100'}>
+                <Container as="footer" maxWidth="container.xl">
                     <Footer />
                 </Container>
+            </Box>
         </>
     )
 }

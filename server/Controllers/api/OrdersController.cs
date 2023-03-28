@@ -9,19 +9,19 @@ using System.Web.Http;
 
 namespace server.Controllers.api
 {
-    public class OrderController : ApiController
+    public class OrdersController : ApiController
     {
         private readonly ApplicationDbContext _context;
 
 
-        public OrderController()
+        public OrdersController()
         {
             _context = new ApplicationDbContext();
         }
         // GET api/<controller>
         public IHttpActionResult Get()
         {
-            var Order = _context.Order.ToList();
+            var Order = _context.Orders.ToList();
             if (Order == null || Order.Count == 0)
             {
                 return NotFound();
@@ -33,7 +33,7 @@ namespace server.Controllers.api
         [HttpGet]
         public IHttpActionResult GetByUser(string Userid)
         {
-            var Order_User = _context.Order.Where(a => a.UserId == Userid).ToList();
+            var Order_User = _context.Orders.Where(a => a.UserId == Userid).ToList();
             if (Userid == null)
             {
                 return NotFound();
@@ -43,7 +43,7 @@ namespace server.Controllers.api
         [HttpGet]
         public IHttpActionResult GetBySeller(string Sellerid)
         {
-            var Order_Seller = _context.Order.Where(a => a.SellerId == Sellerid).ToList();
+            var Order_Seller = _context.Orders.Where(a => a.SellerId == Sellerid).ToList();
             if (Sellerid == null)
             {
                 return NotFound();

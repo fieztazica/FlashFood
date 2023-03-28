@@ -10,109 +10,112 @@ using server.Models;
 
 namespace server.Controllers
 {
-    [Authorize(Roles = "Admin, Manager")]
-    public class MealsController : Controller
+    public class OrdersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Meals
-        [AllowAnonymous]
+        // GET: Orders
         public ActionResult Index()
         {
-            return View(db.Meals.ToList());
+            var orders = db.Orders.Include(o => o.User);
+            return View(orders.ToList());
         }
 
-        // GET: Meals/Details/5
+        // GET: Orders/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Meal meal = db.Meals.Find(id);
-            if (meal == null)
+            Order order = db.Orders.Find(id);
+            if (order == null)
             {
                 return HttpNotFound();
             }
-            return View(meal);
+            return View(order);
         }
 
-        // GET: Meals/Create
+        // GET: Orders/Create
         public ActionResult Create()
         {
+            ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName");
             return View();
         }
 
-        // POST: Meals/Create
+        // POST: Orders/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Price,AmountLeft")] Meal meal)
+        public ActionResult Create([Bind(Include = "Id,OrderAt,PaidAt,Total_money,Paid,Change,SellerId,UserId")] Order order)
         {
             if (ModelState.IsValid)
             {
-                db.Meals.Add(meal);
+                db.Orders.Add(order);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(meal);
+            ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName", order.UserId);
+            return View(order);
         }
 
-        // GET: Meals/Edit/5
+        // GET: Orders/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Meal meal = db.Meals.Find(id);
-            if (meal == null)
+            Order order = db.Orders.Find(id);
+            if (order == null)
             {
                 return HttpNotFound();
             }
-            return View(meal);
+            ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName", order.UserId);
+            return View(order);
         }
 
-        // POST: Meals/Edit/5
+        // POST: Orders/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Price,AmountLeft")] Meal meal)
+        public ActionResult Edit([Bind(Include = "Id,OrderAt,PaidAt,Total_money,Paid,Change,SellerId,UserId")] Order order)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(meal).State = EntityState.Modified;
+                db.Entry(order).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(meal);
+            ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName", order.UserId);
+            return View(order);
         }
 
-        // GET: Meals/Delete/5
+        // GET: Orders/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Meal meal = db.Meals.Find(id);
-            if (meal == null)
+            Order order = db.Orders.Find(id);
+            if (order == null)
             {
                 return HttpNotFound();
             }
-            return View(meal);
+            return View(order);
         }
 
-        // POST: Meals/Delete/5
+        // POST: Orders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Meal meal = db.Meals.Find(id);
-            db.Meals.Remove(meal);
+            Order order = db.Orders.Find(id);
+            db.Orders.Remove(order);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

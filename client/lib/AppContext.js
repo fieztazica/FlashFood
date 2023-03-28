@@ -1,3 +1,4 @@
+import { useToast } from '@chakra-ui/react';
 import axios from 'axios';
 import { useState, useEffect, createContext, useContext } from 'react'
 import instanceApi, { tokenKey } from '.';
@@ -5,8 +6,10 @@ import instanceApi, { tokenKey } from '.';
 const AppContext = createContext();
 
 export function AppContextProvider({ children }) {
+    const toast = useToast();
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [user, setUser] = useState(null);
+    const [cart, setCart] = useState([]);
     const [instance] = useState(() => axios.create({
         baseURL: `${process.env.apiBaseUrl}`,
     }));
@@ -29,8 +32,19 @@ export function AppContextProvider({ children }) {
         console.log(user)
     }, [user])
 
+    function addToCart(item) {
+        setCart((a) => [...a, item]);
+        toast({
+            title: `Added ${item.id} to your cart!`
+        })
+    }
+
+    function removeFromCart(item) {
+        setCart((a) => a.filter(x => x.id != item.id))
+    }
+
     let sharedStates = {
-        isAuthorized, user, instance, api
+        isAuthorized, user, instance, api, addToCart, removeFromCart, cart
     }
 
     return (

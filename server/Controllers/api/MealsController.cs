@@ -14,13 +14,13 @@ using System.Web.Http;
 namespace server.Controllers.api
 {
     [Authorize]
-    public class MealController : ApiController
+    public class MealsController : ApiController
     {
 
         private readonly ApplicationDbContext _context;
 
 
-        public MealController()
+        public MealsController()
         {
             _context = new ApplicationDbContext();
         }
@@ -29,7 +29,7 @@ namespace server.Controllers.api
         [AllowAnonymous]
         public IHttpActionResult Get()
         {
-            var meals = _context.meals.ToList();
+            var meals = _context.Meals.ToList();
             if(meals == null || meals.Count == 0)
             {
                 return NotFound();
@@ -42,7 +42,7 @@ namespace server.Controllers.api
         [AllowAnonymous]
         public IHttpActionResult Get(int id)
         {
-            var meals_Id = _context.meals.FirstOrDefault(a => a.Id == id);
+            var meals_Id = _context.Meals.FirstOrDefault(a => a.Id == id);
             if (meals_Id == null)
             {
                 return NotFound();
@@ -106,7 +106,7 @@ namespace server.Controllers.api
             {
                 return BadRequest(ModelState);
             }
-            if(_context.meals.FirstOrDefault(a => a.Id == model.Id) != null)
+            if(_context.Meals.FirstOrDefault(a => a.Id == model.Id) != null)
             {
                 return BadRequest();
             }
@@ -117,9 +117,9 @@ namespace server.Controllers.api
                 ImageURL = model.ImageURL,
                 Type = model.Type,
             };
-            _context.meals.Add(New_meal);
+            _context.Meals.Add(New_meal);
             _context.SaveChanges();
-            return Ok("Has Save");
+            return Ok("Saved");
         }
         // POST api/<controller>/id
         [Authorize(Roles = "Admin, Manager")]
@@ -129,7 +129,7 @@ namespace server.Controllers.api
             {
                 return BadRequest(ModelState);
             }
-            var EditMeal = _context.meals.FirstOrDefault(a => a.Id == id);
+            var EditMeal = _context.Meals.FirstOrDefault(a => a.Id == id);
             if ( EditMeal == null)
             {
                 return BadRequest();
@@ -139,9 +139,9 @@ namespace server.Controllers.api
             EditMeal.Name = model.Name;
             EditMeal.ImageURL = model.ImageURL;
             EditMeal.Type = model.Type;
-            _context.meals.AddOrUpdate(EditMeal);
+            _context.Meals.AddOrUpdate(EditMeal);
             _context.SaveChanges();
-            return Ok("Has Save");
+            return Ok("Saved");
         }
 
         // PUT api/<controller>
@@ -150,14 +150,14 @@ namespace server.Controllers.api
         [Authorize(Roles = "Admin, Manager")]
         public IHttpActionResult Delete(int id)
         {
-            var DeleteMeal = _context.meals.FirstOrDefault(a => a.Id == id);
+            var DeleteMeal = _context.Meals.FirstOrDefault(a => a.Id == id);
             if (DeleteMeal == null)
             {
                 return BadRequest();
             }
-            _context.meals.Remove(DeleteMeal);
+            _context.Meals.Remove(DeleteMeal);
             _context.SaveChanges();
-            return Ok("Has Save");
+            return Ok("Saved");
         }
     }
 }

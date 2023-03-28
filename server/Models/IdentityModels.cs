@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
 using System.Diagnostics;
 using System.Security.Claims;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
+using server.Migrations;
 
 namespace server.Models
 {
@@ -35,17 +37,17 @@ namespace server.Models
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public DbSet<Meal> meals { get; set; }
-        public DbSet<Order> Order { get; set; }
-        public DbSet<OrderItem> Orderitem { get; set; }
-        public DbSet<CartItem> cartitem { get; set; }
+        public DbSet<Meal> Meals { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<CartItem> Cartitems { get; set; }
 
         public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+            : base("DefaultConnection")
         {
             this.Configuration.LazyLoadingEnabled = false;
         }
-        
+
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
@@ -59,38 +61,31 @@ namespace server.Models
             modelBuilder.Entity<IdentityUserLogin>()
             .HasKey(i => new { i.UserId, i.LoginProvider });
 
-
-
             modelBuilder.Entity<Order>()
-            .HasRequired<ApplicationUser>(s => s.Seller)
+            .HasRequired<ApplicationUser>(s => s.User)
             .WithMany(g => g.Orders)
-            .HasForeignKey<string>(s => s.SellerId);
-
-            modelBuilder.Entity<Order>()
-            .HasRequired<ApplicationUser>(s => s.Seller)
-            .WithMany(g => g.Orders)
-            .HasForeignKey<string>(s => s.SellerId);
+            .HasForeignKey<string>(s => s.UserId);
 
             modelBuilder.Entity<OrderItem>()
             .HasKey(e => new { e.MealId, e.OrderId })
             .HasRequired<Order>(s => s.Order)
-            .WithMany(g => g.oderItems)
+            .WithMany(g => g.OrderItems)
             .HasForeignKey<int>(s => s.OrderId);
 
             modelBuilder.Entity<OrderItem>()
             .HasKey(e => new { e.MealId, e.OrderId })
             .HasRequired<Meal>(s => s.Meal)
-            .WithMany(g => g.oderItems)
+            .WithMany(g => g.OrderItems)
             .HasForeignKey<int>(s => s.MealId);
 
             modelBuilder.Entity<CartItem>()
             .HasKey(e => new { e.MealId, e.UserId })
             .HasRequired<Meal>(s => s.Meal)
-            .WithMany(g => g.cartItems)
+            .WithMany(g => g.CartItems)
             .HasForeignKey<int>(s => s.MealId);
 
             modelBuilder.Entity<CartItem>()
-            .HasKey(e => new { e.MealId,e.UserId})
+            .HasKey(e => new { e.MealId, e.UserId })
             .HasRequired<ApplicationUser>(s => s.User)
             .WithMany(g => g.CartItems)
             .HasForeignKey<string>(s => s.UserId);

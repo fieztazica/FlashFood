@@ -11,18 +11,18 @@ using System.Web.Http;
 
 namespace server.Controllers.api
 {
-    public class OrderItemController : ApiController
+    public class OrderItemsController : ApiController
     {
         private readonly ApplicationDbContext _context;
 
-        public OrderItemController()
+        public OrderItemsController()
         {
             _context = new ApplicationDbContext();
         }
         // GET api/<controller>
         public IHttpActionResult Get()
         {
-            var Orderitem = _context.Orderitem.ToList();
+            var Orderitem = _context.OrderItems.ToList();
             if (Orderitem == null || Orderitem.Count == 0)
             {
                 return NotFound();
@@ -59,7 +59,7 @@ namespace server.Controllers.api
         // GET api/<controller>/5
         public IHttpActionResult Get(int id)
         {
-            var Orderitem = _context.Orderitem.Where(s => s.OrderId == id).ToList();
+            var Orderitem = _context.OrderItems.Where(s => s.OrderId == id).ToList();
             if (Orderitem == null || Orderitem.Count == 0)
             {
                 return NotFound();

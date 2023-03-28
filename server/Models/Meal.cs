@@ -26,7 +26,7 @@ namespace server.Models
         [Required]
         public string Type { get; set;}
 
-        public ICollection<OrderItem> oderItems { get; set; }
-        public ICollection<CartItem> cartItems { get; set; }
+        public ICollection<OrderItem> OrderItems { get; set; }
+        public ICollection<CartItem> CartItems { get; set; }
     }
 }
