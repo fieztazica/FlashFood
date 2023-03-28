@@ -54,6 +54,14 @@ export default function api(instance) {
 
     }
 
+    const getMeal = async (id) => {
+
+    }
+
+    const getMeals = async () => {
+
+    }
+
     const routes = {
         /**
          *
