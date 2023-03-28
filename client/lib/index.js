@@ -2,6 +2,7 @@ export const tokenKey = "flashfood_token";
 
 export const controllers = {
     account: `/api/Account`,
+    meal: `/api/Meals`
 }
 
 /**
