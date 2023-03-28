@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace server.Controllers.api
@@ -50,9 +51,41 @@ namespace server.Controllers.api
             return Ok(Order_Seller);
         }
         // POST api/<controller>
-        public void Post(OrderBindingModel oder)
+        public async Task<IHttpActionResult> Post(OrderBindingModel oder)
         {
-
+            var Total_money = _context.cartitem.Where(a => a.UserId == oder.UserId).ToList();
+            double money = 0;
+            foreach (var t in Total_money)
+            {
+                money += t.Money();
+            }
+            var Oder = new Order()
+            {
+                UserId = oder.UserId,
+                SellerId = oder.SellerId,
+                Paid = oder.Paid,
+                PaidAt = oder.PaidAt,
+                Change = oder.Change,
+                Total_money = money,
+            };
+            _context.Order.Add(Oder);
+            _context.SaveChanges();
+            string Href = "http://localhost:/api/OderItem/Post";
+            Href += Oder.Id.ToString();
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage response = await client.GetAsync(Href);
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    // process the response body
+                }
+                else
+                {
+                    // handle the error
+                }
+            }
+            return Ok();
         }
 
         // PUT api/<controller>/5

@@ -15,5 +15,10 @@ namespace server.Models
 
         public Meal Meal { get; set; }
         public ApplicationUser User { get; set; }
+
+        public double Money()
+        {
+            return Amount * Meal.Price;
+        }
     }
 }

@@ -74,7 +74,14 @@ namespace server.Controllers.api
             var CartItem = _context.cartitem.Where(a => a.UserId == Order.UserId).ToList();
             foreach(var item in CartItem)
             {
-
+                OrderItem orderItem = new OrderItem()
+                {
+                    MealId = item.MealId,
+                    OrderId = Orderid,
+                    Amount = item.Amount,
+                };
+                _context.Orderitem.Add(orderItem);
+                _context.SaveChanges();
             }
             return Ok();
         }
