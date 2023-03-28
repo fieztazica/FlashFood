@@ -53,7 +53,7 @@ namespace server.Controllers.api
         // POST api/<controller>
         public async Task<IHttpActionResult> Post(OrderBindingModel oder)
         {
-            var Total_money = _context.cartitem.Where(a => a.UserId == oder.UserId).ToList();
+            var Total_money = _context.Cartitems.Where(a => a.UserId == oder.UserId).ToList();
             double money = 0;
             foreach (var t in Total_money)
             {
@@ -68,7 +68,7 @@ namespace server.Controllers.api
                 Change = oder.Change,
                 Total_money = money,
             };
-            _context.Order.Add(Oder);
+            _context.Orders.Add(Oder);
             _context.SaveChanges();
             string Href = "http://localhost:/api/OderItem/Post";
             Href += Oder.Id.ToString();
