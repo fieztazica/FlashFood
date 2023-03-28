@@ -50,7 +50,7 @@ namespace server.Controllers.api
             return Ok(Order_Seller);
         }
         // POST api/<controller>
-        public void Post(OrderBidingModel oder)
+        public void Post(OrderBindingModel oder)
         {
 
         }

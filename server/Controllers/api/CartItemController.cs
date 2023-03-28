@@ -80,7 +80,7 @@ namespace server.Controllers
         }
 
         // POST api/<controller>
-        public IHttpActionResult Post(CartBlidingModel model)
+        public IHttpActionResult Post(CartBindingModel model)
         {
             if (!ModelState.IsValid)
             {

@@ -7,7 +7,7 @@ using System.Xml.Linq;
 
 namespace server.Models
 {
-    public class OrderBidingModel
+    public class OrderBindingModel
     {
         [Required]
         [Display(Name = "UserId")]
