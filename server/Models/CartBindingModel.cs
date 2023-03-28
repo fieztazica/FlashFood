@@ -7,7 +7,7 @@ using System.Xml.Linq;
 
 namespace server.Models
 {
-    public class CartBlidingModel
+    public class CartBindingModel
     {
         [Required]
         [Display(Name = "MealId")]
@@ -20,7 +20,7 @@ namespace server.Models
         public double Amount { get; set; }
     }
 
-    public class CartDeleteBlidingModel
+    public class CartDeleteBindingModel
     {
         [Required]
         [Display(Name = "MealId")]

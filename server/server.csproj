@@ -46,6 +46,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.IdentityModel.JsonWebTokens, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.IdentityModel.JsonWebTokens.5.3.0\lib\net461\Microsoft.IdentityModel.JsonWebTokens.dll</HintPath>
@@ -188,9 +191,6 @@
     <Reference Include="System.Web.Http.Owin">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Owin.5.2.9\lib\net45\System.Web.Http.Owin.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
-      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -240,21 +240,22 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202303260453427_init.cs" />
-    <Compile Include="Migrations\202303260453427_init.designer.cs">
-      <DependentUpon>202303260453427_init.cs</DependentUpon>
+    <Compile Include="Migrations\202303251444565_init_DB.cs" />
+    <Compile Include="Migrations\202303251444565_init_DB.designer.cs">
+      <DependentUpon>202303251444565_init_DB.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\CartBlidingModel.cs" />
+    <Compile Include="Models\CartBindingModel.cs" />
     <Compile Include="Models\CartItem.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Meal.cs" />
     <Compile Include="Models\MealBindingModel.cs" />
     <Compile Include="Models\Order.cs" />
-    <Compile Include="Models\OrderBidingModel.cs" />
+    <Compile Include="Models\OrderBindingModel.cs" />
     <Compile Include="Models\OrderItem.cs" />
+    <Compile Include="Models\PagingParameterModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
@@ -300,7 +301,6 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
-    <Content Include="connectionStrings.config" />
     <Content Include="Content\bootstrap.rtl.min.css.map" />
     <Content Include="Content\bootstrap.rtl.css.map" />
     <Content Include="Content\bootstrap.min.css.map" />
@@ -317,6 +317,7 @@
     <Content Include="Content\bootstrap-grid.rtl.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="connectionStrings.config" />
     <None Include="Properties\PublishProfiles\server20230321160155 - Web Deploy.pubxml" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -357,7 +358,6 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="secrets.config" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Staff\Register.cshtml" />
     <Content Include="Views\Staff\Login.cshtml" />
@@ -366,15 +366,9 @@
     <Content Include="Views\Meals\Details.cshtml" />
     <Content Include="Views\Meals\Edit.cshtml" />
     <Content Include="Views\Meals\Index.cshtml" />
-    <Content Include="Views\Orders\Create.cshtml" />
-    <Content Include="Views\Orders\Delete.cshtml" />
-    <Content Include="Views\Orders\Details.cshtml" />
-    <Content Include="Views\Orders\Edit.cshtml" />
-    <Content Include="Views\Orders\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Filters\" />
     <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
@@ -386,9 +380,7 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202303260453427_init.resx">
-      <DependentUpon>202303260453427_init.cs</DependentUpon>
-    </EmbeddedResource>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
