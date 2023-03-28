@@ -110,7 +110,7 @@ namespace server.Controllers
             return Ok("");
         }
         [HttpPost]
-        public IHttpActionResult PostUpdate(CartDeleteBlidingModel model)
+        public IHttpActionResult PostUpdate(CartDeleteBindingModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -138,7 +138,7 @@ namespace server.Controllers
         }
 
         // DELETE api/<controller>/5
-        public IHttpActionResult Delete(CartDeleteBlidingModel model)
+        public IHttpActionResult Delete(CartDeleteBindingModel model)
         {
             List<CartItem> Cartitem = _context.cartitem.Where(s => s.UserId == model.UserId).ToList();
             CartItem DeleteCart = Cartitem.Find(a => a.MealId == model.MealId);
