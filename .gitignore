@@ -370,3 +370,5 @@ FodyWeavers.xsd
 /server/Web.config
 /server/secrets.config
 /server/connectionStrings.config
+/server/.config
+/server/Properties

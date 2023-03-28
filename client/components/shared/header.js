@@ -1,33 +1,121 @@
-import { Box, HStack } from '@chakra-ui/react'
+import { ReactNode } from 'react'
+import {
+    Box,
+    Flex,
+    Avatar,
+    HStack,
+    IconButton,
+    Link,
+    Button,
+    Menu,
+    MenuButton,
+    MenuList,
+    MenuItem,
+    MenuDivider,
+    useDisclosure,
+    useColorModeValue,
+    Stack,
+    Spacer,
+    Switch,
+    Heading,
+    AvatarBadge,
+} from '@chakra-ui/react'
+import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons'
+import react from 'react'
+import { FiShoppingCart } from 'react-icons/fi'
 import NextLink from 'next/link'
+import NavLink from '../NavLink'
+import CartIconButton from '../CartIconButton'
 
 const navLinks = [
     {
-        name: 'trang chu',
-        link: '/home',
+        text: 'Home',
+        href: '/',
     },
     {
-        name: 'tai khoan',
-        link: '/account',
+        text: 'Account',
+        href: '#',
     },
     {
-        name: 'chinh sach',
-        link: '/policy',
+        text: 'Orders',
+        href: '/orders',
     },
 ]
 
-function Header() {
+const StyledNavLink = ({ href, children }) => (
+    <NavLink
+        px={2}
+        py={1}
+        rounded={'md'}
+        _hover={{
+            textDecoration: 'none',
+            bg: useColorModeValue('gray.200', 'gray.700'),
+        }}
+        href={href}
+    >
+        {children}
+    </NavLink>
+)
+
+export default function Simple() {
+    const { isOpen, onOpen, onClose } = useDisclosure()
+
     return (
         <>
-            <HStack>
-                {navLinks.map((navLink) => (
-                    <Box as={NextLink} key={navLink.link} href={navLink.link}>
-                        {navLink.name}
+            <Box padding={[0, 4.8]}>
+                <Flex
+                    h={16}
+                    alignItems={'center'}
+                    justifyContent={'space-between'}
+                >
+                    <IconButton
+                        size={'md'}
+                        icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
+                        aria-label={'Open Menu'}
+                        display={{ md: 'none' }}
+                        onClick={isOpen ? onClose : onOpen}
+                    />
+
+                    <Box as={NextLink} href="/" color={'#333'} fontSize={30}>
+                        <Heading>FlashFood</Heading>
                     </Box>
-                ))}
-            </HStack>
+                    <Flex alignItems={'center'}>
+                        <HStack
+                            as={'nav'}
+                            display={{ base: 'none', md: 'flex' }}
+                            color={'#333'}
+                            fontWeight={100}
+                        >
+                            {navLinks.map((navLink, i) => (
+                                <StyledNavLink
+                                    key={'navlink-' + i}
+                                    href={`${navLink.href}`}
+                                >
+                                    {navLink.text}
+                                </StyledNavLink>
+                            ))}
+                            <CartIconButton />
+                        </HStack>
+                        <Box display={{ base: 'flex', md: 'none' }}>
+                            <CartIconButton  />
+                        </Box>
+                    </Flex>
+                </Flex>
+                {isOpen ? (
+                    <Box pb={4} display={{ md: 'none' }}>
+                        <Stack as={'nav'} spacing={4}>
+                            {navLinks.map((navLink, i) => (
+                                <StyledNavLink
+                                    key={'mb-navlink-' + i}
+                                    href={navLink.href}
+                                >
+                                    {navLink.text}
+                                </StyledNavLink>
+                            ))}
+                        </Stack>
+                    </Box>
+                ) : null}
+            </Box>
         </>
     )
 }
-
-export default Header
