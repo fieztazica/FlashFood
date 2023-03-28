@@ -21,8 +21,6 @@ namespace server.Models
         [Required]
         [Display(Name = "Paid")]
         public double Paid { get; set; }
-        [Required]
-        [Display(Name = "Change")]
-        public double Change { get; set; }
+
     }
 }
