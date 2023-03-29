@@ -3,6 +3,7 @@ using server.Models;
 using server.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -120,12 +121,23 @@ namespace server.Controllers.api
             }
             return Ok();
         }
-
+        
         // PUT api/<controller>/5
-        public void Put(int id, [FromBody] string value)
+        public IHttpActionResult Put(int id, OrderBindingModel orderBindingModel)
         {
+            var Order = _context.Orders.FirstOrDefault(a => a.Id == id);
+            if(Order == null)
+            {
+                return BadRequest("not Found");
+            }
+            Order.Paid = orderBindingModel.Paid;
+            Order.Total_money = orderBindingModel.Total_money;
+            Order.Change = Order.Paid - Order.Total_money;
+            _context.Orders.AddOrUpdate(Order);
+            _context.SaveChanges();
+            return Ok();
         }
-
+        
 
         // DELETE api/<controller>/5
         [HttpDelete]
