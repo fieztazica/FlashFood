@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
 using server.Models;
+using server.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Net;
@@ -23,18 +25,28 @@ namespace server.Controllers.api
         public IHttpActionResult Get()
         {
             var Orderitem = _context.OrderItems.ToList();
+            List<OrderItemViewModel> items = new List<OrderItemViewModel>();
+            foreach(var o in Orderitem)
+            {
+                var Oi = _context.OrderItems.Include(a => a.Meal).FirstOrDefault(a => a.MealId == o.MealId);
+                items.Add(OrderItemViewModel.FromOrderItem(Oi));
+            }
             if (Orderitem == null || Orderitem.Count == 0)
             {
                 return NotFound();
             }
-            return Ok(Orderitem);
+            return Ok(items);
         }
 
-        public IEnumerable<OrderItem> GetOderItem([FromUri] PagingParameterModel pagingparametermodel)
+        public IHttpActionResult GetOderItem([FromUri] PagingParameterModel pagingparametermodel)
         {
-            var source = (from cart in _context.OrderItems.
-                            OrderBy(a => a.OrderId)
-                          select cart).AsQueryable();
+            var Orderitem = _context.OrderItems.ToList();
+            List<OrderItemViewModel> source = new List<OrderItemViewModel>();
+            foreach (var o in Orderitem)
+            {
+                var Oi = _context.OrderItems.Include(a => a.Meal).FirstOrDefault(a => a.MealId == o.MealId);
+                source.Add(OrderItemViewModel.FromOrderItem(Oi));
+            }
             int count = source.Count();
             int CurrentPage = pagingparametermodel.pageNumber;
             int PageSize = pagingparametermodel.pageSize;
@@ -53,13 +65,19 @@ namespace server.Controllers.api
                 nextPage
             };
             HttpContext.Current.Response.Headers.Add("Paging-Headers", JsonConvert.SerializeObject(paginationMetadata));
-            return items;
+            return Ok(items);
         }
 
         // GET api/<controller>/5
         public IHttpActionResult Get(int id)
         {
             var Orderitem = _context.OrderItems.Where(s => s.OrderId == id).ToList();
+            List<OrderItemViewModel> items = new List<OrderItemViewModel>();
+            foreach (var o in Orderitem)
+            {
+                var Oi = _context.OrderItems.Include(a => a.Meal).FirstOrDefault(a => a.MealId == o.MealId);
+                items.Add(OrderItemViewModel.FromOrderItem(Oi));
+            }
             if (Orderitem == null || Orderitem.Count == 0)
             {
                 return NotFound();
