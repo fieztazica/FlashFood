@@ -28,7 +28,7 @@ namespace server.Models
         public string SellerId { get; set; }
         [Required]
         public string UserId { get; set; }
-
+       
         public ApplicationUser User { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; }
 
@@ -36,5 +36,6 @@ namespace server.Models
         {
             OrderAt = DateTime.Now;
         }
+      
     }
 }

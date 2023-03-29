@@ -10,7 +10,7 @@ using server.Models;
 
 namespace server.Controllers
 {
-    [Authorize(Roles = "Admin, Manager")]
+    //[Authorize(Roles = "Admin, Manager")]
     public class MealsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

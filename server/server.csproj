@@ -58,6 +58,7 @@
     <Reference Include="Microsoft.AspNetCore.Routing.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNetCore.Routing.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Routing.Abstractions.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Extensions.Primitives, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.Primitives.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
@@ -278,6 +279,18 @@
     <Compile Include="Migrations\202303260453427_init.designer.cs">
       <DependentUpon>202303260453427_init.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202303291021284_createstatus.cs" />
+    <Compile Include="Migrations\202303291021284_createstatus.designer.cs">
+      <DependentUpon>202303291021284_createstatus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202303291022408_datastatus.cs" />
+    <Compile Include="Migrations\202303291022408_datastatus.designer.cs">
+      <DependentUpon>202303291022408_datastatus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202303291044556_test.cs" />
+    <Compile Include="Migrations\202303291044556_test.designer.cs">
+      <DependentUpon>202303291044556_test.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -422,6 +435,15 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202303260453427_init.resx">
       <DependentUpon>202303260453427_init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202303291021284_createstatus.resx">
+      <DependentUpon>202303291021284_createstatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202303291022408_datastatus.resx">
+      <DependentUpon>202303291022408_datastatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202303291044556_test.resx">
+      <DependentUpon>202303291044556_test.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

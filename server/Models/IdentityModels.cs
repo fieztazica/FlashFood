@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
+
 using server.Migrations;
+using static server.Models.Order;
 
 namespace server.Models
 {
@@ -41,6 +43,7 @@ namespace server.Models
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<CartItem> Cartitems { get; set; }
+      
 
         public ApplicationDbContext()
             : base("DefaultConnection")
