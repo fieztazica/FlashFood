@@ -67,6 +67,7 @@ namespace server.Controllers.api
                 PaidAt = o.PaidAt,
                 Change = Change,
                 Total_money = money,
+
             };
             _context.Orders.Add(order);
             _context.SaveChanges();

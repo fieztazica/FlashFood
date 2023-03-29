@@ -28,7 +28,22 @@
             @Html.DisplayNameFor(model => model.ImageURL)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Type)
+            @using (Html.BeginForm("Index", "Meals", FormMethod.Get))
+            {
+
+                <p id="filter">
+
+                    @Html.DropDownList("searchString", new List<SelectListItem>
+             {
+               new SelectListItem{ Text="Dish", Value = "dish" },
+               new SelectListItem{ Text="Drink", Value = "drink" },
+
+             }, "Type", ViewBag.CurrentTypes as string)
+                    <input type="submit" value="Search" />
+
+
+                </p>
+            }
         </th>
         <th></th>
     </tr>

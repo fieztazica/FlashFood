@@ -7,6 +7,18 @@ using System.Web;
 
 namespace server.Models
 {
+    public static class StatusType
+    {
+        public static string Paid = "paid";
+
+        public static string UnPaid = "unpaid";
+    }
+
+    public enum StatusTypes
+    {
+        paid,
+        unpaid
+    }
     [Table("Orders")]
     public class Order
     {
@@ -14,21 +26,21 @@ namespace server.Models
         public int Id { get; set; }
         [Required]
         public DateTime OrderAt { get; set; }
-        [Required]
-        public DateTime PaidAt { get; set; }
+   
+        public DateTime? PaidAt { get; set; }
         [Required]
         [Range(0, Double.MaxValue)]
         public double Total_money { get; set; }
-        [Required]
+        
         [Range (0,Double.MaxValue)]
-        public double Paid { get; set; }
+        public double? Paid { get; set; }
         [Range(0, Double.MaxValue)]
-        public double Change { get; set;}
+        public double? Change { get; set;}
         [Required]
         public string SellerId { get; set; }
         [Required]
         public string UserId { get; set; }
-       
+
         public ApplicationUser User { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; }
 

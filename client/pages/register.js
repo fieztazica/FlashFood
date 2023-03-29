@@ -46,7 +46,9 @@ export default function SignupCard() {
                 router.push(redirectTo ? `/login?redirect=${redirectTo}` : `/login`)
                 toast({
                     title: 'Success!',
-                    status: 'success',
+                    
+                    
+                    : 'success',
                 })
             } catch (e) {
                 console.log(e)

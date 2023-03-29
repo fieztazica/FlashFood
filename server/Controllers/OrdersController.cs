@@ -18,15 +18,7 @@ namespace server.Controllers
         // GET: Orders
         public ActionResult Index(string sortOrder,string searchString)
         {
-           
-            
-            var orders = db.Orders.Include(o => o.User);
-            //if (!String.IsNullOrEmpty(searchString))
-            //{
-            //    orders = orders.Where(s => s.Status.Contains(searchString)
-            //                          );
-            //}
-          
+            var orders = from o in db.Orders select o;
             return View(orders.ToList());
         }
 
@@ -57,7 +49,7 @@ namespace server.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,OrderAt,PaidAt,Total_money,Paid,Change,SellerId,UserId")] Order order)
+        public ActionResult Create([Bind(Include = "Id,OrderAt,PaidAt,Total_money,Paid,Change,SellerId,UserId,Status")] Order order)
         {
             if (ModelState.IsValid)
             {

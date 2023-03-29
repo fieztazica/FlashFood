@@ -17,11 +17,18 @@ namespace server.Controllers
 
         // GET: Meals
         [AllowAnonymous]
-        public ActionResult Index()
+        public ActionResult Index(string searchString)
         {
-            return View(db.Meals.ToList());
-        }
 
+            var meals = from m in db.Meals select m;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                meals = meals.Where(s => s.Type.Contains(searchString));
+            }
+
+            return View(meals.ToList());
+        }
         // GET: Meals/Details/5
         public ActionResult Details(int? id)
         {
