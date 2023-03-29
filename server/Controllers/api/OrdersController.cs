@@ -1,4 +1,5 @@
-﻿using server.Models;
+﻿using Antlr.Runtime.Misc;
+using server.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,16 +51,27 @@ namespace server.Controllers.api
             }
             return Ok(Order_Seller);
         }
+        //Create Order and OrderItem
         // POST api/<controller>
         public IHttpActionResult Post(OrderBindingModel o)
         {
-            var Total_money = _context.Cartitems.Where(a => a.UserId == o.UserId).ToList();
+
+            var Cart = _context.Cartitems.Where(a => a.UserId == o.UserId).ToList();
             double money = 0;
-            foreach (var t in Total_money)
+            foreach (var t in Cart)
             {
-                money += t.Money();
+                var meal = _context.Meals.FirstOrDefault(a => a.Id == t.MealId);
+                money += t.Amount * meal.Price;
             }
-            var Change = o.Paid - money;
+            double Change;
+            if (o.Paid > money)
+            {
+                 Change = o.Paid - money;
+            }
+            else
+            {
+                return BadRequest();
+            }
             Order order = new Order()
             {
                 UserId = o.UserId,
@@ -67,9 +79,23 @@ namespace server.Controllers.api
                 PaidAt = o.PaidAt,
                 Change = Change,
                 Total_money = money,
+                Paid = o.Paid,
             };
             _context.Orders.Add(order);
             _context.SaveChanges();
+
+            //return RedirectToRoute("OrderItemsPost", new { orderId = order.Id });
+            foreach (var item in Cart)
+            {
+                OrderItem orderItem = new OrderItem()
+                {
+                    MealId = item.MealId,
+                    OrderId = order.Id,
+                    Amount = item.Amount,
+                };
+                _context.OrderItems.Add(orderItem);
+                _context.SaveChanges();
+            }
             return Ok();
         }
 

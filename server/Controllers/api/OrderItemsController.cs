@@ -66,7 +66,7 @@ namespace server.Controllers.api
             }
             return Ok(Orderitem);
         }
-
+        /*
         // POST api/<controller>
         public IHttpActionResult Post(int Orderid)
         {
@@ -85,7 +85,7 @@ namespace server.Controllers.api
             }
             return Ok();
         }
-
+        */
         // PUT api/<controller>/5
         public void Put(int id, [FromBody] string value)
         {
