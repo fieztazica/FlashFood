@@ -20,7 +20,11 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
     <Content Include=".eslintrc.json" />
+    <Content Include="yarn.lock" />
     <None Include="jsconfig.json" />
+    <Content Include=".gitignore" />
+    <Content Include=".prettierrc" />
+    <Content Include="components\CartIconButton.js" />
     <Content Include="components\Item.js" />
     <Content Include="components\NavLink.js" />
     <Content Include="components\shared\logo.js" />
@@ -30,10 +34,10 @@
     <Content Include="pages\login.js">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="pages\meals\[mealId].js" />
     <Content Include="pages\orders.js" />
     <Content Include="pages\register.js" />
     <Content Include="lib\serverInstance.js" />
-    <Content Include="pages\shop.js" />
     <Content Include="README.md" />
     <Content Include="next.config.js" />
     <Content Include="pages\index.js" />
@@ -60,6 +64,7 @@
     <Folder Include="lib" />
     <Folder Include="pages" />
     <Folder Include="pages\api" />
+    <Folder Include="pages\meals\" />
     <Folder Include="public" />
     <Folder Include="styles" />
   </ItemGroup>

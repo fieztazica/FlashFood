@@ -17,7 +17,6 @@ namespace server.Controllers.api
     [Authorize]
     public class MealsController : ApiController
     {
-
         private readonly ApplicationDbContext _context;
 
 
@@ -25,25 +24,6 @@ namespace server.Controllers.api
         {
             _context = new ApplicationDbContext();
         }
-
-        // GET api/<controller>
-        [AllowAnonymous]
-        public IHttpActionResult Get()
-        {
-            var meals = _context.Meals.ToList();
-            List<MealViewModel> lstMeal = new List<MealViewModel>();
-            foreach(var m  in meals)
-            {
-                lstMeal.Add(MealViewModel.FromMeal(m));
-            }
-            
-            if(meals == null || meals.Count == 0)
-            {
-                return NotFound();
-            }
-            return Ok(lstMeal);
-        }
-
 
         // GET api/<controller>/5
         [AllowAnonymous]
@@ -58,17 +38,15 @@ namespace server.Controllers.api
             return Ok(viewMeals);
         }
 
+        // GET api/<controller>
         [AllowAnonymous]
         [HttpGet]
-        public IHttpActionResult GetMeal([FromUri] PagingParameterModel pagingparametermodel)
+        public PagingResult Get([FromUri] PagingParameterModel pagingparametermodel)
         {
             // Return List of Customer  
-            var meals = _context.Meals.ToList();
-            List<MealViewModel> source = new List<MealViewModel>();
-            foreach (var m in meals)
-            {
-                source.Add(MealViewModel.FromMeal(m));
-            }
+            var source = (from meal in _context.Meals.
+                            OrderBy(a => a.Id)
+                          select meal).AsQueryable();
             int count = source.Count();
 
             // Parameter is passed from Query string if it is null then it default Value will be pageNumber:1  
@@ -87,26 +65,25 @@ namespace server.Controllers.api
             var items = source.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
 
             // if CurrentPage is greater than 1 means it has previousPage  
-            var previousPage = CurrentPage > 1 ? "Yes" : "No";
+            bool previousPage = CurrentPage > 1;
 
             // if TotalPages is greater than CurrentPage means it has nextPage  
-            var nextPage = CurrentPage < TotalPages ? "Yes" : "No";
+            bool nextPage = CurrentPage < TotalPages;
 
             // Object which we are going to send in header   
-            var paginationMetadata = new
+            PagingResult returnData = new PagingResult
             {
                 totalCount = TotalCount,
                 pageSize = PageSize,
                 currentPage = CurrentPage,
                 totalPages = TotalPages,
-                previousPage,
-                nextPage
+                previousPage = previousPage,
+                nextPage = nextPage,
+                items = items,
             };
 
-            // Setting Header  
-            HttpContext.Current.Response.Headers.Add("Paging-Headers", JsonConvert.SerializeObject(paginationMetadata));
             // Returing List of Customers Collections  
-            return Ok(items);
+            return returnData;
         }
 
         // POST api/<controller>
@@ -117,11 +94,12 @@ namespace server.Controllers.api
             {
                 return BadRequest(ModelState);
             }
-            if(_context.Meals.FirstOrDefault(a => a.Id == model.Id) != null)
+            if (_context.Meals.FirstOrDefault(a => a.Id == model.Id) != null)
             {
                 return BadRequest();
             }
-            var New_meal = new Meal() {
+            var New_meal = new Meal()
+            {
                 AmountLeft = model.AmountLeft,
                 Price = model.Price,
                 Name = model.Name,
@@ -141,7 +119,7 @@ namespace server.Controllers.api
                 return BadRequest(ModelState);
             }
             var EditMeal = _context.Meals.FirstOrDefault(a => a.Id == id);
-            if ( EditMeal == null)
+            if (EditMeal == null)
             {
                 return BadRequest();
             }

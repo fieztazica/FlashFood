@@ -372,3 +372,5 @@ FodyWeavers.xsd
 /server/connectionStrings.config
 /server/.config
 /server/Properties
+/server/secrets.config
+/client/yarn.lock
