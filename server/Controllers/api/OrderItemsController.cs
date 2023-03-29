@@ -28,8 +28,8 @@ namespace server.Controllers.api
             List<OrderItemViewModel> items = new List<OrderItemViewModel>();
             foreach(var o in Orderitem)
             {
-                var Oi = _context.OrderItems.Include(a => a.Meal).FirstOrDefault(a => a.MealId == o.MealId);
-                items.Add(OrderItemViewModel.FromOrderItem(Oi));
+                o.Meal = _context.Meals.FirstOrDefault(m => m.Id == o.MealId);
+                items.Add(OrderItemViewModel.FromOrderItem(o));
             }
             if (Orderitem == null || Orderitem.Count == 0)
             {
@@ -44,8 +44,8 @@ namespace server.Controllers.api
             List<OrderItemViewModel> source = new List<OrderItemViewModel>();
             foreach (var o in Orderitem)
             {
-                var Oi = _context.OrderItems.Include(a => a.Meal).FirstOrDefault(a => a.MealId == o.MealId);
-                source.Add(OrderItemViewModel.FromOrderItem(Oi));
+                o.Meal = _context.Meals.FirstOrDefault(m => m.Id == o.MealId);
+                source.Add(OrderItemViewModel.FromOrderItem(o));
             }
             int count = source.Count();
             int CurrentPage = pagingparametermodel.pageNumber;
@@ -75,8 +75,8 @@ namespace server.Controllers.api
             List<OrderItemViewModel> items = new List<OrderItemViewModel>();
             foreach (var o in Orderitem)
             {
-                var Oi = _context.OrderItems.Include(a => a.Meal).FirstOrDefault(a => a.MealId == o.MealId);
-                items.Add(OrderItemViewModel.FromOrderItem(Oi));
+                o.Meal = _context.Meals.FirstOrDefault(m => m.Id == o.MealId);
+                items.Add(OrderItemViewModel.FromOrderItem(o));
             }
             if (Orderitem == null || Orderitem.Count == 0)
             {
@@ -110,8 +110,16 @@ namespace server.Controllers.api
         }
 
         // DELETE api/<controller>/5
-        public void Delete(int id)
+        public IHttpActionResult Delete(int id,int mealId)
         {
+            var orderItem = _context.OrderItems.FirstOrDefault(a => a.OrderId == id && a.MealId == mealId);
+            if (orderItem == null)
+            {
+                return BadRequest("not Found");
+            }
+            _context.OrderItems.Remove(orderItem);
+            _context.SaveChanges();
+            return Ok();
         }
     }
 }

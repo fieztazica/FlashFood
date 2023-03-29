@@ -1,10 +1,12 @@
 ﻿using Antlr.Runtime.Misc;
 using server.Models;
+using server.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -27,7 +29,14 @@ namespace server.Controllers.api
             {
                 return NotFound();
             }
-            return Ok(Order);
+            List<OrderViewModel> orders = new List<OrderViewModel>();
+            foreach (var order in Order)
+            {
+                order.User = _context.Users.FirstOrDefault(a => a.Id == order.UserId);
+                orders.Add(OrderViewModel.FromOrder(order));
+            }
+            
+            return Ok(orders);
         }
         //Get by UserID
         // GET api/<controller>/5
@@ -39,7 +48,13 @@ namespace server.Controllers.api
             {
                 return NotFound();
             }
-            return Ok(Order_User);
+            List<OrderViewModel> orders = new List<OrderViewModel>();
+            foreach (var order in Order_User)
+            {
+                order.User = _context.Users.FirstOrDefault(a => a.Id == order.UserId);
+                orders.Add(OrderViewModel.FromOrder(order));
+            }
+            return Ok(orders);
         }
         [HttpGet]
         public IHttpActionResult GetBySeller(string Sellerid)
@@ -49,7 +64,13 @@ namespace server.Controllers.api
             {
                 return NotFound();
             }
-            return Ok(Order_Seller);
+            List<OrderViewModel> orders = new List<OrderViewModel>();
+            foreach (var order in Order_Seller)
+            {
+                order.User = _context.Users.FirstOrDefault(a => a.Id == order.UserId);
+                orders.Add(OrderViewModel.FromOrder(order));
+            }
+            return Ok(orders);
         }
         //Create Order and OrderItem
         // POST api/<controller>
@@ -92,6 +113,7 @@ namespace server.Controllers.api
                     MealId = item.MealId,
                     OrderId = order.Id,
                     Amount = item.Amount,
+                    Meal = _context.Meals.FirstOrDefault(a => a.Id == item.MealId)
                 };
                 _context.OrderItems.Add(orderItem);
                 _context.SaveChanges();
@@ -104,9 +126,26 @@ namespace server.Controllers.api
         {
         }
 
+
         // DELETE api/<controller>/5
-        public void Delete(int id)
+        [HttpDelete]
+        public IHttpActionResult Delete(int id)
         {
+            var Orders = _context.Orders.FirstOrDefault(a => a.Id == id);
+            if(Orders == null)
+            {
+                return BadRequest("Not Found Order");
+            }
+            var Orderitems = _context.OrderItems.Where(a => a.OrderId == id);
+            //delete all OrderItem in this order 
+            foreach (var item in Orderitems)
+            {
+                _context.OrderItems.Remove(item);
+            }
+            //delete this order
+            _context.Orders.Remove(Orders);
+            _context.SaveChanges();
+            return Ok();
         }
     }
 }

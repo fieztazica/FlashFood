@@ -28,8 +28,8 @@ namespace server.Controllers.api
             List<CartItemViewModel> lstcart = new List<CartItemViewModel>();
             foreach (var c in Cartitem)
             {
-                var cartItem = _context.Cartitems.Include(ci => ci.Meal).FirstOrDefault(ci => ci.MealId == c.MealId);
-                lstcart.Add(CartItemViewModel.FromCartItem(cartItem));
+                c.Meal = _context.Meals.FirstOrDefault(m => m.Id == c.MealId);
+                lstcart.Add(CartItemViewModel.FromCartItem(c));
             }
             if (Cartitem == null || Cartitem.Count == 0)
             {
@@ -46,8 +46,8 @@ namespace server.Controllers.api
             List<CartItemViewModel> lstcart = new List<CartItemViewModel>();
             foreach(var c in Cartitem)
             {
-                var cartItem = _context.Cartitems.Include(ci => ci.Meal).FirstOrDefault(ci => ci.MealId == c.MealId);
-                lstcart.Add(CartItemViewModel.FromCartItem(cartItem));
+                c.Meal = _context.Meals.FirstOrDefault(m => m.Id == c.MealId);
+                lstcart.Add(CartItemViewModel.FromCartItem(c));
             }
             if (Cartitem == null || Cartitem.Count == 0)
             {
