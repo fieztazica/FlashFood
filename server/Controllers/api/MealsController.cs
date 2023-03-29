@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Identity;
+using Newtonsoft.Json;
 using server.Models;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,8 @@ using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 
 namespace server.Controllers.api
@@ -13,7 +16,6 @@ namespace server.Controllers.api
     [Authorize]
     public class MealsController : ApiController
     {
-
         private readonly ApplicationDbContext _context;
 
 
@@ -21,19 +23,6 @@ namespace server.Controllers.api
         {
             _context = new ApplicationDbContext();
         }
-
-        // GET api/<controller>
-        [AllowAnonymous]
-        public IHttpActionResult Get()
-        {
-            var meals = _context.Meals.ToList();
-            if(meals == null || meals.Count == 0)
-            {
-                return NotFound();
-            }
-            return Ok(meals);
-        }
-
 
         // GET api/<controller>/5
         [AllowAnonymous]
@@ -47,6 +36,54 @@ namespace server.Controllers.api
             return Ok(meals_Id);
         }
 
+        // GET api/<controller>
+        [AllowAnonymous]
+        [HttpGet]
+        public PagingResult Get([FromUri] PagingParameterModel pagingparametermodel)
+        {
+            // Return List of Customer  
+            var source = (from meal in _context.Meals.
+                            OrderBy(a => a.Id)
+                          select meal).AsQueryable();
+            int count = source.Count();
+
+            // Parameter is passed from Query string if it is null then it default Value will be pageNumber:1  
+            int CurrentPage = pagingparametermodel.pageNumber;
+
+            // Parameter is passed from Query string if it is null then it default Value will be pageSize:20  
+            int PageSize = pagingparametermodel.pageSize;
+
+            // Display TotalCount to Records to User  
+            int TotalCount = count;
+
+            // Calculating Totalpage by Dividing (No of Records / Pagesize)  
+            int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
+
+            // Returns List of Customer after applying Paging   
+            var items = source.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
+
+            // if CurrentPage is greater than 1 means it has previousPage  
+            bool previousPage = CurrentPage > 1;
+
+            // if TotalPages is greater than CurrentPage means it has nextPage  
+            bool nextPage = CurrentPage < TotalPages;
+
+            // Object which we are going to send in header   
+            PagingResult returnData = new PagingResult
+            {
+                totalCount = TotalCount,
+                pageSize = PageSize,
+                currentPage = CurrentPage,
+                totalPages = TotalPages,
+                previousPage = previousPage,
+                nextPage = nextPage,
+                items = items,
+            };
+
+            // Returing List of Customers Collections  
+            return returnData;
+        }
+
         // POST api/<controller>
         [Authorize(Roles = "Admin, Manager")]
         public IHttpActionResult Post(MealBindingModel model)
@@ -55,11 +92,12 @@ namespace server.Controllers.api
             {
                 return BadRequest(ModelState);
             }
-            if(_context.Meals.FirstOrDefault(a => a.Id == model.Id) != null)
+            if (_context.Meals.FirstOrDefault(a => a.Id == model.Id) != null)
             {
                 return BadRequest();
             }
-            var New_meal = new Meal() {
+            var New_meal = new Meal()
+            {
                 AmountLeft = model.AmountLeft,
                 Price = model.Price,
                 Name = model.Name,
@@ -79,7 +117,7 @@ namespace server.Controllers.api
                 return BadRequest(ModelState);
             }
             var EditMeal = _context.Meals.FirstOrDefault(a => a.Id == id);
-            if ( EditMeal == null)
+            if (EditMeal == null)
             {
                 return BadRequest();
             }

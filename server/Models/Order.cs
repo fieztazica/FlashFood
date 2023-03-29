@@ -7,7 +7,7 @@ using System.Web;
 
 namespace server.Models
 {
-    [Table("Order")]
+    [Table("Orders")]
     public class Order
     {
         [Key]

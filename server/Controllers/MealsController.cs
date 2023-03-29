@@ -48,7 +48,7 @@ namespace server.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Price,AmountLeft")] Meal meal)
+        public ActionResult Create(Meal meal)
         {
             if (ModelState.IsValid)
             {
@@ -80,7 +80,7 @@ namespace server.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Price,AmountLeft")] Meal meal)
+        public ActionResult Edit(Meal meal)
         {
             if (ModelState.IsValid)
             {

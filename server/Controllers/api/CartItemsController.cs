@@ -41,7 +41,7 @@ namespace server.Controllers.api
         }
 
         // POST api/<controller>
-        public IHttpActionResult Post(CartBlidingModel model)
+        public IHttpActionResult Post(CartBindingModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -64,7 +64,7 @@ namespace server.Controllers.api
             return Ok("Saved");
         }
         [HttpPost]
-        public IHttpActionResult PostUpdate(CartDeleteBlidingModel model)
+        public IHttpActionResult PostUpdate(CartDeleteBindingModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -83,7 +83,7 @@ namespace server.Controllers.api
         }
 
         // DELETE api/<controller>/5
-        public IHttpActionResult Delete(CartDeleteBlidingModel model)
+        public IHttpActionResult Delete(CartDeleteBindingModel model)
         {
             List<CartItem> Cartitem = _context.Cartitems.Where(s => s.UserId == model.UserId).ToList();
             CartItem DeleteCart = Cartitem.Find(a => a.MealId == model.MealId);

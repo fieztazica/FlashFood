@@ -8,7 +8,7 @@ const DEV_API = 'https://localhost:44375'
 const isProd = process.env.NODE_ENV === 'production'
 
 const buildLocal = process.env.MODE === 'local'
-const API_URL = isProd ? DEPLOY_API : (USE_DEV_PROXY || buildLocal ? '' : DEV_API)
+const API_URL = isProd ? DEPLOY_API : (USE_DEV_PROXY || buildLocal ? 'http://localhost:55468' : DEV_API)
 
 const nextConfig = {
     reactStrictMode: true,
@@ -22,6 +22,15 @@ const nextConfig = {
             });
         }
         return rules;
+    },
+    async redirects() {
+        return [
+            {
+                source: '/meals',
+                destination: '/',
+                permanent: false,
+            }
+        ]
     },
 
     env: {

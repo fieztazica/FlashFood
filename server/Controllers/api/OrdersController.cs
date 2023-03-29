@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace server.Controllers.api
@@ -50,8 +51,26 @@ namespace server.Controllers.api
             return Ok(Order_Seller);
         }
         // POST api/<controller>
-        public void Post([FromBody] string value)
+        public IHttpActionResult Post(OrderBindingModel o)
         {
+            var Total_money = _context.Cartitems.Where(a => a.UserId == o.UserId).ToList();
+            double money = 0;
+            foreach (var t in Total_money)
+            {
+                money += t.Money();
+            }
+            var Change = o.Paid - money;
+            Order order = new Order()
+            {
+                UserId = o.UserId,
+                SellerId = o.SellerId,
+                PaidAt = o.PaidAt,
+                Change = Change,
+                Total_money = money,
+            };
+            _context.Orders.Add(order);
+            _context.SaveChanges();
+            return Ok();
         }
 
         // PUT api/<controller>/5

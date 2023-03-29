@@ -2,10 +2,11 @@ export const tokenKey = "flashfood_token";
 
 export const controllers = {
     account: `/api/Account`,
+    meal: `/api/Meals`
 }
 
 /**
- * 
+ *
  * @param {import("axios").AxiosInstance} instance
  * @returns
  */
@@ -49,9 +50,23 @@ export default function api(instance) {
         return data;
     }
 
+    const addToCart = async (item) => {
+
+    }
+
+    const getMeal = async (id) => {
+        const { data } = await instance.get(`${controllers.meal}/Get/${id}`);
+        return data;
+    }
+
+    const getMeals = async (pageNumber = 1, pageSize = 10) => {
+        const { data } = await instance.get(`${controllers.meal}/Get?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+        return data;
+    }
+
     const routes = {
         /**
-         * 
+         *
          * @param {string} redirectTo
          * @returns
          */
@@ -66,7 +81,8 @@ export default function api(instance) {
         logout,
         clearToken,
         setTokenToInstance,
-        routes
+        routes,
+        getMeal,
+        getMeals
     }
 }
-

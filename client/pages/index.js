@@ -3,80 +3,89 @@ import AppLayout from '@/components/layouts/appLayout'
 import {
     Box,
     Button,
+    Container,
+    Grid,
     Heading,
+    Text,
     Image,
-    Link,
-    Stack,
+    GridItem,
     useDisclosure,
+    SimpleGrid,
+    Input,
+    Select,
+    Flex,
 } from '@chakra-ui/react'
-import NextLink from 'next/link'
 import { useAppStates } from '../lib/AppContext'
-
-const navs = [
-    {
-        text: 'Home',
-        link: '/',
-    },
-    {
-        text: 'Cart',
-        link: '/cart',
-    },
-    {
-        text: 'Order',
-        link: '/orders',
-    },
-]
-
-const NavLink = ({ text, link, ...props }) => (
-    <Link as={NextLink} href={link} {...props}>
-        {text}
-    </Link>
-)
+import Item from '../components/Item'
+import { useCallback, useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 
 function Home() {
-    const { user } = useAppStates()
-    const { isOpen, onOpen, onClose, onToggle } = useDisclosure()
-    return (
-        <>
-            <Box>
-                <Heading>{user?.['Email']}</Heading>
-                <Image src="https://cdn.discordapp.com/attachments/854996766154817559/1089082539056050197/image.png"></Image>
+    const { user, addToCart, api } = useAppStates()
+    const router = useRouter();
+    const [items, setItems] = useState([]);
+    const [pageNumber, setPageNumber] = useState(1);
+    const [pageSize, setPageSize] = useState(20);
+    const [totalCount, setTotalCount] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+    const [hasMore, setHasMore] = useState(true);
+    const [fetching, setFetching] = useState(false);
 
-                <Button
-                    display={{ base: 'block', md: 'none' }}
-                    onClick={onToggle}
-                >
-                    {isOpen ? 'Close' : 'Open'}
-                </Button>
-                {/* <Stack direction={{base: "column", md:"row"}}>
-                    {navs.map((nav) => (
-                        <NavLink
-                            key={nav.text}
-                            text={nav.text}
-                            link={nav.link}
-                        />
-                    ))}
-                </Stack> */}
-                <Box bg={'lightblue'} display={{ base: 'none', md: 'block' }}>
-                    {navs.map((nav) => (
-                        <NavLink
-                            key={nav.text}
-                            text={nav.text}
-                            link={nav.link}
-                        />
-                    ))}
-                </Box>
-                {isOpen && (
-                    <Box bg={'yellow'} display={{ base: 'block', md: 'none' }}>
-                        {navs.map((nav) => (
-                            <Box key={nav.text}>
-                                <NavLink text={nav.text} link={nav.link} />
-                            </Box>
-                        ))}
-                    </Box>
-                )}
-            </Box>
-        </>
+    useEffect(() => {
+        fetchData(pageNumber)
+    }, [pageNumber])
+
+    const fetchData = async (page) => {
+        if (!hasMore) return;
+
+        const data = await api.getMeals(page);
+
+        setHasMore(data.nextPage)
+
+        setItems([...items, ...data.items])
+    }
+
+    const onScroll = () => {
+        const scrollTop = document.documentElement.scrollTop
+        const scrollHeight = document.documentElement.scrollHeight
+        const clientHeight = document.documentElement.clientHeight
+
+        if (scrollTop + clientHeight >= scrollHeight) {
+            setPageNumber(pageNumber + 1)
+        }
+    }
+
+    useEffect(() => {
+        window.addEventListener('scroll', onScroll)
+        return () => window.removeEventListener('scroll', onScroll)
+    }, [items])
+
+    return (
+
+        <Box py={5}
+            minH={"2xl"}>
+            {/*<Flex mb={5} width="full">*/}
+            {/*    <Input />*/}
+            {/*    <Select placeholder='Type' width="fit-content">*/}
+            {/*        <option value='option1'>Option 1</option>*/}
+            {/*        <option value='option2'>Option 2</option>*/}
+            {/*    </Select>*/}
+            {/*    <Select placeholder='Type' width="fit-content">*/}
+            {/*        <option value='option1'>Option 1</option>*/}
+            {/*        <option value='option2'>Option 2</option>*/}
+            {/*    </Select>*/}
+            {/*</Flex>*/}
+
+            <SimpleGrid
+                p={1}
+                columns={[2, null, 4]}
+                spacing={5}
+            >
+                {items.map((item, index) => <Item key={"meal-" + item["Id"]} obj={item}></Item>)}
+            </SimpleGrid>
+
+        </Box>
+
     )
 }
 
