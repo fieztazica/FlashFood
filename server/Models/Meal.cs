@@ -7,6 +7,13 @@ using System.Web;
 
 namespace server.Models
 {
+    public static class MealType
+    {
+        public static string Drink = "drink";
+
+        public static string Dish = "dish";
+    }
+
     [Table("Meals")]
     public class Meal
     {
@@ -28,5 +35,10 @@ namespace server.Models
 
         public ICollection<OrderItem> OrderItems { get; set; }
         public ICollection<CartItem> CartItems { get; set; }
+
+        public Meal()
+        {
+            Type = MealType.Dish;
+        }
     }
 }
