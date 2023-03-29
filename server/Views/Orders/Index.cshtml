@@ -10,11 +10,28 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+@using (Html.BeginForm("Index", "Orders", FormMethod.Get))
+{
+    <p>
+
+        @Html.DropDownList("searchString", new List<SelectListItem>
+ {
+   new SelectListItem{ Text="seller", Value = "1" },
+   new SelectListItem{ Text="2", Value = "2" },
+   new SelectListItem{ Text="Ambassador", Value = "Ambassador" }
+ }, "Select", ViewBag.CurrentTypes as string)
+        <input type="submit" value="Search" />
+
+      
+    </p>
+}
+
 <table class="table">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.User.FirstName)
-        </th>
+        @*<th>
+                @Html.DisplayNameFor(model => model.User.FirstName)
+            </th>*@
+
         <th>
             @Html.DisplayNameFor(model => model.OrderAt)
         </th>
@@ -22,7 +39,7 @@
             @Html.DisplayNameFor(model => model.PaidAt)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Total_money)
+            <a @Html.ActionLink("Total_Money", "Index", new { sortOrder = ViewData["Total_Money"] }, new { @style = "color:#000aaa;" }) </a>
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Paid)
@@ -33,38 +50,40 @@
         <th>
             @Html.DisplayNameFor(model => model.SellerId)
         </th>
+
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.User.FirstName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.OrderAt)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PaidAt)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Total_money)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Paid)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Change)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SellerId)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.User.FirstName)
+                </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaidAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Total_money)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Paid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Change)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SellerId)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
 
 </table>

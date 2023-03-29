@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -15,9 +16,39 @@ namespace server.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Orders
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder,string searchString)
         {
+            ViewData["SellerId"] = String.IsNullOrEmpty(sortOrder) ? "seller_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewData["Total_Money"] = sortOrder == "Mon" ? "mon_desc" : "Mon";
+            
             var orders = db.Orders.Include(o => o.User);
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                orders = orders.Where(s => s.SellerId.Contains(searchString)
+                                      );
+            }
+            switch (sortOrder)
+            {
+                case "seller_desc":
+                    orders = orders.OrderByDescending(s => s.SellerId);
+                    break;
+                case "Date":
+                    orders = orders.OrderBy(s => s.OrderAt);
+                    break;
+                case "date_desc":
+                    orders = orders.OrderByDescending(s => s.OrderAt);
+                    break;
+                case "Mon":
+                    orders = orders.OrderBy(s => s.Total_money);
+                    break;
+                case "mon_desc":
+                    orders = orders.OrderByDescending(s => s.Total_money);
+                    break;
+                default:
+                    orders = orders.OrderBy(s => s.SellerId);
+                    break;
+            }
             return View(orders.ToList());
         }
 
