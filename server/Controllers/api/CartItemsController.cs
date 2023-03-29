@@ -1,6 +1,9 @@
-﻿using server.Models;
+﻿using Microsoft.AspNet.Identity;
+using server.Models;
+using server.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Net;
@@ -22,22 +25,35 @@ namespace server.Controllers.api
         public IHttpActionResult Get()
         {
             var Cartitem = _context.Cartitems.ToList();
+            List<CartItemViewModel> lstcart = new List<CartItemViewModel>();
+            foreach (var c in Cartitem)
+            {
+                var cartItem = _context.Cartitems.Include(ci => ci.Meal).FirstOrDefault(ci => ci.MealId == c.MealId);
+                lstcart.Add(CartItemViewModel.FromCartItem(cartItem));
+            }
             if (Cartitem == null || Cartitem.Count == 0)
             {
                 return NotFound();
             }
-            return Ok(Cartitem);
+            return Ok(lstcart);
         }
-
+        [HttpGet]
         // GET api/<controller>/5
-        public IHttpActionResult Get(string id)
+        public IHttpActionResult GetByUser()
         {
-            List<CartItem> Cartitem = _context.Cartitems.Where(s => s.UserId == id).ToList();
+            var UserId = User.Identity.GetUserId();
+            var Cartitem = _context.Cartitems.Where(s => s.UserId == UserId).ToList();
+            List<CartItemViewModel> lstcart = new List<CartItemViewModel>();
+            foreach(var c in Cartitem)
+            {
+                var cartItem = _context.Cartitems.Include(ci => ci.Meal).FirstOrDefault(ci => ci.MealId == c.MealId);
+                lstcart.Add(CartItemViewModel.FromCartItem(cartItem));
+            }
             if (Cartitem == null || Cartitem.Count == 0)
             {
                 return NotFound();
             }
-            return Ok(Cartitem);
+            return Ok(lstcart);
         }
 
         // POST api/<controller>

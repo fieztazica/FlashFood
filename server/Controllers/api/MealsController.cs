@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using server.Models;
+using server.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
@@ -30,11 +31,17 @@ namespace server.Controllers.api
         public IHttpActionResult Get()
         {
             var meals = _context.Meals.ToList();
+            List<MealViewModel> lstMeal = new List<MealViewModel>();
+            foreach(var m  in meals)
+            {
+                lstMeal.Add(MealViewModel.FromMeal(m));
+            }
+            
             if(meals == null || meals.Count == 0)
             {
                 return NotFound();
             }
-            return Ok(meals);
+            return Ok(lstMeal);
         }
 
 
@@ -47,17 +54,21 @@ namespace server.Controllers.api
             {
                 return NotFound();
             }
-            return Ok(meals_Id);
+            var viewMeals = MealViewModel.FromMeal(meals_Id);          
+            return Ok(viewMeals);
         }
 
         [AllowAnonymous]
         [HttpGet]
-        public IEnumerable<Meal> GetMeal([FromUri] PagingParameterModel pagingparametermodel)
+        public IHttpActionResult GetMeal([FromUri] PagingParameterModel pagingparametermodel)
         {
             // Return List of Customer  
-            var source = (from meal in _context.Meals.
-                            OrderBy(a => a.Id)
-                          select meal).AsQueryable();
+            var meals = _context.Meals.ToList();
+            List<MealViewModel> source = new List<MealViewModel>();
+            foreach (var m in meals)
+            {
+                source.Add(MealViewModel.FromMeal(m));
+            }
             int count = source.Count();
 
             // Parameter is passed from Query string if it is null then it default Value will be pageNumber:1  
@@ -95,7 +106,7 @@ namespace server.Controllers.api
             // Setting Header  
             HttpContext.Current.Response.Headers.Add("Paging-Headers", JsonConvert.SerializeObject(paginationMetadata));
             // Returing List of Customers Collections  
-            return items;
+            return Ok(items);
         }
 
         // POST api/<controller>
