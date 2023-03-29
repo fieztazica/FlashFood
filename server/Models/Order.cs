@@ -35,7 +35,6 @@ namespace server.Models
         public Order()
         {
             OrderAt = DateTime.Now;
-        }
-      
+        }      
     }
 }
