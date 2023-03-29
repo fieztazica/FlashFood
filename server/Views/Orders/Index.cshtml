@@ -10,27 +10,13 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-@using (Html.BeginForm("Index", "Orders", FormMethod.Get))
-{
-    <p>
 
-        @Html.DropDownList("searchString", new List<SelectListItem>
- {
-   new SelectListItem{ Text="seller", Value = "1" },
-   new SelectListItem{ Text="2", Value = "2" },
-   new SelectListItem{ Text="Ambassador", Value = "Ambassador" }
- }, "Select", ViewBag.CurrentTypes as string)
-        <input type="submit" value="Search" />
-
-
-    </p>
-}
 
 <table class="table">
     <tr>
         @*<th>
-                @Html.DisplayNameFor(model => model.User.FirstName)
-            </th>*@
+            @Html.DisplayNameFor(model => model.User.FirstName)
+        </th>*@
 
         <th>
             @Html.DisplayNameFor(model => model.OrderAt)
@@ -39,7 +25,8 @@
             @Html.DisplayNameFor(model => model.PaidAt)
         </th>
         <th>
-            <a @Html.ActionLink("Total_Money", "Index", new { sortOrder = ViewData["Total_Money"] }, new { @style = "color:#000aaa;" }) </a>
+            @Html.DisplayNameFor(model => model.Total_money)
+           
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Paid)
@@ -49,6 +36,25 @@
         </th>
         <th>
             @Html.DisplayNameFor(model => model.SellerId)
+          
+        </th>
+        <th>
+            @using (Html.BeginForm("Index", "Orders", FormMethod.Get))
+            {
+
+                <p id="filter">
+
+                    @Html.DropDownList("searchString", new List<SelectListItem>
+             {
+               new SelectListItem{ Text="Paid", Value = "Paid" },
+               new SelectListItem{ Text="UnPaid", Value = "UnPaid" },
+
+ }, "Tinh trang", ViewBag.CurrentTypes as string)
+                    <input type="submit" value="Search" />
+
+
+                </p>
+            }
         </th>
 
         <th></th>
@@ -58,8 +64,8 @@
     {
         <tr>
             @*<td>
-                    @Html.DisplayFor(modelItem => item.User.FirstName)
-                </td>*@
+            @Html.DisplayFor(modelItem => item.User.FirstName)
+        </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.OrderAt)
             </td>
@@ -78,6 +84,10 @@
             <td>
                 @Html.DisplayFor(modelItem => item.SellerId)
             </td>
+           @*<td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>*@
+ 
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
                 @Html.ActionLink("Details", "Details", new { id = item.Id }) |
