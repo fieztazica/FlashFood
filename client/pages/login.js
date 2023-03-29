@@ -17,7 +17,7 @@ const initialValues = {
 function Login() {
     const router = useRouter();
     const redirectTo = router.query?.["redirect"]
-    const { api, user } = useAppStates();
+    const { api, login, user, getUserInfo } = useAppStates();
     const toast = useToast();
     const [loading, setLoading] = useState(false);
 
@@ -26,13 +26,14 @@ function Login() {
         onSubmit: async (values) => {
             try {
                 setLoading(true);
-                await api.login(values);
+                await login(values);
                 router.push(redirectTo ? `${decodeURIComponent(redirectTo)}` : `/`)
                 toast({
                     title: 'Success!',
                     status: 'success',
                 })
             } catch (e) {
+                console.log(e)
                 toast({
                     title: 'There is an error occured!',
                     description: `${getReasonPhrase(e.response.status)}`,

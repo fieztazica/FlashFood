@@ -7,7 +7,6 @@ const AppContext = createContext();
 
 export function AppContextProvider({ children }) {
     const toast = useToast();
-    const [isAuthorized, setIsAuthorized] = useState(false);
     const [user, setUser] = useState(null);
     const [cart, setCart] = useState([]);
     const [instance] = useState(() => axios.create({
@@ -18,24 +17,37 @@ export function AppContextProvider({ children }) {
     useEffect(() => {
         (async () => {
             api.setTokenToInstance(localStorage.getItem(tokenKey))
-            api.getUserInfo().then(u => {
-                setUser(u)
-                setIsAuthorized(true)
-            }).catch((e) => {
-                console.error(e)
-                setIsAuthorized(false)
-            });
         })()
     }, [])
 
     useEffect(() => {
-        console.log(user)
+        getUserInfo()
     }, [user])
+
+    function getUserInfo() {
+        api.getUserInfo().then(u => {
+            if (JSON.stringify(u) != JSON.stringify(user))
+                setUser(u)
+        }).catch((e) => {
+            console.error(e)
+            setUser(null)
+        });
+    }
+
+    function logout() {
+        api.logout();
+        setUser(null);
+    }
+
+    async function login({ ...props }) {
+        await api.login({ ...props })
+        getUserInfo()
+    }
 
     function addToCart(item) {
         setCart((a) => [...a, item]);
         toast({
-            title: `Added ${item.id} to your cart!`
+            title: `Added ${item["Name"]} to your cart!`
         })
     }
 
@@ -44,7 +56,7 @@ export function AppContextProvider({ children }) {
     }
 
     let sharedStates = {
-        isAuthorized, user, instance, api, addToCart, removeFromCart, cart
+        user, instance, api, addToCart, removeFromCart, cart, logout, getUserInfo, login
     }
 
     return (
