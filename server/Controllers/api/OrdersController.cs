@@ -1,4 +1,5 @@
 ﻿using Antlr.Runtime.Misc;
+using Microsoft.AspNet.Identity;
 using server.Models;
 using server.ViewModels;
 using System;
@@ -49,23 +50,26 @@ namespace server.Controllers.api
             {
                 return NotFound();
             }
+            
             var allCart = _context.OrderItems.Where(a => a.OrderId == id).ToList();
             var orderAll = new OrderAllItemViewModel
             {
                 Id = id,
                 OrderAt = Order.OrderAt,
-                UserName = Order.User.UserName,
+                UserName = _context.Users.FirstOrDefault(a => a.Id == Order.UserId).UserName,
                 PaidAt = (DateTime)Order.PaidAt,
                 Paid = (double)Order.Paid,
                 Change = (double)Order.Change,
                 SellerId = Order.SellerId,
                 TotalMoney = Order.Total_money
             };
+            List<OrderItemViewModel> items = new List<OrderItemViewModel>();
             foreach(var a in allCart)
             {
-                orderAll.ItemOrder.Add(OrderItemViewModel.FromOrderItem(a));
+                a.Meal = _context.Meals.FirstOrDefault(m => m.Id == a.MealId);
+                items.Add(OrderItemViewModel.FromOrderItem(a));
             }
-            
+            orderAll.ItemOrder = items;
             return Ok(orderAll);
         }
         //Get by UserID
