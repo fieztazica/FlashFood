@@ -111,9 +111,9 @@ namespace server.Controllers.api
         public IHttpActionResult Post(OrderBindingModel o)
         {
 
-            var Cart = _context.Cartitems.Where(a => a.UserId == o.UserId).ToList();
+            //var Cart = _context.Cartitems.Where(a => a.UserId == o.UserId).ToList();
             double money = 0;
-            foreach (var t in Cart)
+            foreach (var t in o.Carts)
             {
                 var meal = _context.Meals.FirstOrDefault(a => a.Id == t.MealId);
                 money += t.Amount * meal.Price;
@@ -140,7 +140,7 @@ namespace server.Controllers.api
             _context.SaveChanges();
 
             //return RedirectToRoute("OrderItemsPost", new { orderId = order.Id });
-            foreach (var item in Cart)
+            foreach (var item in o.Carts)
             {
                 OrderItem orderItem = new OrderItem()
                 {
@@ -171,7 +171,6 @@ namespace server.Controllers.api
             return Ok();
         }
         
-
         // DELETE api/<controller>/5
         [HttpDelete]
         public IHttpActionResult Delete(int id)

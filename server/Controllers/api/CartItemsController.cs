@@ -82,7 +82,7 @@ namespace server.Controllers.api
                 MealId = model.MealId,
                 UserId = model.UserId,
                 Amount = model.Amount,
-                //Meal = _context.meals.FirstOrDefault(a => a.Id == model.MealId),
+                Meal = _context.Meals.FirstOrDefault(a => a.Id == model.MealId),
                 //User = _context.Users.FirstOrDefault(a => a.Id == model.UserId)
             };
             _context.Cartitems.Add(New_cart);
