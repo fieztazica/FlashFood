@@ -25,7 +25,7 @@
             @Html.DisplayNameFor(model => model.AmountLeft)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ImageURL)
+             @Html.DisplayNameFor(model => model.ImageURL)
         </th>
         <th>
             @using (Html.BeginForm("Index", "Meals", FormMethod.Get))
@@ -63,7 +63,7 @@
             @Html.DisplayFor(modelItem => item.AmountLeft)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.ImageURL)
+            <img src="@Html.DisplayFor(modelItem => item.ImageURL)" />  
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Type)

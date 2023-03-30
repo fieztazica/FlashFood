@@ -261,25 +261,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202303291354597_update.cs" />
-    <Compile Include="Migrations\202303291354597_update.designer.cs">
-      <DependentUpon>202303291354597_update.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202303291444286_status.cs" />
-    <Compile Include="Migrations\202303291444286_status.designer.cs">
-      <DependentUpon>202303291444286_status.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202303291510155_ordertype.cs" />
-    <Compile Include="Migrations\202303291510155_ordertype.designer.cs">
-      <DependentUpon>202303291510155_ordertype.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202303291521199_test.cs" />
-    <Compile Include="Migrations\202303291521199_test.designer.cs">
-      <DependentUpon>202303291521199_test.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202303291532491_orderalter.cs" />
-    <Compile Include="Migrations\202303291532491_orderalter.designer.cs">
-      <DependentUpon>202303291532491_orderalter.cs</DependentUpon>
+    <Compile Include="Migrations\202303300611514_update.cs" />
+    <Compile Include="Migrations\202303300611514_update.designer.cs">
+      <DependentUpon>202303300611514_update.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
@@ -426,20 +410,8 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202303291354597_update.resx">
-      <DependentUpon>202303291354597_update.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202303291444286_status.resx">
-      <DependentUpon>202303291444286_status.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202303291510155_ordertype.resx">
-      <DependentUpon>202303291510155_ordertype.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202303291521199_test.resx">
-      <DependentUpon>202303291521199_test.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202303291532491_orderalter.resx">
-      <DependentUpon>202303291532491_orderalter.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202303300611514_update.resx">
+      <DependentUpon>202303300611514_update.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
