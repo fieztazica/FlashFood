@@ -1,6 +1,6 @@
 import AppLayout from '@/components/layouts/appLayout'
 import { Box, Button, Heading, Image } from '@chakra-ui/react'
-import { useAppStates } from '../lib/AppContext'
+import { useAppStates } from '../../lib/AppContext';
 
 function Orders() {
     const { user } = useAppStates();

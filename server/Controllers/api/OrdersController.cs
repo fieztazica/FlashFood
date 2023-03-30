@@ -1,11 +1,17 @@
-﻿using server.Models;
+﻿using Antlr.Runtime.Misc;
+using Microsoft.AspNet.Identity;
+using server.Models;
+using server.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.UI;
 
 namespace server.Controllers.api
 {
@@ -26,61 +32,154 @@ namespace server.Controllers.api
             {
                 return NotFound();
             }
-            return Ok(Order);
+            List<OrderViewModel> orders = new List<OrderViewModel>();
+            foreach (var order in Order)
+            {
+                order.User = _context.Users.FirstOrDefault(a => a.Id == order.UserId);
+                orders.Add(OrderViewModel.FromOrder(order));
+            }
+            
+            return Ok(orders);
+        }
+
+
+        public IHttpActionResult Get(int id)
+        {
+            var Order = _context.Orders.FirstOrDefault(a => a.Id == id);
+            if (Order == null)
+            {
+                return NotFound();
+            }
+            
+            var allCart = _context.OrderItems.Where(a => a.OrderId == id).ToList();
+            var orderAll = new OrderAllItemViewModel
+            {
+                Id = id,
+                OrderAt = Order.OrderAt,
+                UserName = _context.Users.FirstOrDefault(a => a.Id == Order.UserId).UserName,
+                PaidAt = (DateTime)Order.PaidAt,
+                Paid = (double)Order.Paid,
+                Change = (double)Order.Change,
+                SellerId = Order.SellerId,
+                TotalMoney = Order.Total_money
+            };
+            List<OrderItemViewModel> items = new List<OrderItemViewModel>();
+            foreach(var a in allCart)
+            {
+                a.Meal = _context.Meals.FirstOrDefault(m => m.Id == a.MealId);
+                items.Add(OrderItemViewModel.FromOrderItem(a));
+            }
+            orderAll.ItemOrder = items;
+            return Ok(orderAll);
         }
         //Get by UserID
         // GET api/<controller>/5
         [HttpGet]
-        public IHttpActionResult GetByUser(string Userid)
+        public IHttpActionResult GetByUser(string userId)
         {
-            var Order_User = _context.Orders.Where(a => a.UserId == Userid).ToList();
-            if (Userid == null)
+            var Order_User = _context.Orders.Where(a => a.UserId == userId).ToList();
+            if (userId == null)
             {
                 return NotFound();
             }
-            return Ok(Order_User);
+            List<OrderViewModel> orders = new List<OrderViewModel>();
+            foreach (var order in Order_User)
+            {
+                order.User = _context.Users.FirstOrDefault(a => a.Id == order.UserId);
+                orders.Add(OrderViewModel.FromOrder(order));
+            }
+            return Ok(orders);
         }
         [HttpGet]
-        public IHttpActionResult GetBySeller(string Sellerid)
+        public IHttpActionResult GetBySeller(string sellerId)
         {
-            var Order_Seller = _context.Orders.Where(a => a.SellerId == Sellerid).ToList();
-            if (Sellerid == null)
+            var Order_Seller = _context.Orders.Where(a => a.SellerId == sellerId).ToList();
+            if (sellerId == null)
             {
                 return NotFound();
             }
-            return Ok(Order_Seller);
+            List<OrderViewModel> orders = new List<OrderViewModel>();
+            foreach (var order in Order_Seller)
+            {
+                order.User = _context.Users.FirstOrDefault(a => a.Id == order.UserId);
+                orders.Add(OrderViewModel.FromOrder(order));
+            }
+            return Ok(orders);
         }
+        //Create Order and OrderItem
         // POST api/<controller>
         public IHttpActionResult Post(OrderBindingModel o)
         {
-            var Total_money = _context.Cartitems.Where(a => a.UserId == o.UserId).ToList();
+            var Cart = _context.CartItems.Where(a => a.UserId == o.UserId).ToList();
+
             double money = 0;
-            foreach (var t in Total_money)
+            foreach (var t in Cart)
             {
-                money += t.Money();
+                var meal = _context.Meals.FirstOrDefault(a => a.Id == t.MealId);
+                money += t.Amount * meal.Price;
             }
-            var Change = o.Paid - money;
+
             Order order = new Order()
             {
                 UserId = o.UserId,
                 SellerId = o.SellerId,
-                PaidAt = o.PaidAt,
-                Change = Change,
                 Total_money = money,
             };
             _context.Orders.Add(order);
             _context.SaveChanges();
+
+            //return RedirectToRoute("OrderItemsPost", new { orderId = order.Id });
+            foreach (var item in Cart)
+            {
+                OrderItem orderItem = new OrderItem()
+                {
+                    MealId = item.MealId,
+                    OrderId = order.Id,
+                    Amount = item.Amount,
+                    Meal = _context.Meals.FirstOrDefault(a => a.Id == item.MealId)
+                };
+                _context.OrderItems.Add(orderItem);
+                _context.SaveChanges();
+            }
             return Ok();
         }
-
+        
         // PUT api/<controller>/5
-        public void Put(int id, [FromBody] string value)
+        public IHttpActionResult Put(int id, OrderBindingModel orderBindingModel)
         {
+            var Order = _context.Orders.FirstOrDefault(a => a.Id == id);
+            if(Order == null)
+            {
+                return NotFound();
+            }
+            Order.Paid = orderBindingModel.Paid;
+            Order.Total_money = orderBindingModel.Total_money;
+            Order.Change = Order.Paid - Order.Total_money;
+            _context.Orders.AddOrUpdate(Order);
+            _context.SaveChanges();
+            return Ok();
         }
+        
 
         // DELETE api/<controller>/5
-        public void Delete(int id)
+        [HttpDelete]
+        public IHttpActionResult Delete(int id)
         {
+            var Orders = _context.Orders.FirstOrDefault(a => a.Id == id);
+            if(Orders == null)
+            {
+                return NotFound();
+            }
+            var Orderitems = _context.OrderItems.Where(a => a.OrderId == id);
+            //delete all OrderItem in this order 
+            foreach (var item in Orderitems)
+            {
+                _context.OrderItems.Remove(item);
+            }
+            //delete this order
+            _context.Orders.Remove(Orders);
+            _context.SaveChanges();
+            return Ok();
         }
     }
 }

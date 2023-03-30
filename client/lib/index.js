@@ -2,7 +2,8 @@ export const tokenKey = "flashfood_token";
 
 export const controllers = {
     account: `/api/Account`,
-    meal: `/api/Meals`
+    meal: `/api/Meals`,
+    order: `/api/Orders`
 }
 
 /**
@@ -32,11 +33,13 @@ export default function api(instance) {
         delete instance.defaults.headers.common['Authorization']
     }
 
-    const register = async ({ email, password, confirmPassword, ...props }) => {
+    const register = async ({ fisrtName, lastName, email, password, confirmPassword, ...props }) => {
         const res = await instance.post(`${controllers.account}/Register`, {
-            "Email": email,
-            "Password": password,
-            "ConfirmPassword": confirmPassword
+            "FirstName": `${fisrtName}`,
+            "LastName": `${lastName}`,
+            "Email": `${email}`,
+            "Password": `${password}`,
+            "ConfirmPassword": `${confirmPassword}`
         });
     }
 
@@ -61,6 +64,11 @@ export default function api(instance) {
 
     const getMeals = async (pageNumber = 1, pageSize = 10) => {
         const { data } = await instance.get(`${controllers.meal}/Get?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+        return data;
+    }
+
+    const getOrders = async () => {
+        const { data } = await instance.get(`${controllers.order}/Get?pageNumber=${pageNumber}&pageSize=${pageSize}`);
         return data;
     }
 

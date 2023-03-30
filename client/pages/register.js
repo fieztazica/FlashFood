@@ -24,6 +24,8 @@ import { useFormik } from 'formik';
 import { getReasonPhrase } from 'http-status-codes';
 
 const initialValues = {
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -45,7 +47,7 @@ export default function SignupCard() {
                 await api.register(values);
                 router.push(redirectTo ? `/login?redirect=${redirectTo}` : `/login`)
                 toast({
-                    title: 'Success!',
+                    title: 'Success!',                  
                     status: 'success',
                 })
             } catch (e) {
@@ -91,9 +93,13 @@ export default function SignupCard() {
                         minW={'md'}
                     >
                         <Stack spacing={4}>
-                            <FormControl id="fullName">
-                                <FormLabel>Full name</FormLabel>
-                                <Input type="text" />
+                            <FormControl id="firstName">
+                                <FormLabel>First name</FormLabel>
+                                <Input type="text" value={formik.values.firstName} onChange={formik.handleChange} />
+                            </FormControl>
+                            <FormControl id="lastName">
+                                <FormLabel>Last name</FormLabel>
+                                <Input type="text" value={formik.values.lastName} onChange={formik.handleChange} />
                             </FormControl>
                             <FormControl id="email" isRequired>
                                 <FormLabel>Email address</FormLabel>

@@ -18,9 +18,10 @@ namespace server.Models
         [Required]
         [Display(Name = "PaidAt")]
         public DateTime PaidAt { get; set; }
-        [Required]
+      
         [Display(Name = "Paid")]
         public double Paid { get; set; }
-
+        [Display(Name = "Total_Money")]
+        public double Total_money { get; set; }
     }
 }
