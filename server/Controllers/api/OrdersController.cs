@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.UI;
 
 namespace server.Controllers.api
 {
@@ -48,14 +49,24 @@ namespace server.Controllers.api
             {
                 return NotFound();
             }
-            List<OrderViewModel> orders = new List<OrderViewModel>();
-            foreach (var order in Order)
+            var allCart = _context.OrderItems.Where(a => a.OrderId == id).ToList();
+            var orderAll = new OrderAllItemViewModel
             {
-                order.User = _context.Users.FirstOrDefault(a => a.Id == order.UserId);
-                orders.Add(OrderViewModel.FromOrder(order));
+                Id = id,
+                OrderAt = Order.OrderAt,
+                UserName = Order.User.UserName,
+                PaidAt = (DateTime)Order.PaidAt,
+                Paid = (double)Order.Paid,
+                Change = (double)Order.Change,
+                SellerId = Order.SellerId,
+                TotalMoney = Order.Total_money
+            };
+            foreach(var a in allCart)
+            {
+                orderAll.ItemOrder.Add(OrderItemViewModel.FromOrderItem(a));
             }
-
-            return Ok(orders);
+            
+            return Ok(orderAll);
         }
         //Get by UserID
         // GET api/<controller>/5
