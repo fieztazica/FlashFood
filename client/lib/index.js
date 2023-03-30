@@ -33,11 +33,13 @@ export default function api(instance) {
         delete instance.defaults.headers.common['Authorization']
     }
 
-    const register = async ({ email, password, confirmPassword, ...props }) => {
+    const register = async ({ fisrtName, lastName, email, password, confirmPassword, ...props }) => {
         const res = await instance.post(`${controllers.account}/Register`, {
-            "Email": email,
-            "Password": password,
-            "ConfirmPassword": confirmPassword
+            "FirstName": `${fisrtName}`,
+            "LastName": `${lastName}`,
+            "Email": `${email}`,
+            "Password": `${password}`,
+            "ConfirmPassword": `${confirmPassword}`
         });
     }
 

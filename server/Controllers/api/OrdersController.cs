@@ -75,10 +75,10 @@ namespace server.Controllers.api
         //Get by UserID
         // GET api/<controller>/5
         [HttpGet]
-        public IHttpActionResult GetByUser(string Userid)
+        public IHttpActionResult GetByUser(string userId)
         {
-            var Order_User = _context.Orders.Where(a => a.UserId == Userid).ToList();
-            if (Userid == null)
+            var Order_User = _context.Orders.Where(a => a.UserId == userId).ToList();
+            if (userId == null)
             {
                 return NotFound();
             }
@@ -91,10 +91,10 @@ namespace server.Controllers.api
             return Ok(orders);
         }
         [HttpGet]
-        public IHttpActionResult GetBySeller(string Sellerid)
+        public IHttpActionResult GetBySeller(string sellerId)
         {
-            var Order_Seller = _context.Orders.Where(a => a.SellerId == Sellerid).ToList();
-            if (Sellerid == null)
+            var Order_Seller = _context.Orders.Where(a => a.SellerId == sellerId).ToList();
+            if (sellerId == null)
             {
                 return NotFound();
             }
