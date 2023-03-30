@@ -37,12 +37,16 @@ function Home() {
 
     const fetchData = async (page) => {
         if (!hasMore) return;
-
+        setFetching(true)
         const data = await api.getMeals(page);
 
-        setHasMore(data.nextPage)
+        if (data) {
+            setHasMore(data.nextPage)
 
-        setItems([...items, ...data.items])
+            setItems([...items, ...data.items])
+
+            setFetching(false)
+        }
     }
 
     const onScroll = () => {
@@ -61,9 +65,10 @@ function Home() {
     }, [items])
 
     return (
-
-        <Box py={5}
-            minH={"2xl"}>
+        <Box
+            py={5}
+            minH={"2xl"}
+        >
             {/*<Flex mb={5} width="full">*/}
             {/*    <Input />*/}
             {/*    <Select placeholder='Type' width="fit-content">*/}
@@ -75,13 +80,13 @@ function Home() {
             {/*        <option value='option2'>Option 2</option>*/}
             {/*    </Select>*/}
             {/*</Flex>*/}
-
             <SimpleGrid
                 p={1}
                 columns={[2, null, 4]}
                 spacing={5}
             >
                 {items.map((item, index) => <Item key={"meal-" + item["Id"]} obj={item}></Item>)}
+                {fetching && <Box>Loading...</Box> }
             </SimpleGrid>
 
         </Box>

@@ -1,4 +1,5 @@
 import {
+    AspectRatio,
     Button,
     ButtonGroup,
     Card,
@@ -19,16 +20,19 @@ function Item({ obj, ...props }) {
             href={`/meals/${obj["Id"]}`}
             maxW="sm"
             transitionDuration={'0.3s'}
-            _hover={{ cursor: 'pointer', boxShadow: '1px 1px 1px 1px grey' }}
+            _hover={{ boxShadow: '1px 1px 1px 1px grey' }}
             {...props}
         >
             <CardBody>
-                <Image
-                    src={obj["ImageURL"]}
-                    alt="Green double couch with wooden legs"
-                    borderRadius="lg"
-                />
-                <Stack mt="6" spacing="3">
+                <AspectRatio ratio={1}>
+                    <Image
+                        src={obj["ImageURL"]}
+                        alt="Green double couch with wooden legs"
+                        borderRadius="lg"
+                        objectFit='cover'
+                    />
+                </AspectRatio>
+                <Stack mt="6">
                     <Heading size="md">{obj['Name']}</Heading>
                     <Text color="blue.600" fontSize={['md', 'xl']}>
                         VND {obj['Price']}
