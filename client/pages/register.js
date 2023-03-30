@@ -45,7 +45,7 @@ export default function SignupCard() {
                 await api.register(values);
                 router.push(redirectTo ? `/login?redirect=${redirectTo}` : `/login`)
                 toast({
-                    title: 'Success!',
+                    title: 'Success!',                  
                     status: 'success',
                 })
             } catch (e) {
