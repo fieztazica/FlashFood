@@ -86,13 +86,13 @@ namespace server.Controllers.api
                 money += t.Amount * meal.Price;
             }
             double Change;
-            if (o.Paid > money)
+            if (o.Paid >= money)
             {
                  Change = o.Paid - money;
             }
             else
             {
-                return BadRequest();
+                return BadRequest("Ko Du Tien");
             }
             Order order = new Order()
             {

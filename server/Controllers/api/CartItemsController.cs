@@ -63,9 +63,19 @@ namespace server.Controllers.api
             {
                 return BadRequest(ModelState);
             }
-            if (_context.Meals.FirstOrDefault(a => a.Id == model.MealId) == null)
+            var UserId = User.Identity.GetUserId();
+            var Meal = _context.Meals.FirstOrDefault(a => a.Id == model.MealId);
+            if (Meal == null)
             {
                 return BadRequest();
+            }
+            var cartItem = _context.Cartitems.FirstOrDefault(a => a.MealId == model.MealId && a.UserId == UserId);
+            if ( cartItem != null)
+            {
+                cartItem.Amount += model.Amount;
+                _context.Cartitems.AddOrUpdate(cartItem);
+                _context.SaveChanges();
+                return Ok(cartItem);
             }
             var New_cart = new CartItem()
             {
