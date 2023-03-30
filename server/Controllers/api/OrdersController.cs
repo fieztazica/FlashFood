@@ -39,6 +39,24 @@ namespace server.Controllers.api
             
             return Ok(orders);
         }
+
+
+        public IHttpActionResult Get(int id)
+        {
+            var Order = _context.Orders.FirstOrDefault(a => a.Id == id);
+            if (Order == null)
+            {
+                return NotFound();
+            }
+            List<OrderViewModel> orders = new List<OrderViewModel>();
+            foreach (var order in Order)
+            {
+                order.User = _context.Users.FirstOrDefault(a => a.Id == order.UserId);
+                orders.Add(OrderViewModel.FromOrder(order));
+            }
+
+            return Ok(orders);
+        }
         //Get by UserID
         // GET api/<controller>/5
         [HttpGet]
