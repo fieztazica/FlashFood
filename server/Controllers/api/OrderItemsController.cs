@@ -13,6 +13,7 @@ using System.Web.Http;
 
 namespace server.Controllers.api
 {
+    [Authorize]
     public class OrderItemsController : ApiController
     {
         private readonly ApplicationDbContext _context;
@@ -21,6 +22,7 @@ namespace server.Controllers.api
         {
             _context = new ApplicationDbContext();
         }
+        [Authorize(Roles = "Admin, Manager")]
         // GET api/<controller>
         public IHttpActionResult Get()
         {
@@ -80,6 +82,7 @@ namespace server.Controllers.api
         }
 
         // DELETE api/<controller>/5
+        [Authorize(Roles = "Admin, Manager")]
         public IHttpActionResult Delete(int id,int mealId)
         {
             var orderItem = _context.OrderItems.FirstOrDefault(a => a.OrderId == id && a.MealId == mealId);

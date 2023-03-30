@@ -22,6 +22,7 @@ namespace server.Controllers.api
             _context = new ApplicationDbContext();
         }
         // GET api/<controller>
+        [Authorize(Roles = "Admin, Manager")]
         public IHttpActionResult Get()
         {
             var Cartitem = _context.Cartitems.ToList();
