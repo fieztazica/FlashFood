@@ -13,10 +13,37 @@
 <table class="table">
     <tr>
         <th>
+            @Html.DisplayNameFor(model => model.Id)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.Price)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.AmountLeft)
+        </th>
+        <th>
+             @Html.DisplayNameFor(model => model.ImageURL)
+        </th>
+        <th>
+            @using (Html.BeginForm("Index", "Meals", FormMethod.Get))
+            {
+
+                <p id="filter">
+
+                    @Html.DropDownList("searchString", new List<SelectListItem>
+             {
+               new SelectListItem{ Text="Dish", Value = "dish" },
+               new SelectListItem{ Text="Drink", Value = "drink" },
+
+             }, "Type", ViewBag.CurrentTypes as string)
+                    <input type="submit" value="Search" />
+
+
+                </p>
+            }
         </th>
         <th></th>
     </tr>
@@ -24,10 +51,22 @@
 @foreach (var item in Model) {
     <tr>
         <td>
+            @Html.DisplayFor(modelItem => item.Id)
+        </td>
+        <td>
             @Html.DisplayFor(modelItem => item.Price)
         </td>
         <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
             @Html.DisplayFor(modelItem => item.AmountLeft)
+        </td>
+        <td>
+            <img src="@Html.DisplayFor(modelItem => item.ImageURL)" />  
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Type)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |

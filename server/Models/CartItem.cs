@@ -15,5 +15,6 @@ namespace server.Models
 
         public Meal Meal { get; set; }
         public ApplicationUser User { get; set; }
+
     }
 }

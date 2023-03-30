@@ -11,17 +11,26 @@ using server.Models;
 namespace server.Controllers
 {
     [Authorize(Roles = "Admin, Manager")]
+
     public class MealsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Meals
         [AllowAnonymous]
-        public ActionResult Index()
-        {
-            return View(db.Meals.ToList());
-        }
 
+        public ActionResult Index(string searchString)
+        {
+
+            var meals = from m in db.Meals select m;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                meals = meals.Where(s => s.Type.Contains(searchString));
+            }
+
+            return View(meals.ToList());
+        }
         // GET: Meals/Details/5
         public ActionResult Details(int? id)
         {
@@ -48,7 +57,7 @@ namespace server.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Price,AmountLeft")] Meal meal)
+        public ActionResult Create(Meal meal)
         {
             if (ModelState.IsValid)
             {
@@ -80,7 +89,7 @@ namespace server.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Price,AmountLeft")] Meal meal)
+        public ActionResult Edit(Meal meal)
         {
             if (ModelState.IsValid)
             {

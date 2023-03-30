@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -15,9 +16,9 @@ namespace server.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Orders
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder,string searchString)
         {
-            var orders = db.Orders.Include(o => o.User);
+            var orders = from o in db.Orders select o;
             return View(orders.ToList());
         }
 
@@ -48,7 +49,7 @@ namespace server.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,OrderAt,PaidAt,Total_money,Paid,Change,SellerId,UserId")] Order order)
+        public ActionResult Create([Bind(Include = "Id,OrderAt,PaidAt,Total_money,Paid,Change,SellerId,UserId,Status")] Order order)
         {
             if (ModelState.IsValid)
             {

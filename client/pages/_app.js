@@ -1,6 +1,7 @@
 import { ChakraProvider } from '@chakra-ui/react'
 import { extendTheme } from '@chakra-ui/react'
 import { AppContextProvider } from '../lib/AppContext'
+import Head from "next/head";
 
 const colors = {
     brand: {
@@ -17,7 +18,19 @@ export default function App({ Component, pageProps }) {
 
     return (
         <>
-            <ChakraProvider theme={theme}>
+            <Head>
+                <title>FlashFood</title>
+                <meta name="title" content={"FlashFood"} />
+                <meta
+                    name="description"
+                    content={`Super Speed Food Service`}
+                />
+                <meta content="width=device-width, initial-scale=1" name="viewport" />
+                <meta name="language" content="English" />
+                <meta name="robots" content="index, follow" />
+                <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
+            </Head>
+            <ChakraProvider theme={theme} toastOptions={{ defaultOptions: { position: 'top' } }}>
                 <AppContextProvider>
                     {getLayout(<Component {...pageProps} />)}
                 </AppContextProvider>

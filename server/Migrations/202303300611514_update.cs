@@ -3,7 +3,7 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class init : DbMigration
+    public partial class update : DbMigration
     {
         public override void Up()
         {
@@ -44,20 +44,20 @@
                     })
                 .PrimaryKey(t => new { t.MealId, t.OrderId })
                 .ForeignKey("dbo.Meals", t => t.MealId, cascadeDelete: true)
-                .ForeignKey("dbo.Order", t => t.OrderId, cascadeDelete: true)
+                .ForeignKey("dbo.Orders", t => t.OrderId, cascadeDelete: true)
                 .Index(t => t.MealId)
                 .Index(t => t.OrderId);
             
             CreateTable(
-                "dbo.Order",
+                "dbo.Orders",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
                         OrderAt = c.DateTime(nullable: false),
-                        PaidAt = c.DateTime(nullable: false),
+                        PaidAt = c.DateTime(),
                         Total_money = c.Double(nullable: false),
-                        Paid = c.Double(nullable: false),
-                        Change = c.Double(nullable: false),
+                        Paid = c.Double(),
+                        Change = c.Double(),
                         SellerId = c.String(nullable: false),
                         UserId = c.String(nullable: false, maxLength: 128),
                     })
@@ -144,8 +144,8 @@
             DropForeignKey("dbo.IdentityUserRoles", "IdentityRole_Id", "dbo.IdentityRoles");
             DropForeignKey("dbo.CartItems", "UserId", "dbo.ApplicationUsers");
             DropForeignKey("dbo.CartItems", "MealId", "dbo.Meals");
-            DropForeignKey("dbo.OrderItems", "OrderId", "dbo.Order");
-            DropForeignKey("dbo.Order", "UserId", "dbo.ApplicationUsers");
+            DropForeignKey("dbo.OrderItems", "OrderId", "dbo.Orders");
+            DropForeignKey("dbo.Orders", "UserId", "dbo.ApplicationUsers");
             DropForeignKey("dbo.IdentityUserRoles", "ApplicationUser_Id", "dbo.ApplicationUsers");
             DropForeignKey("dbo.IdentityUserLogins", "ApplicationUser_Id", "dbo.ApplicationUsers");
             DropForeignKey("dbo.IdentityUserClaims", "ApplicationUser_Id", "dbo.ApplicationUsers");
@@ -154,7 +154,7 @@
             DropIndex("dbo.IdentityUserRoles", new[] { "ApplicationUser_Id" });
             DropIndex("dbo.IdentityUserLogins", new[] { "ApplicationUser_Id" });
             DropIndex("dbo.IdentityUserClaims", new[] { "ApplicationUser_Id" });
-            DropIndex("dbo.Order", new[] { "UserId" });
+            DropIndex("dbo.Orders", new[] { "UserId" });
             DropIndex("dbo.OrderItems", new[] { "OrderId" });
             DropIndex("dbo.OrderItems", new[] { "MealId" });
             DropIndex("dbo.CartItems", new[] { "UserId" });
@@ -164,7 +164,7 @@
             DropTable("dbo.IdentityUserLogins");
             DropTable("dbo.IdentityUserClaims");
             DropTable("dbo.ApplicationUsers");
-            DropTable("dbo.Order");
+            DropTable("dbo.Orders");
             DropTable("dbo.OrderItems");
             DropTable("dbo.Meals");
             DropTable("dbo.CartItems");

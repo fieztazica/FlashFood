@@ -2,6 +2,8 @@ export const tokenKey = "flashfood_token";
 
 export const controllers = {
     account: `/api/Account`,
+    meal: `/api/Meals`,
+    order: `/api/Orders`
 }
 
 /**
@@ -53,6 +55,21 @@ export default function api(instance) {
 
     }
 
+    const getMeal = async (id) => {
+        const { data } = await instance.get(`${controllers.meal}/Get/${id}`);
+        return data;
+    }
+
+    const getMeals = async (pageNumber = 1, pageSize = 10) => {
+        const { data } = await instance.get(`${controllers.meal}/Get?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+        return data;
+    }
+
+    const getOrders = async () => {
+        const { data } = await instance.get(`${controllers.order}/Get?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+        return data;
+    }
+
     const routes = {
         /**
          *
@@ -70,6 +87,8 @@ export default function api(instance) {
         logout,
         clearToken,
         setTokenToInstance,
-        routes
+        routes,
+        getMeal,
+        getMeals
     }
 }

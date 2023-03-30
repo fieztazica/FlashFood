@@ -40,11 +40,12 @@ namespace server.Models
         public DbSet<Meal> Meals { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
-        public DbSet<CartItem> Cartitems { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection")
         {
+            this.Configuration.LazyLoadingEnabled = false;
         }
 
         public static ApplicationDbContext Create()

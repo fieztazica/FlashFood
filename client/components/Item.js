@@ -1,4 +1,5 @@
 import {
+    AspectRatio,
     Button,
     ButtonGroup,
     Card,
@@ -10,26 +11,31 @@ import {
     Stack,
     Text,
 } from '@chakra-ui/react'
+import NextLink from 'next/link'
 
-function Item({ id, ...props }) {
+function Item({ obj, ...props }) {
     return (
         <Card
-            id={id}
+            as={NextLink}
+            href={`/meals/${obj["Id"]}`}
             maxW="sm"
             transitionDuration={'0.3s'}
-            _hover={{ cursor: 'pointer', boxShadow: '1px 1px 1px 1px grey' }}
+            _hover={{ boxShadow: '1px 1px 1px 1px grey' }}
             {...props}
         >
             <CardBody>
-                <Image
-                    src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-                    alt="Green double couch with wooden legs"
-                    borderRadius="lg"
-                />
-                <Stack mt="6" spacing="3">
-                    <Heading size="md">Living room Sofa</Heading>
-                    <Text color="blue.600" fontSize="2xl">
-                        $450
+                <AspectRatio ratio={1}>
+                    <Image
+                        src={obj["ImageURL"]}
+                        alt="Green double couch with wooden legs"
+                        borderRadius="lg"
+                        objectFit='cover'
+                    />
+                </AspectRatio>
+                <Stack mt="6">
+                    <Heading size="md">{obj['Name']}</Heading>
+                    <Text color="blue.600" fontSize={['md', 'xl']}>
+                        VND {obj['Price']}
                     </Text>
                 </Stack>
             </CardBody>
