@@ -9,15 +9,14 @@ export function AppContextProvider({ children }) {
     const toast = useToast();
     const [user, setUser] = useState(null);
     const [cart, setCart] = useState([]);
-    const [instance] = useState(() => axios.create({
+    const [api] = useState(() => instanceApi(axios.create({
         baseURL: `${process.env.apiBaseUrl}`,
-    }));
-    const [api] = useState(() => instanceApi(instance));
+    })));
+
+    if (!api) return;
 
     useEffect(() => {
-        (async () => {
-            api.setTokenToInstance(localStorage.getItem(tokenKey))
-        })()
+        api.setTokenToInstance(localStorage.getItem(tokenKey))
     }, [])
 
     useEffect(() => {
@@ -40,8 +39,7 @@ export function AppContextProvider({ children }) {
     }
 
     async function login({ ...props }) {
-        await api.login({ ...props })
-        getUserInfo()
+        api.login({ ...props }).then(() => getUserInfo())
     }
 
     function addToCart(item) {
@@ -56,7 +54,7 @@ export function AppContextProvider({ children }) {
     }
 
     let sharedStates = {
-        user, instance, api, addToCart, removeFromCart, cart, logout, getUserInfo, login
+        user, api, addToCart, removeFromCart, cart, logout, getUserInfo, login
     }
 
     return (

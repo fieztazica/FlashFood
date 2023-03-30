@@ -33,14 +33,8 @@ export default function api(instance) {
         delete instance.defaults.headers.common['Authorization']
     }
 
-    const register = async ({ fisrtName, lastName, email, password, confirmPassword, ...props }) => {
-        const res = await instance.post(`${controllers.account}/Register`, {
-            "FirstName": `${fisrtName}`,
-            "LastName": `${lastName}`,
-            "Email": `${email}`,
-            "Password": `${password}`,
-            "ConfirmPassword": `${confirmPassword}`
-        });
+    const register = async (body) => {
+        const res = await instance.post(`${controllers.account}/Register`, body);
     }
 
     const logout = () => {
@@ -50,6 +44,7 @@ export default function api(instance) {
 
     const getUserInfo = async () => {
         const { data } = await instance.get(`${controllers.account}/UserInfo`)
+        console.log(data)
         return data;
     }
 

@@ -24,11 +24,11 @@ import { useFormik } from 'formik';
 import { getReasonPhrase } from 'http-status-codes';
 
 const initialValues = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    FirstName: '',
+    LastName: '',
+    Email: '',
+    Password: '',
+    ConfirmPassword: '',
 }
 
 export default function SignupCard() {
@@ -93,22 +93,22 @@ export default function SignupCard() {
                         minW={'md'}
                     >
                         <Stack spacing={4}>
-                            <FormControl id="firstName">
+                            <FormControl id="FirstName">
                                 <FormLabel>First name</FormLabel>
-                                <Input type="text" value={formik.values.firstName} onChange={formik.handleChange} />
+                                <Input type="text" value={formik.values.FirstName} onChange={formik.handleChange} />
                             </FormControl>
-                            <FormControl id="lastName">
+                            <FormControl id="LastName">
                                 <FormLabel>Last name</FormLabel>
-                                <Input type="text" value={formik.values.lastName} onChange={formik.handleChange} />
+                                <Input type="text" value={formik.values.LastName} onChange={formik.handleChange} />
                             </FormControl>
-                            <FormControl id="email" isRequired>
+                            <FormControl id="Email" isRequired>
                                 <FormLabel>Email address</FormLabel>
-                                <Input type="email" value={formik.values.email} onChange={formik.handleChange} />
+                                <Input type="email" value={formik.values.Email} onChange={formik.handleChange} />
                             </FormControl>
-                            <FormControl id="password" isRequired>
+                            <FormControl id="Password" isRequired>
                                 <FormLabel>Password</FormLabel>
                                 <InputGroup>
-                                    <Input type={showPassword ? 'text' : 'password'} value={formik.values.password} onChange={formik.handleChange} />
+                                    <Input type={showPassword ? 'text' : 'password'} value={formik.values.Password} onChange={formik.handleChange} />
                                     <InputRightElement h={'full'}>
                                         <Button
                                             variant={'ghost'}
@@ -120,10 +120,10 @@ export default function SignupCard() {
                                     </InputRightElement>
                                 </InputGroup>
                             </FormControl>
-                            <FormControl id="confirmPassword" isRequired>
+                            <FormControl id="ConfirmPassword" isRequired>
                                 <FormLabel>Confirm your password</FormLabel>
                                 <InputGroup>
-                                    <Input type={showPassword ? 'text' : 'password'} value={formik.values.confirmPassword} onChange={formik.handleChange} />
+                                    <Input type={showPassword ? 'text' : 'password'} value={formik.values.ConfirmPassword} onChange={formik.handleChange} />
                                     <InputRightElement h={'full'}>
                                         <Button
                                             variant={'ghost'}

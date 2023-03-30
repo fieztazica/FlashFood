@@ -46,11 +46,11 @@ const StyledNavLink = ({ href, children }) => (
     </NavLink>
 )
 
-export default function Simple() {
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const { user, logout } = useAppStates();
+function Header() {
     const indicator = useDisclosure();
     const router = useRouter();
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const { user, logout } = useAppStates();
 
     useEffect(() => {
         const handleStart = (url) => {
@@ -182,3 +182,5 @@ export default function Simple() {
         </>
     )
 }
+
+export default Header
