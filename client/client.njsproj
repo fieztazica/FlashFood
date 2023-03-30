@@ -22,7 +22,6 @@
     <Content Include=".eslintrc.json" />
     <Content Include="pages\orders\index.js" />
     <Content Include="pages\orders\[orderId].js" />
-    <Content Include="yarn.lock" />
     <None Include="jsconfig.json" />
     <Content Include=".gitignore" />
     <Content Include=".prettierrc" />

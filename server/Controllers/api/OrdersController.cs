@@ -110,31 +110,20 @@ namespace server.Controllers.api
         // POST api/<controller>
         public IHttpActionResult Post(OrderBindingModel o)
         {
+            var Cart = _context.CartItems.Where(a => a.UserId == o.UserId).ToList();
 
-            var Cart = _context.Cartitems.Where(a => a.UserId == o.UserId).ToList();
             double money = 0;
             foreach (var t in Cart)
             {
                 var meal = _context.Meals.FirstOrDefault(a => a.Id == t.MealId);
                 money += t.Amount * meal.Price;
             }
-            double Change;
-            if (o.Paid >= money)
-            {
-                 Change = o.Paid - money;
-            }
-            else
-            {
-                return BadRequest("Ko Du Tien");
-            }
+
             Order order = new Order()
             {
                 UserId = o.UserId,
                 SellerId = o.SellerId,
-                PaidAt = o.PaidAt,
-                Change = Change,
                 Total_money = money,
-                Paid = o.Paid,
             };
             _context.Orders.Add(order);
             _context.SaveChanges();
@@ -161,7 +150,7 @@ namespace server.Controllers.api
             var Order = _context.Orders.FirstOrDefault(a => a.Id == id);
             if(Order == null)
             {
-                return BadRequest("not Found");
+                return NotFound();
             }
             Order.Paid = orderBindingModel.Paid;
             Order.Total_money = orderBindingModel.Total_money;
@@ -179,7 +168,7 @@ namespace server.Controllers.api
             var Orders = _context.Orders.FirstOrDefault(a => a.Id == id);
             if(Orders == null)
             {
-                return BadRequest("Not Found Order");
+                return NotFound();
             }
             var Orderitems = _context.OrderItems.Where(a => a.OrderId == id);
             //delete all OrderItem in this order 
