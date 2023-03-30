@@ -261,6 +261,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202303291520328_test.cs" />
+    <Compile Include="Migrations\202303291520328_test.Designer.cs">
+      <DependentUpon>202303291520328_test.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\202303300611514_update.cs" />
     <Compile Include="Migrations\202303300611514_update.designer.cs">
       <DependentUpon>202303300611514_update.cs</DependentUpon>
@@ -414,6 +418,9 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Migrations\202303291520328_test.resx">
+      <DependentUpon>202303291520328_test.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202303300611514_update.resx">
       <DependentUpon>202303300611514_update.cs</DependentUpon>
     </EmbeddedResource>
