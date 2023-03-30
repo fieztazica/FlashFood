@@ -1,6 +1,9 @@
-﻿using server.Models;
+﻿using Microsoft.AspNet.Identity;
+using server.Models;
+using server.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Net;
@@ -22,22 +25,35 @@ namespace server.Controllers.api
         public IHttpActionResult Get()
         {
             var Cartitem = _context.Cartitems.ToList();
+            List<CartItemViewModel> lstcart = new List<CartItemViewModel>();
+            foreach (var c in Cartitem)
+            {
+                c.Meal = _context.Meals.FirstOrDefault(m => m.Id == c.MealId);
+                lstcart.Add(CartItemViewModel.FromCartItem(c));
+            }
             if (Cartitem == null || Cartitem.Count == 0)
             {
                 return NotFound();
             }
-            return Ok(Cartitem);
+            return Ok(lstcart);
         }
-
+        [HttpGet]
         // GET api/<controller>/5
-        public IHttpActionResult Get(string id)
+        public IHttpActionResult GetByUser()
         {
-            List<CartItem> Cartitem = _context.Cartitems.Where(s => s.UserId == id).ToList();
+            var UserId = User.Identity.GetUserId();
+            var Cartitem = _context.Cartitems.Where(s => s.UserId == UserId).ToList();
+            List<CartItemViewModel> lstcart = new List<CartItemViewModel>();
+            foreach(var c in Cartitem)
+            {
+                c.Meal = _context.Meals.FirstOrDefault(m => m.Id == c.MealId);
+                lstcart.Add(CartItemViewModel.FromCartItem(c));
+            }
             if (Cartitem == null || Cartitem.Count == 0)
             {
                 return NotFound();
             }
-            return Ok(Cartitem);
+            return Ok(lstcart);
         }
 
         // POST api/<controller>
@@ -47,9 +63,19 @@ namespace server.Controllers.api
             {
                 return BadRequest(ModelState);
             }
-            if (_context.Meals.FirstOrDefault(a => a.Id == model.MealId) == null)
+            var UserId = User.Identity.GetUserId();
+            var Meal = _context.Meals.FirstOrDefault(a => a.Id == model.MealId);
+            if (Meal == null)
             {
                 return BadRequest();
+            }
+            var cartItem = _context.Cartitems.FirstOrDefault(a => a.MealId == model.MealId && a.UserId == UserId);
+            if ( cartItem != null)
+            {
+                cartItem.Amount += model.Amount;
+                _context.Cartitems.AddOrUpdate(cartItem);
+                _context.SaveChanges();
+                return Ok(cartItem);
             }
             var New_cart = new CartItem()
             {

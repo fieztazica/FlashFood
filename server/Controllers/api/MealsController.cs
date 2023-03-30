@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using server.Models;
+using server.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
@@ -33,7 +34,8 @@ namespace server.Controllers.api
             {
                 return NotFound();
             }
-            return Ok(meals_Id);
+            var viewMeals = MealViewModel.FromMeal(meals_Id);          
+            return Ok(viewMeals);
         }
 
         // GET api/<controller>
@@ -42,9 +44,12 @@ namespace server.Controllers.api
         public PagingResult Get([FromUri] PagingParameterModel pagingparametermodel)
         {
             // Return List of Customer  
-            var source = (from meal in _context.Meals.
-                            OrderBy(a => a.Id)
-                          select meal).AsQueryable();
+            var Meals = _context.Meals.ToList();
+            List<MealViewModel> source = new List<MealViewModel>();
+            foreach (var o in Meals)
+            {
+                source.Add(MealViewModel.FromMeal(o));
+            }
             int count = source.Count();
 
             // Parameter is passed from Query string if it is null then it default Value will be pageNumber:1  
