@@ -7,18 +7,7 @@ using System.Web;
 
 namespace server.Models
 {
-    public static class StatusType
-    {
-        public static string Paid = "paid";
-
-        public static string UnPaid = "unpaid";
-    }
-
-    public enum StatusTypes
-    {
-        paid,
-        unpaid
-    }
+   
     [Table("Orders")]
     public class Order
     {
