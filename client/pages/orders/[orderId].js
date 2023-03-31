@@ -17,40 +17,41 @@ import {
     Flex,
     ButtonGroup,
     AspectRatio,
-} from '@chakra-ui/react'
+    Center,
+} from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { useAppStates } from '../../lib/AppContext'
-import { publicInstance } from '../../lib/serverInstance'
-import NextLink from 'next/link'
+import { useAppStates } from '../../lib/AppContext';
+import NextLink from 'next/link';
 import { useEffect, useState } from 'react';
 
 function Order() {
-    const { addToCart, user } = useAppStates();
+    const { addToCart, user, api } = useAppStates();
     const [redirectUrl, setRedirectUrl] = useState(null)
     const router = useRouter();
+
+    if (!api || !user) return (
+        <Center minH="2xl" w="full" py={5} justifyItems="center">
+            <NextLink href="/login">
+                <Button size="lg" colorScheme="purple">Please login first</Button>
+            </NextLink>
+        </Center>
+    );
+
+    useEffect(() => {
+
+    }, [])
 
     return (
         <>
             <Box minH="70vh">
-                
+
             </Box>
         </>
     )
 }
 
-//export async function getServerSideProps(context) {
-//    const mealId = context.query["mealId"];
-//    const publicApi = publicInstance();
-//    const meal = await publicApi.getMeal(mealId);
-//    return {
-//        props: {
-//            data: meal
-//        },
-//    }
-//}
-
 Order.getLayout = function getLayout(page) {
-    return <AppLayout>{page}</AppLayout>
+    return <AppLayout title={"Your Orders"}>{page}</AppLayout>
 }
 
 export default Order

@@ -37,7 +37,7 @@
     </Content>
     <Content Include="pages\meals\[mealId].js" />
     <Content Include="pages\register.js" />
-    <Content Include="lib\serverInstance.js" />
+    <Content Include="lib\instances.js" />
     <Content Include="README.md" />
     <Content Include="next.config.js" />
     <Content Include="pages\index.js" />

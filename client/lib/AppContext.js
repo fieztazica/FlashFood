@@ -21,6 +21,7 @@ export function AppContextProvider({ children }) {
 
     useEffect(() => {
         getUserInfo()
+        console.log(user)
     }, [user])
 
     function getUserInfo() {

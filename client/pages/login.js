@@ -53,6 +53,11 @@ function Login() {
 
     return (
         <>
+            <Head>
+                <title>
+                    Register
+                </title>
+            </Head>
             <Flex
                 minH={'100vh'}
                 align={'center'}

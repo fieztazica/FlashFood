@@ -44,7 +44,6 @@ export default function api(instance) {
 
     const getUserInfo = async () => {
         const { data } = await instance.get(`${controllers.account}/UserInfo`)
-        console.log(data)
         return data;
     }
 
@@ -52,18 +51,45 @@ export default function api(instance) {
 
     }
 
+    /**
+     * 
+     * @param {number} id
+     * @returns
+     */
     const getMeal = async (id) => {
         const { data } = await instance.get(`${controllers.meal}/Get/${id}`);
         return data;
     }
 
+    /**
+     * 
+     * @param {number} pageNumber
+     * @param {number} pageSize
+     * @returns
+     */
     const getMeals = async (pageNumber = 1, pageSize = 10) => {
         const { data } = await instance.get(`${controllers.meal}/Get?pageNumber=${pageNumber}&pageSize=${pageSize}`);
         return data;
     }
 
-    const getOrders = async () => {
+    /**
+     * 
+     * @param {number} pageNumber
+     * @param {number} pageSize
+     * @returns
+     */
+    const getOrders = async (pageNumber = 1, pageSize = 10) => {
         const { data } = await instance.get(`${controllers.order}/Get?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+        return data;
+    }
+
+    /**
+     * 
+     * @param {number} id
+     * @returns
+     */
+    const getOrder = async (id) => {
+        const { data } = await instance.get(`${controllers.order}/Get/${id}`);
         return data;
     }
 
@@ -86,6 +112,8 @@ export default function api(instance) {
         setTokenToInstance,
         routes,
         getMeal,
-        getMeals
+        getMeals,
+        getOrders,
+        getOrder
     }
 }
