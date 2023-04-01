@@ -14,10 +14,29 @@ import {
     Flex,
     Spacer,
     HStack,
+    useNumberInput,
+    Input,
 } from '@chakra-ui/react'
 import { useAppStates } from '../lib/AppContext'
 import Item from '../components/Item'
 import React from 'react'
+
+const listItem = [
+    {
+        MealId: 1,
+        UserId: 'avb',
+        Amount: 20,
+        MealName: 'Vien Chien',
+        MealImageURL: '',
+    },
+    {
+        MealId: 2,
+        UserId: 'aasvb',
+        Amount: 22,
+        MealName: 'Vien Chien',
+        MealImageURL: '',
+    },
+]
 function Cart() {
     const { user, cart } = useAppStates()
     const [checkedItems, setCheckedItems] = React.useState(() =>
@@ -25,10 +44,20 @@ function Cart() {
     )
     const allChecked = checkedItems.every((i) => i === true)
     const isIndeterminate = checkedItems.some((i) => i === true) && !allChecked
+    const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
+        useNumberInput({
+            step: 1,
+            defaultValue: 1,
+            min: 1,
+            max: 6,
+        })
+    const inc = getIncrementButtonProps()
+    const dec = getDecrementButtonProps()
+    const input = getInputProps()
 
     return (
         <Box>
-            {!cart.length ? (
+            {!listItem.length ? (
                 <Text>Your cart is empty!</Text>
             ) : (
                 <>
@@ -48,56 +77,63 @@ function Cart() {
                         <Spacer />
                         <Button>Buy</Button>
                     </Flex>
-                    {cart.map((item, index) => (
-                        <Card
-                            direction={{ base: 'column', sm: 'row' }}
-                            overflow="hidden"
-                            variant="outline"
-                            width="full"
-                            key={index}
-                        >
-                            <Image
-                                objectFit="cover"
-                                maxW={{ base: '100%', sm: '200px' }}
-                                src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-                                alt="Caffe Latte"
-                            />
-                            <Stack>
-                                <CardBody>
-                                    <Heading size="md">
-                                        The perfect latte
-                                    </Heading>
+                    {listItem.map((item, index) => (
+                        <Flex>
+                            <Card
+                                direction={{ base: 'column', sm: 'row' }}
+                                overflow="hidden"
+                                variant="outline"
+                                width="full"
+                                key={index}
+                            >
+                                <Image
+                                    objectFit="cover"
+                                    maxW={{ base: '100%', sm: '200px' }}
+                                    src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
+                                    alt="Caffe Latte"
+                                />
+                                <Stack>
+                                    <CardBody>
+                                        <Heading size="md">
+                                            The perfect latte
+                                        </Heading>
 
-                                    <Text py="2">
-                                        Caffè latte is a coffee beverage
-                                        of Italian origin made with
-                                        espresso and steamed milk.
-                                    </Text>
-                                </CardBody>
-                                <CardFooter>
-                                    <Button
-                                        variant="solid"
-                                        colorScheme="blue"
-                                    >
-                                        Buy Latte
-                                    </Button>
-                                </CardFooter>
-                            </Stack>
-                            <Checkbox
-                            size="lg"
-                                isChecked={checkedItems[index]}
-                                onChange={(e) =>
-                                    setCheckedItems((arr) =>
-                                        arr.map((ele, i) => {
-                                            if (i === index) {
-                                                return e.target.checked
-                                            }
-                                            return ele
-                                        })
-                                    )
-                                }
-                            />
-                        </Card>
+                                        <Text py="2">
+                                            Caffè latte is a coffee beverage of
+                                            Italian origin made with espresso
+                                            and steamed milk.
+                                        </Text>
+                                    </CardBody>
+                                    <CardFooter>
+                                        <Box>
+                                            <HStack maxW="150px">
+                                                <Button {...dec}>-</Button>
+                                                <Input
+                                                    {...input}
+                                                    textAlign={'center'}
+                                                />
+                                                <Button {...inc}>+</Button>
+                                            </HStack>
+                                        </Box>
+                                    </CardFooter>
+                                </Stack>
+                                <Spacer />
+                                <Checkbox
+                                    size="lg"
+                                    isChecked={checkedItems[index]}
+                                    onChange={(e) =>
+                                        setCheckedItems((arr) =>
+                                            arr.map((ele, i) => {
+                                                if (i === index) {
+                                                    return e.target.checked
+                                                }
+                                                return ele
+                                            })
+                                        )
+                                    }
+                                />
+                            </Card>
+                        </Flex>
                     ))}
                 </>
             )}
