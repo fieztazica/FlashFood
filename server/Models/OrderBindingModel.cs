@@ -25,6 +25,9 @@ namespace server.Models
         [Display(Name = "Total_Money")]
         public double Total_money { get; set; }
 
+        [Display(Name = "Status")]
+        public string Status { get; set; }
+
         [Display(Name ="List_Cart")]
         public List<CartItemViewModel> Carts { get; set; }
     }
