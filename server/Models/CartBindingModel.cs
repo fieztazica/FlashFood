@@ -13,24 +13,15 @@ namespace server.Models
         [Display(Name = "MealId")]
         public int MealId { get; set; }
         [Required]
-        [Display(Name = "UserId")]
-        public string UserId { get; set; }
-        [Required]
         [Display(Name = "Amount")]
         public double Amount { get; set; }
     }
 
-    public class CartDeleteBindingModel
+    public class DeleteCartItemBindingModel
     {
         [Required]
         [Display(Name = "MealId")]
         public int MealId { get; set; }
-        [Required]
-        [Display(Name = "UserId")]
-        public string UserId { get; set; }
-
-        [Display(Name = "Amount")]
-        public double Amount { get; set; }
     }
 
 }

@@ -111,10 +111,9 @@ namespace server.Controllers.api
         //Create Order and OrderItem
         // POST api/<controller>
         [Authorize(Roles = "Admin, Manager")]
-        public IHttpActionResult Post(OrderBindingModel o)
+        [HttpPost]
+        public IHttpActionResult Create(OrderBindingModel o)
         {
-
-            //var Cart = _context.Cartitems.Where(a => a.UserId == o.UserId).ToList();
             double money = 0;
             foreach (var t in o.Carts)
             {
@@ -141,8 +140,6 @@ namespace server.Controllers.api
             };
             _context.Orders.Add(order);
             _context.SaveChanges();
-
-            //return RedirectToRoute("OrderItemsPost", new { orderId = order.Id });
             foreach (var item in o.Carts)
             {
                 OrderItem orderItem = new OrderItem()
@@ -159,7 +156,7 @@ namespace server.Controllers.api
         }
         [Authorize(Roles = "Admin, Manager")]
         // PUT api/<controller>/5
-        public IHttpActionResult Put(int id, OrderBindingModel orderBindingModel)
+        public IHttpActionResult Update(int id, OrderBindingModel orderBindingModel)
         {
             var Order = _context.Orders.FirstOrDefault(a => a.Id == id);
             if(Order == null)
