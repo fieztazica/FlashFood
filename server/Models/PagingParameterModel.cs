@@ -1,4 +1,5 @@
-﻿using System;
+﻿using server.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -31,6 +32,6 @@ namespace server.Models
         public int totalPages;
         public bool previousPage;
         public bool nextPage;
-        public IEnumerable<Meal> items;
+        public List<MealViewModel> items;
     }
 }
