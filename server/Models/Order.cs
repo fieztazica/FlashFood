@@ -34,11 +34,16 @@ namespace server.Models
         [Required]
         public string UserId { get; set; }
 
+        [Required]
+
+        public string Status { get; set; }
+
         public ApplicationUser User { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; }
 
         public Order()
         {
+            Status = "ordered";
             OrderAt = DateTime.Now;
         }
     }

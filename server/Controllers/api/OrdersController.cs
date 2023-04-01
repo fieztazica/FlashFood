@@ -194,5 +194,17 @@ namespace server.Controllers.api
             _context.SaveChanges();
             return Ok();
         }
+
+        [HttpPut]
+        public IHttpActionResult UpdateStatus(int id,string status)
+        {
+            var Order = _context.Orders.FirstOrDefault(o => o.Id == id);
+            if (Order == null)
+            {
+                return NotFound();
+            }
+            Order.Status = status;
+            return Ok();
+        }
     }
 }
