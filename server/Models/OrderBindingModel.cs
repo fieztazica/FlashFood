@@ -22,7 +22,7 @@ namespace server.Models
         [Display(Name = "Status")]
         public string Status { get; set; }
         [Required]
-        [Display(Name ="ListCart")]
+        [Display(Name ="ListCartItem")]
         public List<CartItemViewModel> Carts { get; set; }
     }
 }

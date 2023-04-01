@@ -243,6 +243,10 @@
     <Compile Include="Migrations\202304010608358_InitDb.designer.cs">
       <DependentUpon>202304010608358_InitDb.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202304010907094_UpdateToInt.cs" />
+    <Compile Include="Migrations\202304010907094_UpdateToInt.designer.cs">
+      <DependentUpon>202304010907094_UpdateToInt.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -394,6 +398,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202304010608358_InitDb.resx">
       <DependentUpon>202304010608358_InitDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202304010907094_UpdateToInt.resx">
+      <DependentUpon>202304010907094_UpdateToInt.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
