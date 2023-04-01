@@ -82,9 +82,9 @@ export function AppContextProvider({ children }) {
         login,
         // Cart
         addToCart,
-        removeFromCart,
         deleteCartItem,
         getUserCart,
+        setCart,
     }
 
     let sharedStates = {

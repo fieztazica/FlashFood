@@ -14,12 +14,12 @@ import {
     Flex,
     Spacer,
     HStack,
-    useNumberInput,
     Input,
+    Center,
+    VStack,
 } from '@chakra-ui/react'
 import { useAppStates } from '../lib/AppContext'
-import Item from '../components/Item'
-import React from 'react'
+import { useState } from 'react'
 
 const listItem = [
     {
@@ -37,121 +37,147 @@ const listItem = [
         MealImageURL: '',
     },
 ]
+
 function Cart() {
     const { user, cart } = useAppStates()
-    const [checkedItems, setCheckedItems] = React.useState(() =>
-        cart.map((i) => false)
-    )
-    const allChecked = checkedItems.every((i) => i === true)
-    const isIndeterminate = checkedItems.some((i) => i === true) && !allChecked
-    const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
-        useNumberInput({
-            step: 1,
-            defaultValue: 1,
-            min: 1,
-            max: 6,
+    const [fakeCart, setFakeCart] = useState([...listItem])
+    const [checkedItems, setCheckedItems] = useState(fakeCart.map(i => i.MealId))
+    const [submiting, setSubmiting] = useState(false)
+
+    if (!fakeCart.length)
+        return (
+            <Center minH="2xl" w="full" py={5} justifyItems="center">
+                No items found.
+            </Center>
+        );
+
+    const allChecked = !!checkedItems.length && fakeCart.every((ele) => checkedItems.includes(ele.MealId))
+    const isIndeterminate = fakeCart.some((ele) => checkedItems.includes(ele.MealId) == true) && !allChecked
+
+    function onAmountChange(MealId, amount) {
+        setFakeCart(arr => {
+            const temp = [...arr]
+            const item = temp.find(x => x.MealId == MealId)
+            item.Amount = amount
+            return temp;
         })
-    const inc = getIncrementButtonProps()
-    const dec = getDecrementButtonProps()
-    const input = getInputProps()
+    }
+
+    function incAmount(MealId) {
+        setFakeCart(arr => {
+            const newArr = arr.map((item, index) => {
+                if (item.MealId === MealId)
+                    return { ...item, Amount: item.Amount + 1 }
+                return item;
+            })
+            return newArr;
+        })
+    }
+
+    function decAmount(MealId) {
+        setFakeCart(arr => {
+            const newArr = arr.map((item, index) => {
+                if (item.MealId === MealId)
+                    return { ...item, Amount: item.Amount - 1 }
+                return item;
+            })
+            return newArr;
+        })
+    }
 
     return (
         <Box>
-            {!listItem.length ? (
-                <Text>Your cart is empty!</Text>
-            ) : (
-                <>
-                    <Flex padding={5}>
-                        <Checkbox
-                            size={'lg'}
-                            isChecked={allChecked}
-                            isIndeterminate={isIndeterminate}
-                            onChange={(e) =>
-                                setCheckedItems((a) =>
-                                    new Array(a.length).fill(e.target.checked)
-                                )
-                            }
-                        >
-                            Select All
-                        </Checkbox>
-                        <Spacer />
-                        <Button>Buy</Button>
-                    </Flex>
-                    {listItem.map((item, index) => (
-                        <Flex>
-                            <Card
-                                direction={{ base: 'column', sm: 'row' }}
-                                overflow="hidden"
-                                variant="outline"
-                                width="full"
-                                key={index}
-                            >
-                                <Image
-                                    objectFit="cover"
-                                    maxW={{ base: '100%', sm: '200px' }}
-                                    src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-                                    alt="Caffe Latte"
-                                />
-                                <Stack>
-                                    <CardBody>
-                                        <Heading size="md">
-                                            The perfect latte
-                                        </Heading>
-
-                                        <Text py="2">
-                                            Caffè latte is a coffee beverage of
-                                            Italian origin made with espresso
-                                            and steamed milk.
-                                        </Text>
-                                    </CardBody>
-                                    <CardFooter>
-                                        <Box>
-                                            <HStack maxW="150px">
-                                                <Button {...dec}>-</Button>
-                                                <Input
-                                                    {...input}
-                                                    textAlign={'center'}
-                                                />
-                                                <Button {...inc}>+</Button>
-                                            </HStack>
-                                        </Box>
-                                    </CardFooter>
-                                </Stack>
-                                <Spacer />
-                                <Checkbox
-                                    size="lg"
-                                    isChecked={checkedItems[index]}
-                                    onChange={(e) =>
-                                        setCheckedItems((arr) =>
-                                            arr.map((ele, i) => {
-                                                if (i === index) {
-                                                    return e.target.checked
-                                                }
-                                                return ele
-                                            })
-                                        )
-                                    }
-                                />
-                            </Card>
-                        </Flex>
-                    ))}
-                </>
-            )}
             <Flex padding={5}>
                 <Checkbox
                     size={'lg'}
                     isChecked={allChecked}
                     isIndeterminate={isIndeterminate}
-                    onChange={(e) =>
-                        setCheckedItems((a) =>
-                            new Array(a.length).fill(e.target.checked)
-                        )
-                    }
+                    onChange={(e) => setCheckedItems(e.target.checked ? fakeCart.map(i => i.MealId) : [])}
                 >
                     Select All
                 </Checkbox>
                 <Spacer />
-                <Button>Buy</Button>
+                <Button size="lg" colorScheme="purple">Order</Button>
+            </Flex>
+            <VStack>
+                {fakeCart.map((item) => (
+                    <Card
+                        direction={{ base: 'column', sm: 'row' }}
+                        overflow="hidden"
+                        variant="outline"
+                        width="full"
+                        key={item.MealId}
+                    >
+                        <Image
+                            objectFit="cover"
+                            maxW={{ base: '100%', sm: '200px' }}
+                            src={item.MealImageURL}
+                            alt={item.MealName}
+                        />
+                        <CardBody>
+                            <Stack>
+                                <Heading size="md">
+                                    {item.MealName}
+                                </Heading>
+
+                                <Text py="2">
+                                    Caffè latte is a coffee beverage of
+                                    Italian origin made with espresso
+                                    and steamed milk.
+                                </Text>
+                            </Stack>
+                        </CardBody>
+                        <CardFooter>
+                            <VStack width={{ base: "full", md: "fit-content" }}>
+                                <Flex width="full" flexDirection={{ base: "row", md: "row-reverse" }} justify={{ base: "left", md: "right" }}>
+                                    <Checkbox
+                                        size="lg"
+                                        isChecked={checkedItems.includes(item.MealId)}
+                                        onChange={(e) =>
+                                            setCheckedItems((arr) =>
+                                                e.target.checked
+                                                    ? [...arr, item.MealId]
+                                                    : arr.filter(x => x != item.MealId)
+                                            )
+                                        }
+                                    />
+                                    <Text mx={2}>Select</Text>
+                                </Flex>
+                                <HStack maxW={{ base: "full", md: "150px" }}>
+                                    <Button
+                                        isDisabled={!checkedItems.includes(item.MealId) || item.Amount <= 0}
+                                        onClick={() => decAmount(item.MealId)}
+                                    >-</Button>
+                                    <Input
+                                        value={item.Amount}
+                                        onChange={(e) => onAmountChange(item.MealId, e.target.value)}
+                                        isDisabled={!checkedItems.includes(item.MealId)}
+                                        width="100%"
+                                    />
+                                    <Button
+                                        isDisabled={!checkedItems.includes(item.MealId)}
+                                        onClick={() => incAmount(item.MealId)}
+                                    >+</Button>
+                                </HStack>
+                                <Button width="full" colorScheme="red">
+                                    Delete
+                                </Button>
+                            </VStack>
+                        </CardFooter>
+                    </Card>
+                ))}
+            </VStack>
+            <Flex padding={5}>
+                <Checkbox
+                    size={'lg'}
+                    isChecked={allChecked}
+                    isIndeterminate={isIndeterminate}
+                    onChange={(e) => setCheckedItems(e.target.checked ? fakeCart.map(i => i.MealId) : [])}
+                >
+                    Select All
+                </Checkbox>
+                <Spacer />
+                <Button size="lg" colorScheme="purple">Order</Button>
             </Flex>
         </Box>
     )
