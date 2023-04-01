@@ -78,7 +78,6 @@ namespace server.Controllers.api
                 cartItem.Amount += model.Amount;
                 _context.CartItems.AddOrUpdate(cartItem);
                 _context.SaveChanges();
-                
                 foreach (var c in CartUpdate)
                 {
                     c.Meal = _context.Meals.FirstOrDefault(m => m.Id == c.MealId);
@@ -92,7 +91,6 @@ namespace server.Controllers.api
                 UserId = UserId,
                 Amount = model.Amount,
                 Meal = _context.Meals.FirstOrDefault(a => a.Id == model.MealId),
-                //User = _context.Users.FirstOrDefault(a => a.Id == model.UserId)
             };
             _context.CartItems.Add(New_cart);
             _context.SaveChanges();
@@ -121,7 +119,6 @@ namespace server.Controllers.api
             EditCart.Amount = model.Amount;
             _context.CartItems.AddOrUpdate(EditCart);
             _context.SaveChanges();
-            List<CartItemViewModel> lstcart = new List<CartItemViewModel>();
             var CartNow = _context.CartItems.Where(a => a.UserId == UserId).ToList();
             foreach (var c in CartNow)
             {
