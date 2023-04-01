@@ -36,6 +36,19 @@ namespace server.Controllers
             }
             return View(order);
         }
+        public ActionResult orderItemsDetails(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var orderItems= db.OrderItems.Find(id);
+            if (orderItems == null)
+            {
+                return HttpNotFound();
+            }
+            return View(orderItems);
+        }
 
         // GET: Orders/Create
         public ActionResult Create()
