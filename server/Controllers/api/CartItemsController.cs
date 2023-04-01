@@ -126,6 +126,7 @@ namespace server.Controllers.api
             var UserId = User.Identity.GetUserId();
             List<CartItem> Cartitem = _context.CartItems.Where(s => s.UserId == UserId).ToList();
             CartItem EditCart = Cartitem.Find(a => a.MealId == model.MealId);
+
             List<CartItemViewModel> lstcart = new List<CartItemViewModel>();
             //Check neu Amount <0 thi xoa CartItem
             if (model.Amount <= 0)
@@ -140,6 +141,17 @@ namespace server.Controllers.api
                     lstcart.Add(CartItemViewModel.FromCartItem(c));
                 }
                 return Ok(lstcart);
+            }
+            //xu ly meal
+            if(model.Amount < EditCart.Amount)
+            {
+                Meal.AmountLeft += (EditCart.Amount - model.Amount);
+                _context.Meals.AddOrUpdate(Meal);
+            }
+            else
+            {
+                Meal.AmountLeft += (model.Amount - EditCart.Amount);
+                _context.Meals.AddOrUpdate(Meal);
             }
             EditCart.Amount = model.Amount;
             _context.CartItems.AddOrUpdate(EditCart);
