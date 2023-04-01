@@ -17,6 +17,8 @@ namespace server.ViewModels
         public string SellerId { get; set; }
         public string UserName { get; set; }
 
+        public string Status { get; set; }
+
         List<OrderItemViewModel> Items { get; set; }
 
         public static OrderViewModel FromOrder(Order order)
@@ -30,7 +32,8 @@ namespace server.ViewModels
                 Paid = (double)order.Paid,
                 Change = (double)order.Change,
                 SellerId = order.SellerId,
-                TotalMoney = order.Total_money,     
+                TotalMoney = order.Total_money,
+                Status = order.Status,
             };
         }
     }
@@ -44,6 +47,8 @@ namespace server.ViewModels
         public double Change { get; set; }
         public string SellerId { get; set; }
         public string UserName { get; set; }
+
+        public string Status { get; set; }
 
         public List<OrderItemViewModel> ItemOrder { get; set; }
 
@@ -59,6 +64,7 @@ namespace server.ViewModels
                 Change = (double)order.Change,
                 SellerId = order.SellerId,
                 TotalMoney = order.Total_money,
+                Status = order.Status,
             };
         }
     }

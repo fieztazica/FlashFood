@@ -168,6 +168,7 @@ namespace server.Controllers.api
             Order.Paid = orderBindingModel.Paid;
             Order.Total_money = orderBindingModel.Total_money;
             Order.Change = Order.Paid - Order.Total_money;
+            Order.Status = orderBindingModel.Status;
             _context.Orders.AddOrUpdate(Order);
             _context.SaveChanges();
             return Ok();
@@ -190,6 +191,20 @@ namespace server.Controllers.api
             }
             //delete this order
             _context.Orders.Remove(Orders);
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        [HttpPut]
+        public IHttpActionResult UpdateStatus(int id,string status)
+        {
+            var Order = _context.Orders.FirstOrDefault(o => o.Id == id);
+            if (Order == null)
+            {
+                return NotFound();
+            }
+            Order.Status = status;
+            _context.Orders.AddOrUpdate(Order);
             _context.SaveChanges();
             return Ok();
         }
