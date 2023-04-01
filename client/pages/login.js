@@ -56,7 +56,7 @@ function Login() {
         <>
             <Head>
                 <title>
-                    Register
+                    Login
                 </title>
             </Head>
             <Flex

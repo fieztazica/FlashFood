@@ -114,6 +114,7 @@ export function AppContextProvider({ children }) {
         deleteCartItem,
         getUserCart,
         setCart,
+        // Order
     }
 
     let sharedStates = {

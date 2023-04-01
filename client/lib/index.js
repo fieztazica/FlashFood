@@ -95,7 +95,7 @@ export default function api(instance) {
      * @returns
      */
     const getOrders = async (pageNumber = 1, pageSize = 10) => {
-        const { data } = await instance.get(`${controllers.order}/Get?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+        const { data } = await instance.get(`${controllers.order}/GetMine?pageNumber=${pageNumber}&pageSize=${pageSize}`);
         return data;
     }
 
@@ -110,11 +110,9 @@ export default function api(instance) {
     }
 
     const createOrder = async (items) => {
-        const orderBody = {
-            ListCart: items
-        }
-        const { data } = await instance.post(`${controllers.order}/Create`, orderBody);
-        return data;
+         await instance.post(`${controllers.order}/Create`, {
+            Carts: [...items]
+        });
     }
 
     const cancelOrder = async (id) => {

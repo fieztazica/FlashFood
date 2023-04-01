@@ -20,6 +20,7 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
     <Content Include=".eslintrc.json" />
+    <Content Include="components\ConfirmOrderModal.js" />
     <Content Include="pages\orders\index.js" />
     <Content Include="pages\orders\[orderId].js" />
     <None Include="jsconfig.json" />

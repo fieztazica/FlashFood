@@ -21,6 +21,7 @@ import {
 import { useAppStates } from '../lib/AppContext'
 import { useEffect, useState } from 'react'
 import NextLink from 'next/link'
+import ConfirmOrderModal from '../components/ConfirmOrderModal'
 
 function Cart() {
     const { user, cart, action } = useAppStates()
@@ -31,14 +32,14 @@ function Cart() {
             setCheckedItems(cart.map(i => i.MealId))
     }, [cart])
 
-    //if (!user)
-    //    return (
-    //        <Center minH="2xl" w="full" py={5} justifyItems="center">
-    //            <NextLink href="/login">
-    //                <Button size="lg" colorScheme="purple">Please login first</Button>
-    //            </NextLink>
-    //        </Center>
-    //    );
+    if (!user)
+        return (
+            <Center minH="2xl" w="full" py={5} justifyItems="center">
+                <NextLink href="/login">
+                    <Button size="lg" colorScheme="purple">Please login first</Button>
+                </NextLink>
+            </Center>
+        );
 
     if (!cart.length)
         return (
@@ -93,7 +94,7 @@ function Cart() {
                     Select All
                 </Checkbox>
                 <Spacer />
-                <Button size="lg" colorScheme="purple">Order</Button>
+                <ConfirmOrderModal checkedItems={checkedItems} />
             </Flex>
             <VStack>
                 {cart.map((item) => (
@@ -173,7 +174,7 @@ function Cart() {
                     Select All
                 </Checkbox>
                 <Spacer />
-                <Button size="lg" colorScheme="purple">Order</Button>
+                <ConfirmOrderModal checkedItems={checkedItems} />
             </Flex>
         </Box>
     )
