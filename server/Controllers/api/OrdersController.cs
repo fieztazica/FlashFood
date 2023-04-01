@@ -205,6 +205,8 @@ namespace server.Controllers.api
                 return NotFound();
             }
             Order.Status = status;
+            _context.Orders.AddOrUpdate(Order);
+            _context.SaveChanges();
             return Ok();
         }
     }
