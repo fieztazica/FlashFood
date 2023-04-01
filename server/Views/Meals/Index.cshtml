@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>Meals</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -31,7 +31,7 @@
             @using (Html.BeginForm("Index", "Meals", FormMethod.Get))
             {
 
-                <p id="filter">
+                <p>
 
                     @Html.DropDownList("searchString", new List<SelectListItem>
              {
