@@ -14,7 +14,7 @@ namespace server.Models
         public int MealId { get; set; }
         [Required]
         [Display(Name = "Amount")]
-        public double Amount { get; set; }
+        public int Amount { get; set; }
     }
 
     public class DeleteCartItemBindingModel
@@ -23,7 +23,7 @@ namespace server.Models
         [Display(Name = "MealId")]
         public int MealId { get; set; }
         [Display(Name = "Amount")]
-        public double Amount { get; set; }
+        public int Amount { get; set; }
     }
 
 }
