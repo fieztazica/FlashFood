@@ -13,6 +13,7 @@ namespace server.ViewModels
         public int Amount { get; set; }
         public string MealName { get; set; }
         public string MealImageURL { get; set; }
+        public int MealPrice { get; set; }
 
         public static CartItemViewModel FromCartItem(CartItem cartItem)
         {
@@ -22,7 +23,8 @@ namespace server.ViewModels
                 UserId = cartItem.UserId,
                 Amount = cartItem.Amount,
                 MealName = cartItem.Meal.Name,
-                MealImageURL = cartItem.Meal.ImageURL
+                MealImageURL = cartItem.Meal.ImageURL,
+                MealPrice = cartItem.Meal.Price
             };
         }
 
