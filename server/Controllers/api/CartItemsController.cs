@@ -22,6 +22,7 @@ namespace server.Controllers.api
             _context = new ApplicationDbContext();
         }
         // GET api/<controller>
+        [Authorize(Roles = "Admin, Manager")]
         public IHttpActionResult Get()
         {
             var Cartitem = _context.CartItems.ToList();
@@ -82,7 +83,7 @@ namespace server.Controllers.api
                 MealId = model.MealId,
                 UserId = model.UserId,
                 Amount = model.Amount,
-                //Meal = _context.meals.FirstOrDefault(a => a.Id == model.MealId),
+                Meal = _context.Meals.FirstOrDefault(a => a.Id == model.MealId),
                 //User = _context.Users.FirstOrDefault(a => a.Id == model.UserId)
             };
             _context.CartItems.Add(New_cart);

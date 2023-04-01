@@ -15,6 +15,7 @@ using System.Web.UI;
 
 namespace server.Controllers.api
 {
+    [Authorize]
     public class OrdersController : ApiController
     {
         private readonly ApplicationDbContext _context;
@@ -24,6 +25,7 @@ namespace server.Controllers.api
         {
             _context = new ApplicationDbContext();
         }
+        [Authorize(Roles = "Admin, Manager")]
         // GET api/<controller>
         public IHttpActionResult Get()
         {
@@ -41,7 +43,6 @@ namespace server.Controllers.api
             
             return Ok(orders);
         }
-
 
         public IHttpActionResult Get(int id)
         {
@@ -73,7 +74,7 @@ namespace server.Controllers.api
             return Ok(orderAll);
         }
         //Get by UserID
-        // GET api/<controller>/5
+        //GET api/<controller>/5
         [HttpGet]
         public IHttpActionResult GetByUser(string userId)
         {
@@ -90,6 +91,7 @@ namespace server.Controllers.api
             }
             return Ok(orders);
         }
+        [Authorize(Roles = "Admin, Manager")]
         [HttpGet]
         public IHttpActionResult GetBySeller(string sellerId)
         {
@@ -108,12 +110,14 @@ namespace server.Controllers.api
         }
         //Create Order and OrderItem
         // POST api/<controller>
+        [Authorize(Roles = "Admin, Manager")]
         public IHttpActionResult Post(OrderBindingModel o)
         {
             var Cart = _context.CartItems.Where(a => a.UserId == o.UserId).ToList();
 
+            //var Cart = _context.Cartitems.Where(a => a.UserId == o.UserId).ToList();
             double money = 0;
-            foreach (var t in Cart)
+            foreach (var t in o.Carts)
             {
                 var meal = _context.Meals.FirstOrDefault(a => a.Id == t.MealId);
                 money += t.Amount * meal.Price;
@@ -129,7 +133,7 @@ namespace server.Controllers.api
             _context.SaveChanges();
 
             //return RedirectToRoute("OrderItemsPost", new { orderId = order.Id });
-            foreach (var item in Cart)
+            foreach (var item in o.Carts)
             {
                 OrderItem orderItem = new OrderItem()
                 {
@@ -143,7 +147,7 @@ namespace server.Controllers.api
             }
             return Ok();
         }
-        
+        [Authorize(Roles = "Admin, Manager")]
         // PUT api/<controller>/5
         public IHttpActionResult Put(int id, OrderBindingModel orderBindingModel)
         {
@@ -159,8 +163,7 @@ namespace server.Controllers.api
             _context.SaveChanges();
             return Ok();
         }
-        
-
+        [Authorize(Roles = "Admin, Manager")]
         // DELETE api/<controller>/5
         [HttpDelete]
         public IHttpActionResult Delete(int id)

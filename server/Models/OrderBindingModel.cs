@@ -1,4 +1,5 @@
-﻿using System;
+﻿using server.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -23,5 +24,8 @@ namespace server.Models
         public double Paid { get; set; }
         [Display(Name = "Total_Money")]
         public double Total_money { get; set; }
+
+        [Display(Name ="List_Cart")]
+        public List<CartItemViewModel> Carts { get; set; }
     }
 }
