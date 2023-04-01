@@ -22,13 +22,13 @@ namespace server.Models
       
         [Display(Name = "Paid")]
         public double Paid { get; set; }
-        [Display(Name = "Total_Money")]
+        [Display(Name = "TotalMoney")]
         public double Total_money { get; set; }
 
         [Display(Name = "Status")]
         public string Status { get; set; }
 
-        [Display(Name ="List_Cart")]
+        [Display(Name ="ListCart")]
         public List<CartItemViewModel> Carts { get; set; }
     }
 }
