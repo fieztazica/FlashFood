@@ -2,6 +2,7 @@ import { useToast } from '@chakra-ui/react';
 import axios from 'axios';
 import { useState, useEffect, createContext, useContext } from 'react'
 import instanceApi, { tokenKey } from '.';
+import Cart from '../pages/cart';
 
 const AppContext = createContext();
 
@@ -21,6 +22,7 @@ export function AppContextProvider({ children }) {
 
     useEffect(() => {
         getUserInfo()
+        getUserCart()
         console.log(user)
     }, [user])
 
@@ -37,25 +39,59 @@ export function AppContextProvider({ children }) {
     function logout() {
         api.logout();
         setUser(null);
+        setCart([]);
     }
 
     async function login({ ...props }) {
         api.login({ ...props }).then(() => getUserInfo())
     }
 
-    function addToCart(item) {
-        setCart((a) => [...a, item]);
+    async function addToCart(item, amount = 1) {
+        const data = await api.addToCart(item, amount)
+        if (data) setCart(data)
         toast({
             title: `Added ${item["Name"]} to your cart!`
         })
+
     }
 
-    function removeFromCart(item) {
-        setCart((a) => a.filter(x => x.id != item.id))
+    async function getUserCart() {
+        try {
+            const data = await api.getCart();
+            if (data) setCart(data);
+        } catch (e) {
+            setCart([]);
+            console.error(e)
+        }
+    }
+
+    async function deleteCartItem(id) {
+        try {
+            const data = await api.deleteCartItem(id);
+            if (data) setCart(data);
+        } catch (e) {
+            setCart([]);
+            console.error(e)
+        }
+    }
+
+    const action = {
+        // Auth
+        logout,
+        getUserInfo,
+        login,
+        // Cart
+        addToCart,
+        removeFromCart,
+        deleteCartItem,
+        getUserCart,
     }
 
     let sharedStates = {
-        user, api, addToCart, removeFromCart, cart, logout, getUserInfo, login
+        api,
+        action,
+        cart,
+        user,
     }
 
     return (

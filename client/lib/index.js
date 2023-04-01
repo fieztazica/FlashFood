@@ -3,7 +3,8 @@ export const tokenKey = "flashfood_token";
 export const controllers = {
     account: `/api/Account`,
     meal: `/api/Meals`,
-    order: `/api/Orders`
+    order: `/api/Orders`,
+    cartitem: `/api/CartItems`,
 }
 
 /**
@@ -47,8 +48,25 @@ export default function api(instance) {
         return data;
     }
 
-    const addToCart = async (item) => {
+    const addToCart = async (item, amount = 1) => {
+        const cartItem = {
+            MealId: item.Id,
+            Amount: amount
+        }
+        const { data } = await instance.post(`${controllers.cartitem}/Create`, cartItem)
+        return data;
+    }
 
+    const getCart = async () => {
+        const { data } = await instance.get(`${controllers.account}/GetMine`)
+        return data;
+    }
+
+    const deleteCartItem = async (id) => {
+        const { data } = await instance.delete(`${controllers.account}/Delete`, {
+            MealId: id
+        })
+        return data;
     }
 
     /**
@@ -93,27 +111,39 @@ export default function api(instance) {
         return data;
     }
 
-    const routes = {
-        /**
-         *
-         * @param {string} redirectTo
-         * @returns
-         */
-        login: (redirectTo = null) => redirectTo ? `/login?redirect=${redirectTo}` : `/login`,
-        forbidden: () => '/forbidden',
+    const createOrder = async (items) => {
+        const orderBody = {
+            ListCart: items
+        }
+        const { data } = await instance.post(`${controllers.order}/Create`, orderBody);
+        return data;
+    }
+
+    const cancelOrder = async (id) => {
+        const { data } = await instance.post(`${controllers.order}/UpdateStatus/${id}?status=canceled`);
+        return data;
     }
 
     return {
+        // Auth
         login,
         getUserInfo,
         register,
         logout,
         clearToken,
         setTokenToInstance,
-        routes,
+        // Order
+        getOrders,
+        getOrder,
+        createOrder,
+        cancelOrder,
+        // Meal
         getMeal,
         getMeals,
-        getOrders,
-        getOrder
+        // Cart
+        getCart,
+        addToCart,
+        deleteCartItem,
+        // Misc
     }
 }

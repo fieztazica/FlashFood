@@ -40,7 +40,7 @@ namespace server.Controllers.api
                 order.User = _context.Users.FirstOrDefault(a => a.Id == order.UserId);
                 orders.Add(OrderViewModel.FromOrder(order));
             }
-            
+
             return Ok(orders);
         }
 
@@ -51,7 +51,7 @@ namespace server.Controllers.api
             {
                 return NotFound();
             }
-            
+
             var allCart = _context.OrderItems.Where(a => a.OrderId == id).ToList();
             var orderAll = new OrderAllItemViewModel
             {
@@ -65,7 +65,7 @@ namespace server.Controllers.api
                 TotalMoney = Order.Total_money
             };
             List<OrderItemViewModel> items = new List<OrderItemViewModel>();
-            foreach(var a in allCart)
+            foreach (var a in allCart)
             {
                 a.Meal = _context.Meals.FirstOrDefault(m => m.Id == a.MealId);
                 items.Add(OrderItemViewModel.FromOrderItem(a));
@@ -161,7 +161,7 @@ namespace server.Controllers.api
         public IHttpActionResult Put(int id, OrderBindingModel orderBindingModel)
         {
             var Order = _context.Orders.FirstOrDefault(a => a.Id == id);
-            if(Order == null)
+            if (Order == null)
             {
                 return NotFound();
             }
@@ -179,7 +179,7 @@ namespace server.Controllers.api
         public IHttpActionResult Delete(int id)
         {
             var Orders = _context.Orders.FirstOrDefault(a => a.Id == id);
-            if(Orders == null)
+            if (Orders == null)
             {
                 return NotFound();
             }
@@ -196,7 +196,7 @@ namespace server.Controllers.api
         }
 
         [HttpPut]
-        public IHttpActionResult UpdateStatus(int id,string status)
+        public IHttpActionResult UpdateStatus(int id, string status)
         {
             var Order = _context.Orders.FirstOrDefault(o => o.Id == id);
             if (Order == null)

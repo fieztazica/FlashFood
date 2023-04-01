@@ -25,7 +25,7 @@ import NextLink from 'next/link';
 import { useEffect, useState } from 'react';
 
 function Order() {
-    const { addToCart, user, api } = useAppStates();
+    const { user, api } = useAppStates();
     const [redirectUrl, setRedirectUrl] = useState(null)
     const router = useRouter();
 

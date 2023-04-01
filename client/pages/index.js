@@ -25,7 +25,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
 function Home() {
-    const { user, addToCart, api } = useAppStates()
+    const { user, action, api } = useAppStates()
     const router = useRouter();
     const [items, setItems] = useState([]);
     const [pageNumber, setPageNumber] = useState(1);

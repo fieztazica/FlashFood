@@ -62,7 +62,8 @@ function Header() {
     const indicator = useDisclosure();
     const router = useRouter();
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { user, logout } = useAppStates();
+    const { user, action } = useAppStates();
+    const { logout } = action;
 
     useEffect(() => {
         const handleStart = (url) => {

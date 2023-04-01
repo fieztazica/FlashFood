@@ -25,9 +25,10 @@ import NextLink from 'next/link'
 import { useEffect, useState } from 'react';
 
 function Meal({ data }) {
-    const { addToCart, user } = useAppStates();
+    const { action, user } = useAppStates();
     const [redirectUrl, setRedirectUrl] = useState(null)
     const router = useRouter();
+    const { addToCart } = action
 
     useEffect(() => {
         setRedirectUrl(window.location.href)
