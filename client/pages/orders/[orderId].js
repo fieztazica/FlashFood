@@ -24,6 +24,12 @@ import { useAppStates } from '../../lib/AppContext';
 import NextLink from 'next/link';
 import { useEffect, useState } from 'react';
 
+const fakeTableRows = new Array(10).fill({
+    meal: "ca vien chien",
+    amount: "ca vien chien",
+    total: "ca vien chien"
+})
+
 function Order() {
     const { user, api } = useAppStates();
     const [redirectUrl, setRedirectUrl] = useState(null)
