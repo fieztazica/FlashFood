@@ -114,6 +114,7 @@ namespace server.Controllers.api
         [HttpPost]
         public IHttpActionResult Create(OrderBindingModel o)
         {
+            var UserId = o.Carts.FirstOrDefault().UserId;
             double money = 0;
             foreach (var t in o.Carts)
             {
@@ -131,8 +132,8 @@ namespace server.Controllers.api
             }
             Order order = new Order()
             {
-                UserId = o.UserId,
-                SellerId = o.SellerId,
+                UserId = UserId,
+                SellerId = User.Identity.GetUserId(),
                 PaidAt = o.PaidAt,
                 Change = Change,
                 Total_money = money,
@@ -150,11 +151,14 @@ namespace server.Controllers.api
                     Meal = _context.Meals.FirstOrDefault(a => a.Id == item.MealId)
                 };
                 _context.OrderItems.Add(orderItem);
+                var CartItem = _context.CartItems.FirstOrDefault(a => a.MealId == item.MealId && a.UserId == UserId);
+                _context.CartItems.Remove(CartItem);
                 _context.SaveChanges();
             }
             return Ok();
         }
         [Authorize(Roles = "Admin, Manager")]
+        [HttpPut]
         // PUT api/<controller>/5
         public IHttpActionResult Update(int id, OrderBindingModel orderBindingModel)
         {

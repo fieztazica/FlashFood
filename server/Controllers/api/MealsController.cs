@@ -91,7 +91,8 @@ namespace server.Controllers.api
 
         // POST api/<controller>
         [Authorize(Roles = "Admin, Manager")]
-        public IHttpActionResult Post(MealBindingModel model)
+        [HttpPost]
+        public IHttpActionResult Create(CreateMealBindingModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -115,7 +116,8 @@ namespace server.Controllers.api
         }
         // POST api/<controller>/id
         [Authorize(Roles = "Admin, Manager")]
-        public IHttpActionResult Post(int id, MealEditBindingModel model)
+        [HttpPost]
+        public IHttpActionResult Update(int id, EditMealBindingModel model)
         {
             if (!ModelState.IsValid)
             {
