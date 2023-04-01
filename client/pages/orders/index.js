@@ -65,7 +65,13 @@ function Orders() {
         <>
             <VStack spacing={8} align="stretch" my={5}>
                 {orders.map((order) => (
-                    <Card key={order.Id} borderWidth="1px" borderRadius="lg" p={4} cursor={"pointer"} _hover={{ boxShadow: '1px 1px 1px 1px grey' }}>
+                    <Card
+                        key={order.Id}
+                        p={4}
+                        cursor={"pointer"}
+                        transitionDuration="0.3s"
+                        _hover={{ boxShadow: '1px 1px 1px 1px grey' }}
+                        variant="outline">
                         <Heading size="md">Order #{order.Id}</Heading>
                         <Text fontWeight="semibold">Total: {order.TotalMoney}</Text>
                         <Text>Status: {order.Paid ? "Paid" : "Unpaid"}</Text>
