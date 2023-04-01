@@ -44,7 +44,7 @@ namespace server.Controllers.api
             var UserId = User.Identity.GetUserId();
             var Cartitem = _context.CartItems.Where(s => s.UserId == UserId).ToList();
             List<CartItemViewModel> lstcart = new List<CartItemViewModel>();
-            foreach(var c in Cartitem)
+            foreach (var c in Cartitem)
             {
                 c.Meal = _context.Meals.FirstOrDefault(m => m.Id == c.MealId);
                 lstcart.Add(CartItemViewModel.FromCartItem(c));
@@ -67,10 +67,10 @@ namespace server.Controllers.api
             var Meal = _context.Meals.FirstOrDefault(a => a.Id == model.MealId);
             if (Meal == null)
             {
-                return BadRequest();
+                return BadRequest("The meal is not existed");
             }
             var cartItem = _context.CartItems.FirstOrDefault(a => a.MealId == model.MealId && a.UserId == UserId);
-            if ( cartItem != null)
+            if (cartItem != null)
             {
                 cartItem.Amount += model.Amount;
                 _context.CartItems.AddOrUpdate(cartItem);
@@ -98,7 +98,7 @@ namespace server.Controllers.api
             }
             if (_context.Meals.FirstOrDefault(a => a.Id == model.MealId) == null)
             {
-                return BadRequest();
+                return BadRequest("The meal is not existed");
             }
             List<CartItem> Cartitem = _context.CartItems.Where(s => s.UserId == model.UserId).ToList();
             CartItem EditCart = Cartitem.Find(a => a.MealId == model.MealId);
