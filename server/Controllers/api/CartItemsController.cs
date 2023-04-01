@@ -167,11 +167,11 @@ namespace server.Controllers.api
         }
 
         // DELETE api/<controller>/5
-        public IHttpActionResult Delete(DeleteCartItemBindingModel model)
+        public IHttpActionResult Delete(int mealId)
         {
             var UserId = User.Identity.GetUserId();
             List<CartItem> Cartitem = _context.CartItems.Where(s => s.UserId == UserId).ToList();
-            CartItem DeleteCart = Cartitem.Find(a => a.MealId == model.MealId);
+            CartItem DeleteCart = Cartitem.Find(a => a.MealId == mealId);
             if (DeleteCart == null)
             {
                 return BadRequest();

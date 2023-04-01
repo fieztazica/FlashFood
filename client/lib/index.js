@@ -13,7 +13,7 @@ export const controllers = {
  * @returns
  */
 export default function api(instance) {
-    instance.defaults.headers.post["Content-Type"] = 'application/json';
+    instance.defaults.headers.post["Content-Type"] = "application/json; charset=UTF-8";
 
     const login = async ({ email, password, rememberMe = false, ...props }) => {
         const { data } = await instance.post(`${controllers.account}/Login`, {
@@ -58,14 +58,12 @@ export default function api(instance) {
     }
 
     const getCart = async () => {
-        const { data } = await instance.get(`${controllers.account}/GetMine`)
+        const { data } = await instance.get(`${controllers.cartitem}/GetMine`)
         return data;
     }
 
-    const deleteCartItem = async (id) => {
-        const { data } = await instance.delete(`${controllers.account}/Delete`, {
-            MealId: id
-        })
+    const deleteCartItem = async (item) => {
+        const { data } = await instance.delete(`${controllers.cartitem}/Delete?mealId=${item.MealId}`)
         return data;
     }
 

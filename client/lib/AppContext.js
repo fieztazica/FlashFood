@@ -47,31 +47,60 @@ export function AppContextProvider({ children }) {
     }
 
     async function addToCart(item, amount = 1) {
-        const data = await api.addToCart(item, amount)
-        if (data) setCart(data)
-        toast({
-            title: `Added ${item["Name"]} to your cart!`
-        })
-
+        try {
+            toast({
+                title: `Adding ${item["Name"]}...`,
+                status: "loading"
+            })
+            const data = await api.addToCart(item, amount)
+            if (data) {
+                setCart(data)
+                const addedItem = data.find(x => x.MealId == item.Id)
+                toast({
+                    title: `Added ${addedItem.MealName}${addedItem.Amount > 1 ? ` (x${addedItem.Amount})` : ""} to your cart!`,
+                    status: "success"
+                })
+            }
+        } catch (e) {
+            console.error(e)
+            toast({
+                title: "There is an error occured!",
+                status: "error"
+            })
+        }
     }
 
     async function getUserCart() {
         try {
             const data = await api.getCart();
-            if (data) setCart(data);
+            if (data) {
+                setCart(data);
+            }
         } catch (e) {
-            setCart([]);
             console.error(e)
         }
     }
 
-    async function deleteCartItem(id) {
+    async function deleteCartItem(item) {
         try {
-            const data = await api.deleteCartItem(id);
-            if (data) setCart(data);
+            toast({
+                title: `Deleting ${item["MealName"]}...`,
+                status: "loading"
+            })
+            const data = await api.deleteCartItem(item);
+            if (data) {
+                setCart(data);
+                toast({
+                    title: "Deleted!",
+                    status: "success"
+                })
+            }
         } catch (e) {
-            setCart([]);
             console.error(e)
+            toast({
+                title: "There is an error occured!",
+                status: "error"
+            })
         }
     }
 

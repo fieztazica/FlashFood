@@ -19,43 +19,39 @@ import {
     VStack,
 } from '@chakra-ui/react'
 import { useAppStates } from '../lib/AppContext'
-import { useState } from 'react'
-
-const listItem = [
-    {
-        MealId: 1,
-        UserId: 'avb',
-        Amount: 20,
-        MealName: 'Vien Chien',
-        MealImageURL: '',
-    },
-    {
-        MealId: 2,
-        UserId: 'aasvb',
-        Amount: 22,
-        MealName: 'Vien Chien',
-        MealImageURL: '',
-    },
-]
+import { useEffect, useState } from 'react'
+import NextLink from 'next/link'
 
 function Cart() {
-    const { user, cart } = useAppStates()
-    const [fakeCart, setFakeCart] = useState([...listItem])
-    const [checkedItems, setCheckedItems] = useState(fakeCart.map(i => i.MealId))
-    const [submiting, setSubmiting] = useState(false)
+    const { user, cart, action } = useAppStates()
+    const [checkedItems, setCheckedItems] = useState(cart.map(i => i.MealId))
 
-    if (!fakeCart.length)
+    useEffect(() => {
+        if (!!cart.length && !checkedItems.length)
+            setCheckedItems(cart.map(i => i.MealId))
+    }, [cart])
+
+    //if (!user)
+    //    return (
+    //        <Center minH="2xl" w="full" py={5} justifyItems="center">
+    //            <NextLink href="/login">
+    //                <Button size="lg" colorScheme="purple">Please login first</Button>
+    //            </NextLink>
+    //        </Center>
+    //    );
+
+    if (!cart.length)
         return (
             <Center minH="2xl" w="full" py={5} justifyItems="center">
                 No items found.
             </Center>
         );
 
-    const allChecked = !!checkedItems.length && fakeCart.every((ele) => checkedItems.includes(ele.MealId))
-    const isIndeterminate = fakeCart.some((ele) => checkedItems.includes(ele.MealId) == true) && !allChecked
+    const allChecked = !!checkedItems.length && cart.every((ele) => checkedItems.includes(ele.MealId))
+    const isIndeterminate = cart.some((ele) => checkedItems.includes(ele.MealId) == true) && !allChecked
 
     function onAmountChange(MealId, amount) {
-        setFakeCart(arr => {
+        action.setCart(arr => {
             const temp = [...arr]
             const item = temp.find(x => x.MealId == MealId)
             item.Amount = amount
@@ -64,7 +60,7 @@ function Cart() {
     }
 
     function incAmount(MealId) {
-        setFakeCart(arr => {
+        action.setCart(arr => {
             const newArr = arr.map((item, index) => {
                 if (item.MealId === MealId)
                     return { ...item, Amount: item.Amount + 1 }
@@ -75,7 +71,7 @@ function Cart() {
     }
 
     function decAmount(MealId) {
-        setFakeCart(arr => {
+        action.setCart(arr => {
             const newArr = arr.map((item, index) => {
                 if (item.MealId === MealId)
                     return { ...item, Amount: item.Amount - 1 }
@@ -92,7 +88,7 @@ function Cart() {
                     size={'lg'}
                     isChecked={allChecked}
                     isIndeterminate={isIndeterminate}
-                    onChange={(e) => setCheckedItems(e.target.checked ? fakeCart.map(i => i.MealId) : [])}
+                    onChange={(e) => setCheckedItems(e.target.checked ? cart.map(i => i.MealId) : [])}
                 >
                     Select All
                 </Checkbox>
@@ -100,7 +96,7 @@ function Cart() {
                 <Button size="lg" colorScheme="purple">Order</Button>
             </Flex>
             <VStack>
-                {fakeCart.map((item) => (
+                {cart.map((item) => (
                     <Card
                         direction={{ base: 'column', sm: 'row' }}
                         overflow="hidden"
@@ -159,7 +155,7 @@ function Cart() {
                                         onClick={() => incAmount(item.MealId)}
                                     >+</Button>
                                 </HStack>
-                                <Button width="full" colorScheme="red">
+                                <Button width="full" colorScheme="red" onClick={() => action.deleteCartItem(item)}>
                                     Delete
                                 </Button>
                             </VStack>
@@ -172,7 +168,7 @@ function Cart() {
                     size={'lg'}
                     isChecked={allChecked}
                     isIndeterminate={isIndeterminate}
-                    onChange={(e) => setCheckedItems(e.target.checked ? fakeCart.map(i => i.MealId) : [])}
+                    onChange={(e) => setCheckedItems(e.target.checked ? cart.map(i => i.MealId) : [])}
                 >
                     Select All
                 </Checkbox>
