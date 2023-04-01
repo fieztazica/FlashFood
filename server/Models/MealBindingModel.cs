@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace server.Models
 {
-    public class MealBindingModel
+    public class CreateMealBindingModel
     {
         public int Id { get; set; }
         [Required]
@@ -28,7 +28,7 @@ namespace server.Models
         public string Type { get; set; }
     }
 
-    public class MealEditBindingModel
+    public class EditMealBindingModel
     {
         [Required]
         [Display(Name = "Price")]

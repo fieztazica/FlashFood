@@ -56,30 +56,6 @@ namespace server.Controllers.api
             }
             return Ok(Orderitem);
         }
-        /*
-        // POST api/<controller>
-        public IHttpActionResult Post(int Orderid)
-        {
-            var Order = _context.Orders.FirstOrDefault(a => a.Id == Orderid);
-            var CartItem = _context.Cartitems.Where(a => a.UserId == Order.UserId).ToList();
-            foreach(var item in CartItem)
-            {
-                OrderItem orderItem = new OrderItem()
-                {
-                    MealId = item.MealId,
-                    OrderId = Orderid,
-                    Amount = item.Amount,
-                };
-                _context.OrderItems.Add(orderItem);
-                _context.SaveChanges();
-            }
-            return Ok();
-        }
-        */
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody] string value)
-        {
-        }
 
         // DELETE api/<controller>/5
         [Authorize(Roles = "Admin, Manager")]

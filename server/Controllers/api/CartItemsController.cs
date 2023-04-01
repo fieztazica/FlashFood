@@ -56,9 +56,9 @@ namespace server.Controllers.api
             }
             return Ok(lstcart);
         }
-
+        [HttpPost]
         // POST api/<controller>
-        public IHttpActionResult Create(CartBindingModel model)
+        public IHttpActionResult Create(CreateCartItemBindingModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -67,18 +67,21 @@ namespace server.Controllers.api
             var UserId = User.Identity.GetUserId();
             var Meal = _context.Meals.FirstOrDefault(a => a.Id == model.MealId);
             List<CartItemViewModel> lstcart = new List<CartItemViewModel>();
-            if (Meal == null)
+            if (Meal == null && Meal.AmountLeft < model.Amount)
             {
                 return BadRequest("The meal is not existed");
             }
             var cartItem = _context.CartItems.FirstOrDefault(a => a.MealId == model.MealId && a.UserId == UserId);
             if (cartItem != null)
             {
-                var CartUpdate = _context.CartItems.Where(a => a.UserId == model.UserId).ToList();
+                var CartUpdate = _context.CartItems.Where(a => a.UserId == UserId).ToList();
                 cartItem.Amount += model.Amount;
                 _context.CartItems.AddOrUpdate(cartItem);
+                //Update Meal
+                Meal.AmountLeft -= model.Amount;
+                _context.Meals.AddOrUpdate(Meal);
                 _context.SaveChanges();
-                
+
                 foreach (var c in CartUpdate)
                 {
                     c.Meal = _context.Meals.FirstOrDefault(m => m.Id == c.MealId);
@@ -89,14 +92,17 @@ namespace server.Controllers.api
             var New_cart = new CartItem()
             {
                 MealId = model.MealId,
-                UserId = model.UserId,
+                UserId = UserId,
                 Amount = model.Amount,
                 Meal = _context.Meals.FirstOrDefault(a => a.Id == model.MealId),
-                //User = _context.Users.FirstOrDefault(a => a.Id == model.UserId)
             };
             _context.CartItems.Add(New_cart);
+            //Update Meal
+            Meal.AmountLeft -= model.Amount;
+            _context.Meals.AddOrUpdate(Meal);
             _context.SaveChanges();
-            var CartNow = _context.CartItems.Where(a => a.UserId == model.UserId).ToList();
+
+            var CartNow = _context.CartItems.Where(a => a.UserId == UserId).ToList();
             foreach (var c in CartNow)
             {
                 c.Meal = _context.Meals.FirstOrDefault(m => m.Id == c.MealId);
@@ -105,23 +111,53 @@ namespace server.Controllers.api
             return Ok(lstcart);
         }
         [HttpPost]
-        public IHttpActionResult Update(CartDeleteBindingModel model)
+        public IHttpActionResult Update(DeleteCartItemBindingModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            if (_context.Meals.FirstOrDefault(a => a.Id == model.MealId) == null)
+            //check Meal ton tai khong
+            var Meal = _context.Meals.FirstOrDefault(a => a.Id == model.MealId);
+            if (Meal == null && Meal.AmountLeft < model.Amount)
             {
                 return BadRequest("The meal is not existed");
             }
-            List<CartItem> Cartitem = _context.CartItems.Where(s => s.UserId == model.UserId).ToList();
+            var UserId = User.Identity.GetUserId();
+            List<CartItem> Cartitem = _context.CartItems.Where(s => s.UserId == UserId).ToList();
             CartItem EditCart = Cartitem.Find(a => a.MealId == model.MealId);
+
+            List<CartItemViewModel> lstcart = new List<CartItemViewModel>();
+            //Check neu Amount <0 thi xoa CartItem
+            if (model.Amount <= 0)
+            {
+                _context.CartItems.Remove(EditCart);
+                _context.SaveChanges();
+
+                var CartDelete = _context.CartItems.Where(a => a.UserId == UserId).ToList();
+                foreach (var c in CartDelete)
+                {
+                    c.Meal = _context.Meals.FirstOrDefault(m => m.Id == c.MealId);
+                    lstcart.Add(CartItemViewModel.FromCartItem(c));
+                }
+                return Ok(lstcart);
+            }
+            //xu ly meal
+            if(model.Amount < EditCart.Amount)
+            {
+                Meal.AmountLeft += (EditCart.Amount - model.Amount);
+                _context.Meals.AddOrUpdate(Meal);
+            }
+            else
+            {
+                Meal.AmountLeft += (model.Amount - EditCart.Amount);
+                _context.Meals.AddOrUpdate(Meal);
+            }
             EditCart.Amount = model.Amount;
             _context.CartItems.AddOrUpdate(EditCart);
             _context.SaveChanges();
-            List<CartItemViewModel> lstcart = new List<CartItemViewModel>();
-            var CartNow = _context.CartItems.Where(a => a.UserId == model.UserId).ToList();
+
+            var CartNow = _context.CartItems.Where(a => a.UserId == UserId).ToList();
             foreach (var c in CartNow)
             {
                 c.Meal = _context.Meals.FirstOrDefault(m => m.Id == c.MealId);
@@ -131,9 +167,10 @@ namespace server.Controllers.api
         }
 
         // DELETE api/<controller>/5
-        public IHttpActionResult Delete(CartDeleteBindingModel model)
+        public IHttpActionResult Delete(DeleteCartItemBindingModel model)
         {
-            List<CartItem> Cartitem = _context.CartItems.Where(s => s.UserId == model.UserId).ToList();
+            var UserId = User.Identity.GetUserId();
+            List<CartItem> Cartitem = _context.CartItems.Where(s => s.UserId == UserId).ToList();
             CartItem DeleteCart = Cartitem.Find(a => a.MealId == model.MealId);
             if (DeleteCart == null)
             {
@@ -141,8 +178,9 @@ namespace server.Controllers.api
             }
             _context.CartItems.Remove(DeleteCart);
             _context.SaveChanges();
+
             List<CartItemViewModel> lstcart = new List<CartItemViewModel>();
-            var CartNow = _context.CartItems.Where(a => a.UserId == model.UserId).ToList();
+            var CartNow = _context.CartItems.Where(a => a.UserId == UserId).ToList();
             foreach (var c in CartNow)
             {
                 c.Meal = _context.Meals.FirstOrDefault(m => m.Id == c.MealId);

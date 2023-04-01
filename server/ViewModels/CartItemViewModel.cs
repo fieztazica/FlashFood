@@ -10,7 +10,7 @@ namespace server.ViewModels
     {
         public int MealId { get; set; }
         public string UserId { get; set; }
-        public double Amount { get; set; }
+        public int Amount { get; set; }
         public string MealName { get; set; }
         public string MealImageURL { get; set; }
 

@@ -111,9 +111,10 @@ namespace server.Controllers.api
         //Create Order and OrderItem
         // POST api/<controller>
         [Authorize(Roles = "Admin, Manager")]
-        public IHttpActionResult Post(OrderBindingModel o)
+        [HttpPost]
+        public IHttpActionResult Create(OrderBindingModel o)
         {
-            //var Cart = _context.Cartitems.Where(a => a.UserId == o.UserId).ToList();
+            var UserId = o.Carts.FirstOrDefault().UserId;
             double money = 0;
             foreach (var t in o.Carts)
             {
@@ -131,8 +132,8 @@ namespace server.Controllers.api
             }
             Order order = new Order()
             {
-                UserId = o.UserId,
-                SellerId = o.SellerId,
+                UserId = UserId,
+                SellerId = User.Identity.GetUserId(),
                 PaidAt = o.PaidAt,
                 Change = Change,
                 Total_money = money,
@@ -140,8 +141,6 @@ namespace server.Controllers.api
             };
             _context.Orders.Add(order);
             _context.SaveChanges();
-
-            //return RedirectToRoute("OrderItemsPost", new { orderId = order.Id });
             foreach (var item in o.Carts)
             {
                 OrderItem orderItem = new OrderItem()
@@ -152,13 +151,16 @@ namespace server.Controllers.api
                     Meal = _context.Meals.FirstOrDefault(a => a.Id == item.MealId)
                 };
                 _context.OrderItems.Add(orderItem);
+                var CartItem = _context.CartItems.FirstOrDefault(a => a.MealId == item.MealId && a.UserId == UserId);
+                _context.CartItems.Remove(CartItem);
                 _context.SaveChanges();
             }
             return Ok();
         }
         [Authorize(Roles = "Admin, Manager")]
+        [HttpPut]
         // PUT api/<controller>/5
-        public IHttpActionResult Put(int id, OrderBindingModel orderBindingModel)
+        public IHttpActionResult Update(int id, OrderBindingModel orderBindingModel)
         {
             var Order = _context.Orders.FirstOrDefault(a => a.Id == id);
             if (Order == null)
