@@ -129,8 +129,11 @@ namespace server.Controllers.api
                     return BadRequest("Khong du so luong cho mon " + meal.Name);
                 }
                 money += t.Amount * meal.Price;
+                meal.AmountLeft -= t.Amount;
+                _context.Meals.AddOrUpdate(meal);
+
             }
-           
+
             Order order = new Order()
             {
                 UserId = UserId,
