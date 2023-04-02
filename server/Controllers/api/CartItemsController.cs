@@ -92,9 +92,7 @@ namespace server.Controllers.api
                 Meal = _context.Meals.FirstOrDefault(a => a.Id == model.MealId),
             };
             _context.CartItems.Add(New_cart);
-            //Update Meal
-            Meal.AmountLeft -= model.Amount;
-            _context.Meals.AddOrUpdate(Meal);
+
             _context.SaveChanges();
 
             var CartNow = _context.CartItems.Where(a => a.UserId == UserId).ToList();
@@ -137,17 +135,7 @@ namespace server.Controllers.api
                 }
                 return Ok(lstcart);
             }
-            //xu ly meal
-            if(model.Amount < EditCart.Amount)
-            {
-                Meal.AmountLeft += (EditCart.Amount - model.Amount);
-                _context.Meals.AddOrUpdate(Meal);
-            }
-            else
-            {
-                Meal.AmountLeft += (model.Amount - EditCart.Amount);
-                _context.Meals.AddOrUpdate(Meal);
-            }
+
             EditCart.Amount = model.Amount;
             _context.CartItems.AddOrUpdate(EditCart);
             _context.SaveChanges();
