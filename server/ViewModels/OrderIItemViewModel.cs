@@ -13,7 +13,7 @@ namespace server.ViewModels
         public int MealId { get; set; }
         [Required(ErrorMessage = "Please enter the amount.")]
         [Range(0, double.MaxValue, ErrorMessage = "Please enter a positive value for the amount.")]
-        public double Amount { get; set; }
+        public int Amount { get; set; }
         public string MealName { get; set; }
         public decimal MealPrice { get; set; }
 

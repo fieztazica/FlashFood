@@ -40,7 +40,8 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ImageURL)
+            <p>@Html.DisplayFor(model => model.ImageURL)</p>
+            <img src="@Html.DisplayFor(model => model.ImageURL)" style="max-width: 500px"  />
         </dd>
 
         <dt>

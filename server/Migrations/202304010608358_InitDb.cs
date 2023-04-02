@@ -3,7 +3,7 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class update : DbMigration
+    public partial class InitDb : DbMigration
     {
         public override void Up()
         {
@@ -60,6 +60,7 @@
                         Change = c.Double(),
                         SellerId = c.String(nullable: false),
                         UserId = c.String(nullable: false, maxLength: 128),
+                        Status = c.String(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.ApplicationUsers", t => t.UserId, cascadeDelete: true)

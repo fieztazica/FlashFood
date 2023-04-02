@@ -20,6 +20,7 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
     <Content Include=".eslintrc.json" />
+    <Content Include="components\ConfirmOrderModal.js" />
     <Content Include="pages\orders\index.js" />
     <Content Include="pages\orders\[orderId].js" />
     <None Include="jsconfig.json" />
@@ -37,7 +38,7 @@
     </Content>
     <Content Include="pages\meals\[mealId].js" />
     <Content Include="pages\register.js" />
-    <Content Include="lib\serverInstance.js" />
+    <Content Include="lib\instances.js" />
     <Content Include="README.md" />
     <Content Include="next.config.js" />
     <Content Include="pages\index.js" />

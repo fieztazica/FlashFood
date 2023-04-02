@@ -11,7 +11,7 @@ namespace server.Models
         public int MealId { get; set; }
         public string UserId { get; set; }
         [Required]
-        public double Amount { get; set; }
+        public int Amount { get; set; }
 
         public Meal Meal { get; set; }
         public ApplicationUser User { get; set; }

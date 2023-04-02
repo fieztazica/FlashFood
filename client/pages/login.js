@@ -17,9 +17,10 @@ const initialValues = {
 function Login() {
     const router = useRouter();
     const redirectTo = router.query?.["redirect"]
-    const { api, login, user, getUserInfo } = useAppStates();
+    const { api, action, user } = useAppStates();
     const toast = useToast();
     const [loading, setLoading] = useState(false);
+    const { login } = action
 
     const formik = useFormik({
         initialValues,
@@ -35,7 +36,7 @@ function Login() {
             } catch (e) {
                 console.log(e)
                 toast({
-                    title: 'There is an error occured!',
+                    title: `${e.response.data.Message}` || 'There is an error occured!',
                     description: `${getReasonPhrase(e.response.status)}`,
                     status: 'error',
                 })
@@ -53,6 +54,11 @@ function Login() {
 
     return (
         <>
+            <Head>
+                <title>
+                    Login
+                </title>
+            </Head>
             <Flex
                 minH={'100vh'}
                 align={'center'}
@@ -62,7 +68,7 @@ function Login() {
                     <Stack align={'center'}>
                         <Heading fontSize={'4xl'}>Sign in</Heading>
                         <Text fontSize={'lg'} color={'gray.600'}>
-                            to enjoy all of our cool <Link color={'blue.400'}>features</Link> ??
+                            to enjoy all of our cool <Link color={'blue.400'} as={NextLink} href="/">features</Link>?
                         </Text>
                     </Stack>
                     <form

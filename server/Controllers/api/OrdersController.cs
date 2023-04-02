@@ -4,6 +4,7 @@ using server.Models;
 using server.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Net;
@@ -15,6 +16,7 @@ using System.Web.UI;
 
 namespace server.Controllers.api
 {
+    [Authorize]
     public class OrdersController : ApiController
     {
         private readonly ApplicationDbContext _context;
@@ -24,10 +26,11 @@ namespace server.Controllers.api
         {
             _context = new ApplicationDbContext();
         }
+        [Authorize(Roles = "Admin, Manager")]
         // GET api/<controller>
-        public IHttpActionResult Get()
+        public IHttpActionResult Get([FromUri] bool? today, string searchString)
         {
-            var Order = _context.Orders.ToList();
+            var Order = _context.Orders.OrderByDescending(x => x.OrderAt).ToList();
             if (Order == null || Order.Count == 0)
             {
                 return NotFound();
@@ -38,10 +41,19 @@ namespace server.Controllers.api
                 order.User = _context.Users.FirstOrDefault(a => a.Id == order.UserId);
                 orders.Add(OrderViewModel.FromOrder(order));
             }
-            
+
+            if (today != null && today == true)
+            {
+                orders = orders.Where(x => x.OrderAt.Date == DateTime.Now.Date).ToList();
+            }
+
+            if (searchString != null && !String.IsNullOrEmpty(searchString))
+            {
+                orders = orders.Where(s => s.Status.Contains(searchString)).ToList();
+            }
+
             return Ok(orders);
         }
-
 
         public IHttpActionResult Get(int id)
         {
@@ -50,35 +62,37 @@ namespace server.Controllers.api
             {
                 return NotFound();
             }
-            
+
             var allCart = _context.OrderItems.Where(a => a.OrderId == id).ToList();
-            var orderAll = new OrderAllItemViewModel
+            var orderAll = new OrderViewModel
             {
                 Id = id,
                 OrderAt = Order.OrderAt,
                 UserName = _context.Users.FirstOrDefault(a => a.Id == Order.UserId).UserName,
-                PaidAt = (DateTime)Order.PaidAt,
-                Paid = (double)Order.Paid,
-                Change = (double)Order.Change,
+                PaidAt = Order.PaidAt,
+                Paid = Order.Paid,
+                Change = Order.Change,
                 SellerId = Order.SellerId,
+                Status = Order.Status,
                 TotalMoney = Order.Total_money
             };
             List<OrderItemViewModel> items = new List<OrderItemViewModel>();
-            foreach(var a in allCart)
+            foreach (var a in allCart)
             {
                 a.Meal = _context.Meals.FirstOrDefault(m => m.Id == a.MealId);
                 items.Add(OrderItemViewModel.FromOrderItem(a));
             }
-            orderAll.ItemOrder = items;
+            orderAll.Items = items;
             return Ok(orderAll);
         }
         //Get by UserID
-        // GET api/<controller>/5
+        //GET api/<controller>/5
         [HttpGet]
-        public IHttpActionResult GetByUser(string Userid)
+        public IHttpActionResult GetMine()
         {
-            var Order_User = _context.Orders.Where(a => a.UserId == Userid).ToList();
-            if (Userid == null)
+            string userId = User.Identity.GetUserId();
+            var Order_User = _context.Orders.Where(a => a.UserId == userId).ToList();
+            if (userId == null)
             {
                 return NotFound();
             }
@@ -90,11 +104,12 @@ namespace server.Controllers.api
             }
             return Ok(orders);
         }
+        [Authorize(Roles = "Admin, Manager")]
         [HttpGet]
-        public IHttpActionResult GetBySeller(string Sellerid)
+        public IHttpActionResult GetBySeller(string sellerId)
         {
-            var Order_Seller = _context.Orders.Where(a => a.SellerId == Sellerid).ToList();
-            if (Sellerid == null)
+            var Order_Seller = _context.Orders.Where(a => a.SellerId == sellerId).ToList();
+            if (sellerId == null)
             {
                 return NotFound();
             }
@@ -108,28 +123,37 @@ namespace server.Controllers.api
         }
         //Create Order and OrderItem
         // POST api/<controller>
-        public IHttpActionResult Post(OrderBindingModel o)
+        [HttpPost]
+        public IHttpActionResult Create(OrderBindingModel o)
         {
-            var Cart = _context.CartItems.Where(a => a.UserId == o.UserId).ToList();
-
+            var UserId = o.Carts.FirstOrDefault().UserId;
             double money = 0;
-            foreach (var t in Cart)
+            foreach (var t in o.Carts)
             {
                 var meal = _context.Meals.FirstOrDefault(a => a.Id == t.MealId);
+                if (t.Amount <= 0)
+                {
+                    return BadRequest("Khong hop le!");
+                }
+                if (meal.AmountLeft < t.Amount)
+                {
+                    return BadRequest("Khong du so luong cho mon " + meal.Name);
+                }
                 money += t.Amount * meal.Price;
+                meal.AmountLeft -= t.Amount;
+                _context.Meals.AddOrUpdate(meal);
+
             }
 
             Order order = new Order()
             {
-                UserId = o.UserId,
-                SellerId = o.SellerId,
+                UserId = UserId,
+                SellerId = User.Identity.GetUserId(),
                 Total_money = money,
             };
             _context.Orders.Add(order);
             _context.SaveChanges();
-
-            //return RedirectToRoute("OrderItemsPost", new { orderId = order.Id });
-            foreach (var item in Cart)
+            foreach (var item in o.Carts)
             {
                 OrderItem orderItem = new OrderItem()
                 {
@@ -139,34 +163,37 @@ namespace server.Controllers.api
                     Meal = _context.Meals.FirstOrDefault(a => a.Id == item.MealId)
                 };
                 _context.OrderItems.Add(orderItem);
+                var CartItem = _context.CartItems.FirstOrDefault(a => a.MealId == item.MealId && a.UserId == UserId);
+                _context.CartItems.Remove(CartItem);
                 _context.SaveChanges();
             }
             return Ok();
         }
-        
+        [Authorize(Roles = "Admin, Manager")]
+        [HttpPut]
         // PUT api/<controller>/5
-        public IHttpActionResult Put(int id, OrderBindingModel orderBindingModel)
+        public IHttpActionResult Update(int id, OrderBindingModel orderBindingModel)
         {
             var Order = _context.Orders.FirstOrDefault(a => a.Id == id);
-            if(Order == null)
+            if (Order == null)
             {
                 return NotFound();
             }
             Order.Paid = orderBindingModel.Paid;
             Order.Total_money = orderBindingModel.Total_money;
             Order.Change = Order.Paid - Order.Total_money;
+            Order.Status = orderBindingModel.Status;
             _context.Orders.AddOrUpdate(Order);
             _context.SaveChanges();
             return Ok();
         }
-        
-
+        [Authorize(Roles = "Admin, Manager")]
         // DELETE api/<controller>/5
         [HttpDelete]
         public IHttpActionResult Delete(int id)
         {
             var Orders = _context.Orders.FirstOrDefault(a => a.Id == id);
-            if(Orders == null)
+            if (Orders == null)
             {
                 return NotFound();
             }
@@ -178,6 +205,35 @@ namespace server.Controllers.api
             }
             //delete this order
             _context.Orders.Remove(Orders);
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        [HttpPut]
+        public IHttpActionResult UpdateStatus(int id, string status)
+        {
+            var Order = _context.Orders.FirstOrDefault(o => o.Id == id);
+
+            if (Order == null)
+            {
+                return NotFound();
+            }
+
+            if (User.IsInRole("Customer"))
+            {
+                if (status != "canceled")
+                    return BadRequest("You can only cancel orders");
+
+                if (Order.UserId != User.Identity.GetUserId())
+                    return BadRequest("This order is not yours!");
+            }
+
+            var acceptedStatuses = new List<string> { "ordered", "canceled", "accepted", "making", "ready" };
+            if (!acceptedStatuses.Contains(status))
+                return BadRequest($"Status {status} is not exist!");
+
+            Order.Status = status;
+            _context.Orders.AddOrUpdate(Order);
             _context.SaveChanges();
             return Ok();
         }

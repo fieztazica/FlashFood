@@ -12,12 +12,12 @@ import {
     Text,
 } from '@chakra-ui/react'
 import NextLink from 'next/link'
+import { useAppStates } from '../lib/AppContext'
 
 function Item({ obj, ...props }) {
+    const { action } = useAppStates()
     return (
         <Card
-            as={NextLink}
-            href={`/meals/${obj["Id"]}`}
             maxW="sm"
             transitionDuration={'0.3s'}
             _hover={{ boxShadow: '1px 1px 1px 1px grey' }}
@@ -34,11 +34,26 @@ function Item({ obj, ...props }) {
                 </AspectRatio>
                 <Stack mt="6">
                     <Heading size="md">{obj['Name']}</Heading>
+                    <Text>
+                        Left: {obj['AmountLeft']}
+                    </Text>
                     <Text color="blue.600" fontSize={['md', 'xl']}>
                         VND {obj['Price']}
                     </Text>
                 </Stack>
             </CardBody>
+            <CardFooter>
+                <Stack width="full" direction={{ base: "column", xl: "row" }}>
+                    <Button colorScheme="blue" width="full"
+                        as={NextLink}
+                        href={`/meals/${obj["Id"]}`}>
+                        Detail
+                    </Button>
+                    <Button colorScheme="purple" width="full" onClick={() => action.addToCart(obj)}>
+                        Add to cart
+                    </Button>
+                </Stack>
+            </CardFooter>
         </Card>
     )
 }

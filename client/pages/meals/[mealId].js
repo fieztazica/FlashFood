@@ -20,14 +20,15 @@ import {
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router';
 import { useAppStates } from '../../lib/AppContext'
-import { publicInstance } from '../../lib/serverInstance'
+import { publicInstance } from '../../lib/instances'
 import NextLink from 'next/link'
 import { useEffect, useState } from 'react';
 
 function Meal({ data }) {
-    const { addToCart, user } = useAppStates();
+    const { action, user } = useAppStates();
     const [redirectUrl, setRedirectUrl] = useState(null)
     const router = useRouter();
+    const { addToCart } = action
 
     useEffect(() => {
         setRedirectUrl(window.location.href)
@@ -67,6 +68,11 @@ function Meal({ data }) {
     )
 }
 
+/**
+ * 
+ * @param {import("next").GetServerSidePropsContext} context
+ * @returns
+ */
 export async function getServerSideProps(context) {
     const mealId = context.query["mealId"];
     const publicApi = publicInstance();

@@ -1,0 +1,98 @@
+﻿@model IEnumerable<server.Models.Order>
+
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>All orders</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<table class="table">
+    <tr>
+        @*<th>
+                @Html.DisplayNameFor(model => model.User.FirstName)
+            </th>*@
+
+        <th>
+            @Html.DisplayNameFor(model => model.OrderAt)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PaidAt)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Total_money)
+
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Paid)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Change)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SellerId)
+
+        </th>
+        <th>
+            @using (Html.BeginForm("Index", "Orders", FormMethod.Get))
+            {
+
+                <p>
+
+                    @Html.DropDownList("searchString", new List<SelectListItem>
+             {
+               new SelectListItem() { Text = "Ordered", Value = "ordered" },
+               new SelectListItem() { Text = "Canceled", Value = "canceled" },
+               new SelectListItem() { Text = "Accepted", Value = "accepted" },
+               new SelectListItem() { Text = "Making", Value = "making" },
+               new SelectListItem() { Text = "Ready", Value = "ready" }
+
+             }, "Type", ViewBag.CurrentTypes as string)
+                    <input type="submit" value="Search" />
+
+
+                </p>
+            }
+        </th>
+
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaidAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Total_money)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Paid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Change)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SellerId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+
+            <td>
+                @Html.ActionLink("Watch", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>

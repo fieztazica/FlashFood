@@ -1,79 +1,117 @@
 ﻿@model IEnumerable<server.Models.Order>
 
+@section Scripts {=
+    @Scripts.Render("~/bundles/jquery")
+}
+
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>@DateTime.Now.ToShortDateString() Orders</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
 
-
 <table class="table">
-    <tr>
-        @*<th>
-            @Html.DisplayNameFor(model => model.User.FirstName)
-        </th>*@
-
-        <th>
-            @Html.DisplayNameFor(model => model.OrderAt)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PaidAt)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Total_money)
-           
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Paid)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Change)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.SellerId)
-          
-        </th>
-      
-
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
+    <thead>
         <tr>
-            @*<td>
-            @Html.DisplayFor(modelItem => item.User.FirstName)
-        </td>*@
-            <td>
-                @Html.DisplayFor(modelItem => item.OrderAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PaidAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Total_money)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Paid)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Change)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SellerId)
-            </td>
-          
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-            </td>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderAt)
+            </th>
+            <th>
+                Total
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Paid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Change)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SellerId)
+            </th>
+            <th>
+                @using (Html.BeginForm("Index", "Orders", FormMethod.Get))
+                {
+                    <p>
+                        @Html.DropDownList("searchString", new List<SelectListItem>
+                 {
+                   new SelectListItem() { Text = "Ordered", Value = "ordered" },
+                   new SelectListItem() { Text = "Canceled", Value = "canceled" },
+                   new SelectListItem() { Text = "Accepted", Value = "accepted" },
+                   new SelectListItem() { Text = "Making", Value = "making" },
+                   new SelectListItem() { Text = "Ready", Value = "ready" }
+
+                 }, "Type", ViewBag.CurrentTypes as string)
+                        <input type="submit" value="Search" />
+                    </p>
+                }
+            </th>
+            <th></th>
         </tr>
+
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.OrderAt.ToString("MM/dd/yyyy, HH:mm:ss tt")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Total_money)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Paid)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Change)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SellerId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+
+                <td>
+                    @Html.ActionLink("Watch", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    function getTable() {
+        var token = sessionStorage.getItem("accessToken");
+        var headers = {};
+        if (token) {
+            headers.Authorization = 'Bearer ' + token;
+        }
+        else
+            clearInterval(tableInterval)
+
+        let params = (new URL(document.location)).searchParams;
+        let searchString = params.get("searchString");
+
+        $.ajax({
+            type: 'GET',
+            url: '/api/Orders/Get?today=true&searchString=' + `${!!searchString ? `${searchString}` : ""}`,
+            headers: headers,
+        }).done(function (data) {
+            console.log(data)
+            let output = data.map(o => "<tr><td>" + `${new Date(o.OrderAt).toLocaleString() || ""}` + "</td><td>" + o.TotalMoney + "</td><td>" + `${o.Paid || ""}` + "</td><td>" + `${o.Change || ""}` + "</td><td>" + o.SellerId + "</td><td>" + o.Status + "</td><td>" + `<a href="/Orders/Edit/${o.Id}">Watch</a> | <a href="/Orders/Delete/${o.Id}">Delete</a>` + "</td></tr>")
+            $(".table tbody").html(output)
+        }).fail(function (e) {
+            var r = jQuery.parseJSON(e.responseText);
+            alert("Message: " + r.Message);
+        });
     }
 
-</table>
+    var tableInterval = setInterval(getTable, 60000)
+</script>

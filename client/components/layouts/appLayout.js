@@ -1,10 +1,14 @@
 import { Box, Container } from '@chakra-ui/react'
+import Head from 'next/head'
 import Footer from '../shared/footer'
 import Header from '../shared/header'
 
-function AppLayout({ children }) {
+function AppLayout({ title, children }) {
     return (
         <>
+            <Head>
+                <title>{title || "FlashFood"}</title>
+            </Head>
             <Box bg={'gray.100'}>
                 <Container as="header" maxWidth="container.xl">
                     <Header />

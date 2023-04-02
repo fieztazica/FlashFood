@@ -4,20 +4,25 @@ const https = require('https');
 
 /**
  * 
- * @param {string} token
+ * @param {import("next").GetServerSidePropsContext} ctx
  * @returns
  */
-export function serverInstace(req) {
+export function authInstance(ctx) {
+    const { req } = ctx
     const instance = axios.create({
-        baseURL: `${process.env.apiBaseUrl}`
+        baseURL: `${process.env.apiBaseUrl}`,
+        withCredentials: true,
+        headers: {
+            Cookie: req.headers.cookie
+        },
+        httpsAgent: new https.Agent({
+            rejectUnauthorized: false
+        })
     });
-
 
     instance.defaults.headers.post["Content-Type"] = 'application/json';
 
     const api = instanceApi(instance);
-
-    api.setTokenToInstance(token);
 
     return api;
 }

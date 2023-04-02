@@ -14,12 +14,6 @@ namespace server.Models
         public static string Dish = "dish";
     }
 
-    public enum MealTypes
-    {
-        dish,
-        drink
-    }
-
     [Table("Meals")]
     public class Meal
     {
