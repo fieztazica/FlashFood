@@ -104,7 +104,7 @@ function Home() {
             {/*</Flex>*/}
             <SimpleGrid
                 p={1}
-                columns={[2, null, 4]}
+                columns={[2, 3, 4]}
                 spacing={5}
             >
                 {items.map((item, index) => <Item key={"meal-" + item["Id"]} obj={item}></Item>)}

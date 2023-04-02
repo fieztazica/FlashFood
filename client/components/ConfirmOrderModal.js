@@ -33,7 +33,7 @@ import { useState } from 'react'
 import { useAppStates } from '../lib/AppContext'
 
 function ConfirmOrderModal({ checkedItems, ...props }) {
-    const { user, cart, api } = useAppStates();
+    const { user, cart, api, action } = useAppStates();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [loading, setLoading] = useState(false);
     const toast = useToast();
@@ -51,6 +51,7 @@ function ConfirmOrderModal({ checkedItems, ...props }) {
             console.log(orderCart)
             setLoading(true)
             await api.createOrder(orderCart);
+            await action.getUserCart()
         } catch (e) {
             console.error(e)
             toast({

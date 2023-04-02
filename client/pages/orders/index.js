@@ -1,13 +1,17 @@
 import AppLayout from '@/components/layouts/appLayout'
-import { Box, Button, Heading, Image, Skeleton, Text, VStack, Card, CardBody, CardHeader, Center, Spinner } from '@chakra-ui/react'
+import { Box, Button, Heading, Image, Skeleton, Text, VStack, Card, CardBody, CardHeader, Center, Spinner, Tabs, TabList, Tab, TabPanels, TabPanel, Select } from '@chakra-ui/react'
 import { useEffect, useState } from 'react';
 import { useAppStates } from '../../lib/AppContext';
 import NextLink from 'next/link';
+
+const statuses = ["ordered", "making", "ready", "canceled", "accepted"]
+const colors = [undefined, "yellow.200", "green.200", "red.200", "orange.200"]
 
 function Orders() {
     const { user, api } = useAppStates();
     const [fetching, setFetching] = useState(false);
     const [orders, setOrders] = useState([]);
+    const [tabIndex, setTabIndex] = useState(0)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -52,9 +56,17 @@ function Orders() {
         );
 
     return (
-        <>
+        <Box minH="70vh">
             <VStack spacing={8} align="stretch" my={5}>
-                {orders.map((order) => (
+                <Tabs display={["none", null, "block"]} onChange={(index) => setTabIndex(index)}>
+                    <TabList>
+                        {statuses.map((status, index) => <Tab key={status} bg={tabIndex == index && colors[index]}>{status}</Tab>)}
+                    </TabList>
+                </Tabs>
+                <Select display={["block", null, "none"]} onChange={(ev) => setTabIndex(ev.target.value)} bg={colors[tabIndex]}>
+                    {statuses.map((status, index) => <option key={status} value={index}>{status}</option>)}
+                </Select>
+                {orders.filter(x => x.Status == statuses[tabIndex]).sort((a, b) =>  Date.parse(b.OrderAt) - Date.parse(a.OrderAt)).map((order) => (
                     <Card
                         key={order.Id}
                         p={4}
@@ -74,7 +86,7 @@ function Orders() {
                     </Card>
                 ))}
             </VStack>
-        </>
+        </Box>
     )
 }
 
