@@ -170,13 +170,16 @@ namespace server.Controllers.api
         public IHttpActionResult Delete(int mealId)
         {
             var UserId = User.Identity.GetUserId();
+            var Meal = _context.Meals.FirstOrDefault(a => a.Id == mealId);
             List<CartItem> Cartitem = _context.CartItems.Where(s => s.UserId == UserId).ToList();
             CartItem DeleteCart = Cartitem.Find(a => a.MealId == mealId);
             if (DeleteCart == null)
             {
                 return BadRequest();
             }
+            Meal.AmountLeft += DeleteCart.Amount;
             _context.CartItems.Remove(DeleteCart);
+            _context.Meals.AddOrUpdate(Meal);
             _context.SaveChanges();
 
             List<CartItemViewModel> lstcart = new List<CartItemViewModel>();
