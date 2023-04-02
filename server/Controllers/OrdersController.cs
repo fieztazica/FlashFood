@@ -34,7 +34,6 @@ namespace server.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Order order = db.Orders.Find(id);
-            Meal meal = db.Meals.Find(id);
             if (order == null)
             {
                 return HttpNotFound();
@@ -75,27 +74,7 @@ namespace server.Controllers
             ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName", order.UserId);
             return View(order);
         }
-        public ActionResult orderItemsDetails(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            var orderItems= db.OrderItems.Find(id);
-            if (orderItems == null)
-            {
-                return HttpNotFound();
-            }
-            return View(orderItems);
-        }
-
-        // GET: Orders/Create
-        public ActionResult Create()
-        {
-            ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName");
-            return View();
-        }
-
+     
         // POST: Orders/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
