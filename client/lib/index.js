@@ -110,14 +110,13 @@ export default function api(instance) {
     }
 
     const createOrder = async (items) => {
-         await instance.post(`${controllers.order}/Create`, {
+        await instance.post(`${controllers.order}/Create`, {
             Carts: [...items]
         });
     }
 
     const cancelOrder = async (id) => {
-        const { data } = await instance.post(`${controllers.order}/UpdateStatus/${id}?status=canceled`);
-        return data;
+        return await instance.put(`${controllers.order}/UpdateStatus/${id}?status=canceled`);
     }
 
     return {

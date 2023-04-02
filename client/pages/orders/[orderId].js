@@ -26,6 +26,8 @@ import {
     Table,
     Spinner,
     HStack,
+    Spacer,
+    useToast,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useAppStates } from '../../lib/AppContext'
@@ -37,24 +39,43 @@ function Order() {
     const [order, setOrder] = useState(null)
     const [loading, setLoading] = useState(false)
     const router = useRouter()
+    const toast = useToast()
+    const [canceling, setCanceling] = useState(false)
 
     useEffect(() => {
-        async function fetchData() {
-            try {
-                setLoading(true)
-                const data = await api.getOrder(router.query.orderId);
-                if (data) setOrder(data)
-            } catch (e) {
-                console.error(e)
-            } finally {
-                setLoading(false)
-            }
-
-        }
         if (user) {
             fetchData()
         }
     }, [user])
+
+    async function fetchData() {
+        try {
+            setLoading(true)
+            const data = await api.getOrder(router.query.orderId);
+            if (data) setOrder(data)
+        } catch (e) {
+            console.error(e)
+        } finally {
+            setLoading(false)
+        }
+
+    }
+
+    async function cancelOrder() {
+        try {
+            setCanceling(true)
+            await api.cancelOrder(order.Id)
+            await fetchData()
+        } catch (e) {
+            toast({
+                status: "error",
+                title: 'There is an error occured!'
+            })
+            console.error(e)
+        } finally {
+            setCanceling(false)
+        }
+    }
 
     if (!api || !user)
         return (
@@ -85,14 +106,27 @@ function Order() {
     return (
         <>
             <Box minH="70vh" py={5}>
-                <HStack mb={2}>
-                    <Button variant="ghost" as={NextLink} href="/orders">Orders</Button>
-                    <Heading >
-                        / Order #{order.Id}
-                    </Heading>
-                </HStack>
+                <Flex justify="space-between">
+                    <HStack mb={2}>
+                        <Button variant="ghost" as={NextLink} href="/orders">Orders</Button>
+                        <Heading >
+                            / Order #{order.Id}
+                        </Heading>
+                    </HStack>
+                    {(order.Status == "ordered" || order.Status == "canceled") &&
+                        <Button
+                            colorScheme="red"
+                            variant="ghost"
+                            isDisabled={order.Status == "canceled"}
+                            isLoading={canceling}
+                            onClick={() => cancelOrder()}
+                        >
+                            {order.Status == "canceled" ? "Canceled" : "Cancel"}
+                        </Button>
+                    }
+                </Flex>
                 <Divider />
-                <Box p={5 }>
+                <Box p={5}>
                     <Text fontWeight="semibold">Total: {order.TotalMoney}</Text>
                     <Text>Status: {order.Status}</Text>
                     {order.Paid && <Text>Paid {order.Paid} at {order.PaidAt}</Text>}

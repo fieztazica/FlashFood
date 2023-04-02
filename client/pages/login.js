@@ -68,7 +68,7 @@ function Login() {
                     <Stack align={'center'}>
                         <Heading fontSize={'4xl'}>Sign in</Heading>
                         <Text fontSize={'lg'} color={'gray.600'}>
-                            to enjoy all of our cool <Link color={'blue.400'}>features</Link> ??
+                            to enjoy all of our cool <Link color={'blue.400'} as={NextLink} href="/">features</Link>?
                         </Text>
                     </Stack>
                     <form
