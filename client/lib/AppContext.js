@@ -64,7 +64,7 @@ export function AppContextProvider({ children }) {
         } catch (e) {
             console.error(e)
             toast({
-                title: "There is an error occured!",
+                title: `${e.response.data.Message}` || "There is an error occured!",
                 status: "error"
             })
         }
@@ -98,7 +98,7 @@ export function AppContextProvider({ children }) {
         } catch (e) {
             console.error(e)
             toast({
-                title: "There is an error occured!",
+                title: `${e.response.data.Message}` || "There is an error occured!",
                 status: "error"
             })
         }

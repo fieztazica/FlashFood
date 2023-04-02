@@ -69,7 +69,7 @@ function Order() {
         } catch (e) {
             toast({
                 status: "error",
-                title: 'There is an error occured!'
+                title: `${e.response.data.Message}` || 'There is an error occured!'
             })
             console.error(e)
         } finally {

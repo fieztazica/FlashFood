@@ -52,16 +52,16 @@ function ConfirmOrderModal({ checkedItems, ...props }) {
             setLoading(true)
             await api.createOrder(orderCart);
             await action.getUserCart()
+            router.push("/orders")
         } catch (e) {
             console.error(e)
             toast({
-                title: "There is an error occured!",
+                title: `${e.response.data.Message}` || "There is an error occured!",
                 status: "error"
             })
         } finally {
             setLoading(false)
             onClose()
-            router.push("/orders")
         }
     }
 

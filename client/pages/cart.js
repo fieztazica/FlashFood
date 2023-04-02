@@ -55,7 +55,12 @@ function Cart() {
         action.setCart(arr => {
             const temp = [...arr]
             const item = temp.find(x => x.MealId == MealId)
-            item.Amount = amount
+
+            if (!!amount && amount > 0)
+                item.Amount = amount
+            else
+                item.Amount = 1
+
             return temp;
         })
     }
@@ -142,7 +147,7 @@ function Cart() {
                                 </Flex>
                                 <HStack maxW={{ base: "full", md: "150px" }}>
                                     <Button
-                                        isDisabled={!checkedItems.includes(item.MealId) || item.Amount <= 0}
+                                        isDisabled={!checkedItems.includes(item.MealId) || item.Amount <= 1}
                                         onClick={() => decAmount(item.MealId)}
                                     >-</Button>
                                     <Input

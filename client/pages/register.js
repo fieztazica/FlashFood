@@ -53,7 +53,7 @@ export default function SignupCard() {
             } catch (e) {
                 console.log(e)
                 toast({
-                    title: 'There is an error occured!',
+                    title: `${e.response.data.Message}` ||  'There is an error occured!',
                     description: `${getReasonPhrase(e.response.status)}`,
                     status: 'error',
                 })
