@@ -16,7 +16,7 @@ namespace server.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Orders
-        public ActionResult Index(string sortOrder,string searchString)
+        public ActionResult Index(string sortOrder, string searchString)
         {
             var orders = from o in db.Orders select o;
             return View(orders.ToList());

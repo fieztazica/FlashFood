@@ -29,7 +29,7 @@ namespace server.Controllers.api
         // GET api/<controller>
         public IHttpActionResult Get()
         {
-            var Order = _context.Orders.ToList();
+            var Order = _context.Orders.OrderByDescending(x => x.OrderAt).ToList();
             if (Order == null || Order.Count == 0)
             {
                 return NotFound();
@@ -120,6 +120,14 @@ namespace server.Controllers.api
             foreach (var t in o.Carts)
             {
                 var meal = _context.Meals.FirstOrDefault(a => a.Id == t.MealId);
+                if (t.Amount <= 0)
+                {
+                    return BadRequest("Khong hop le!");
+                }
+                if (meal.AmountLeft < t.Amount)
+                {
+                    return BadRequest("Khong du so luong cho mon " + meal.Name);
+                }
                 money += t.Amount * meal.Price;
             }
            
