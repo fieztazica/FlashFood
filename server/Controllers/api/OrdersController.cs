@@ -4,6 +4,7 @@ using server.Models;
 using server.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Net;
@@ -27,7 +28,7 @@ namespace server.Controllers.api
         }
         [Authorize(Roles = "Admin, Manager")]
         // GET api/<controller>
-        public IHttpActionResult Get()
+        public IHttpActionResult Get([FromUri] bool? today, string searchString)
         {
             var Order = _context.Orders.OrderByDescending(x => x.OrderAt).ToList();
             if (Order == null || Order.Count == 0)
@@ -39,6 +40,16 @@ namespace server.Controllers.api
             {
                 order.User = _context.Users.FirstOrDefault(a => a.Id == order.UserId);
                 orders.Add(OrderViewModel.FromOrder(order));
+            }
+
+            if (today != null && today == true)
+            {
+                orders = orders.Where(x => x.OrderAt.Date == DateTime.Now.Date).ToList();
+            }
+
+            if (searchString != null && !String.IsNullOrEmpty(searchString))
+            {
+                orders = orders.Where(s => s.Status.Contains(searchString)).ToList();
             }
 
             return Ok(orders);
