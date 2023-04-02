@@ -77,11 +77,6 @@ namespace server.Controllers.api
                 var CartUpdate = _context.CartItems.Where(a => a.UserId == UserId).ToList();
                 cartItem.Amount += model.Amount;
                 _context.CartItems.AddOrUpdate(cartItem);
-                //Update Meal
-                Meal.AmountLeft -= model.Amount;
-                _context.Meals.AddOrUpdate(Meal);
-                _context.SaveChanges();
-
                 foreach (var c in CartUpdate)
                 {
                     c.Meal = _context.Meals.FirstOrDefault(m => m.Id == c.MealId);
@@ -170,16 +165,13 @@ namespace server.Controllers.api
         public IHttpActionResult Delete(int mealId)
         {
             var UserId = User.Identity.GetUserId();
-            var Meal = _context.Meals.FirstOrDefault(a => a.Id == mealId);
             List<CartItem> Cartitem = _context.CartItems.Where(s => s.UserId == UserId).ToList();
             CartItem DeleteCart = Cartitem.Find(a => a.MealId == mealId);
             if (DeleteCart == null)
             {
                 return BadRequest();
             }
-            Meal.AmountLeft += DeleteCart.Amount;
             _context.CartItems.Remove(DeleteCart);
-            _context.Meals.AddOrUpdate(Meal);
             _context.SaveChanges();
 
             List<CartItemViewModel> lstcart = new List<CartItemViewModel>();
