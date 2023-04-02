@@ -16,17 +16,19 @@ import {
     Divider,
     Flex,
     ButtonGroup,
+    AspectRatio,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router';
 import { useAppStates } from '../../lib/AppContext'
-import { publicInstance } from '../../lib/serverInstance'
+import { publicInstance } from '../../lib/instances'
 import NextLink from 'next/link'
 import { useEffect, useState } from 'react';
 
 function Meal({ data }) {
-    const { addToCart, user } = useAppStates();
+    const { action, user } = useAppStates();
     const [redirectUrl, setRedirectUrl] = useState(null)
     const router = useRouter();
+    const { addToCart } = action
 
     useEffect(() => {
         setRedirectUrl(window.location.href)
@@ -36,7 +38,7 @@ function Meal({ data }) {
         <>
             <Box minH="70vh" py={5}>
                 <Flex width="full" flexDirection={['column-reverse', null, "row"]}>
-                    <Image borderRadius='md' boxSize='md' objectFit='cover' src={data["ImageURL"]} alt={`${data["Name"]} image`} width={["full", null, 4 / 10]} />
+                        <Image borderRadius='md' boxSize='md' objectFit='cover' src={data["ImageURL"]} alt={`${data["Name"]} image`} width={["full", null, 4 / 10]} />
                     <Stack width="100%" px={[1, null, 5]} mb={[4, null, 0]} >
                         <Heading fontSize="2xl">
                             {data["Name"]}                        </Heading>
@@ -66,6 +68,11 @@ function Meal({ data }) {
     )
 }
 
+/**
+ * 
+ * @param {import("next").GetServerSidePropsContext} context
+ * @returns
+ */
 export async function getServerSideProps(context) {
     const mealId = context.query["mealId"];
     const publicApi = publicInstance();

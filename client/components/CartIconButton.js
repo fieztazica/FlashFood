@@ -27,7 +27,7 @@ function CartIconButton() {
                                     boxSize={['1rem', null, '1.2rem']}
                                     bg={'purple.300'}
                                     borderWidth={0}
-                                    zIndex={9999}
+                                    zIndex={9}
                                 >
                                     <Text fontSize={['0.6rem', null, '0.8rem']}>
                                         {cart.length}

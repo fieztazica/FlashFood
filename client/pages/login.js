@@ -17,9 +17,10 @@ const initialValues = {
 function Login() {
     const router = useRouter();
     const redirectTo = router.query?.["redirect"]
-    const { api, login, user, getUserInfo } = useAppStates();
+    const { api, action, user } = useAppStates();
     const toast = useToast();
     const [loading, setLoading] = useState(false);
+    const { login } = action
 
     const formik = useFormik({
         initialValues,
@@ -53,6 +54,11 @@ function Login() {
 
     return (
         <>
+            <Head>
+                <title>
+                    Login
+                </title>
+            </Head>
             <Flex
                 minH={'100vh'}
                 align={'center'}

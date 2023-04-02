@@ -11,17 +11,26 @@ using server.Models;
 namespace server.Controllers
 {
     [Authorize(Roles = "Admin, Manager")]
+
     public class MealsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Meals
         [AllowAnonymous]
-        public ActionResult Index()
-        {
-            return View(db.Meals.ToList());
-        }
 
+        public ActionResult Index(string searchString)
+        {
+
+            var meals = from m in db.Meals select m;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                meals = meals.Where(s => s.Type.Contains(searchString));
+            }
+
+            return View(meals.ToList());
+        }
         // GET: Meals/Details/5
         public ActionResult Details(int? id)
         {

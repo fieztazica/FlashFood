@@ -2,6 +2,7 @@ import { useToast } from '@chakra-ui/react';
 import axios from 'axios';
 import { useState, useEffect, createContext, useContext } from 'react'
 import instanceApi, { tokenKey } from '.';
+import Cart from '../pages/cart';
 
 const AppContext = createContext();
 
@@ -9,19 +10,20 @@ export function AppContextProvider({ children }) {
     const toast = useToast();
     const [user, setUser] = useState(null);
     const [cart, setCart] = useState([]);
-    const [instance] = useState(() => axios.create({
+    const [api] = useState(() => instanceApi(axios.create({
         baseURL: `${process.env.apiBaseUrl}`,
-    }));
-    const [api] = useState(() => instanceApi(instance));
+    })));
+
+    if (!api) return;
 
     useEffect(() => {
-        (async () => {
-            api.setTokenToInstance(localStorage.getItem(tokenKey))
-        })()
+        api.setTokenToInstance(localStorage.getItem(tokenKey))
     }, [])
 
     useEffect(() => {
         getUserInfo()
+        getUserCart()
+        console.log(user)
     }, [user])
 
     function getUserInfo() {
@@ -37,26 +39,89 @@ export function AppContextProvider({ children }) {
     function logout() {
         api.logout();
         setUser(null);
+        setCart([]);
     }
 
     async function login({ ...props }) {
-        await api.login({ ...props })
-        getUserInfo()
+        api.login({ ...props }).then(() => getUserInfo())
     }
 
-    function addToCart(item) {
-        setCart((a) => [...a, item]);
-        toast({
-            title: `Added ${item["Name"]} to your cart!`
-        })
+    async function addToCart(item, amount = 1) {
+        try {
+            toast({
+                title: `Adding ${item["Name"]}...`,
+                status: "loading"
+            })
+            const data = await api.addToCart(item, amount)
+            if (data) {
+                setCart(data)
+                const addedItem = data.find(x => x.MealId == item.Id)
+                toast({
+                    title: `Added ${addedItem.MealName}${addedItem.Amount > 1 ? ` (x${addedItem.Amount})` : ""} to your cart!`,
+                    status: "success"
+                })
+            }
+        } catch (e) {
+            console.error(e)
+            toast({
+                title: "There is an error occured!",
+                status: "error"
+            })
+        }
     }
 
-    function removeFromCart(item) {
-        setCart((a) => a.filter(x => x.id != item.id))
+    async function getUserCart() {
+        try {
+            const data = await api.getCart();
+            if (data) {
+                setCart(data);
+            }
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    async function deleteCartItem(item) {
+        try {
+            toast({
+                title: `Deleting ${item["MealName"]}...`,
+                status: "loading"
+            })
+            const data = await api.deleteCartItem(item);
+            if (data) {
+                setCart(data);
+                toast({
+                    title: "Deleted!",
+                    status: "success"
+                })
+            }
+        } catch (e) {
+            console.error(e)
+            toast({
+                title: "There is an error occured!",
+                status: "error"
+            })
+        }
+    }
+
+    const action = {
+        // Auth
+        logout,
+        getUserInfo,
+        login,
+        // Cart
+        addToCart,
+        deleteCartItem,
+        getUserCart,
+        setCart,
+        // Order
     }
 
     let sharedStates = {
-        user, instance, api, addToCart, removeFromCart, cart, logout, getUserInfo, login
+        api,
+        action,
+        cart,
+        user,
     }
 
     return (

@@ -60,13 +60,21 @@ namespace server.Controllers.api
         // GET api/Account/UserInfo
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [Route("UserInfo")]
-        public UserInfoViewModel GetUserInfo()
+        public async Task<UserInfoViewModel>  GetUserInfo()
         {
             ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
 
+            ApplicationUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+
+            List<string> roles = UserManager.GetRoles(User.Identity.GetUserId()).ToList();
+
             return new UserInfoViewModel
             {
-                Email = User.Identity.GetUserName(),
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                UserName = user.UserName,
+                Roles = roles,
                 HasRegistered = externalLogin == null,
                 LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null
             };
@@ -365,7 +373,7 @@ namespace server.Controllers.api
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email ,FirstName = model.FirstName, LastName = model.LastName };
+            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 

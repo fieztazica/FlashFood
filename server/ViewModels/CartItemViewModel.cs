@@ -13,7 +13,7 @@ namespace server.ViewModels
         public int Amount { get; set; }
         public string MealName { get; set; }
         public string MealImageURL { get; set; }
-        public double MealPrice { get; set; }
+        public int MealPrice { get; set; }
 
         public static CartItemViewModel FromCartItem(CartItem cartItem)
         {

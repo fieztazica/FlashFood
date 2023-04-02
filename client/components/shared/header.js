@@ -16,6 +16,8 @@ import {
     Divider,
     Spinner,
     HStack,
+    Text,
+    keyframes,
 } from '@chakra-ui/react'
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons'
 import NextLink from 'next/link'
@@ -26,10 +28,20 @@ import { useRouter } from 'next/router'
 
 const navLinks = [
     {
-        text: 'Orders',
+        text: 'Your Cart',
+        href: '/cart',
+    },
+    {
+        text: 'Your Orders',
         href: '/orders',
     },
 ]
+
+const blinker = keyframes`
+    50% {
+        opacity: 0;
+    }
+`
 
 const StyledNavLink = ({ href, children }) => (
     <NavLink
@@ -46,11 +58,12 @@ const StyledNavLink = ({ href, children }) => (
     </NavLink>
 )
 
-export default function Simple() {
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const { user, logout } = useAppStates();
+function Header() {
     const indicator = useDisclosure();
     const router = useRouter();
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const { user, action } = useAppStates();
+    const { logout } = action;
 
     useEffect(() => {
         const handleStart = (url) => {
@@ -91,7 +104,9 @@ export default function Simple() {
 
                     <HStack as={NextLink} href="/" color={'#333'} fontSize={30}>
                         <Heading>FlashFood</Heading>
-                        <Spinner display={indicator.isOpen ? "block" : "none"} />
+                        {indicator.isOpen ?
+                            <Spinner /> :
+                            <Text animation={`${blinker} 1s linear infinite`}>_</Text>}
                     </HStack>
                     <Flex alignItems={'center'}>
                         <Flex
@@ -119,6 +134,7 @@ export default function Simple() {
                                             bg: useColorModeValue('gray.200', 'gray.700'),
                                         }}>{user.Email}</MenuButton>
                                     <MenuList>
+                                        <MenuItem>Hi, {`${user["FirstName"]}`}!</MenuItem>
                                         {navLinks.map((navLink, i) => (
                                             <NavLink
                                                 key={'navlink-' + i}
@@ -156,7 +172,8 @@ export default function Simple() {
                                 </StyledNavLink>
                             ) : (
                                 <>
-                                    <StyledNavLink href="#">Hi, {user.Email}!</StyledNavLink>
+                                    <StyledNavLink href="#">Hi, {`${user["FirstName"]}`}!</StyledNavLink>
+                                    <StyledNavLink href="/">Shop</StyledNavLink>
                                     {navLinks.map((navLink, i) => (
                                         <StyledNavLink
                                             key={'navlink-' + i}
@@ -182,3 +199,5 @@ export default function Simple() {
         </>
     )
 }
+
+export default Header

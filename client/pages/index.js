@@ -14,6 +14,10 @@ import {
     Input,
     Select,
     Flex,
+    Card,
+    CardBody,
+    Center,
+    Spinner,
 } from '@chakra-ui/react'
 import { useAppStates } from '../lib/AppContext'
 import Item from '../components/Item'
@@ -21,7 +25,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
 function Home() {
-    const { user, addToCart, api } = useAppStates()
+    const { user, action, api } = useAppStates()
     const router = useRouter();
     const [items, setItems] = useState([]);
     const [pageNumber, setPageNumber] = useState(1);
@@ -36,13 +40,21 @@ function Home() {
     }, [pageNumber])
 
     const fetchData = async (page) => {
-        if (!hasMore) return;
+        try {
+            if (!hasMore) return;
+            setFetching(true)
+            const data = await api.getMeals(page);
 
-        const data = await api.getMeals(page);
+            if (data) {
+                setHasMore(data.nextPage)
 
-        setHasMore(data.nextPage)
-
-        setItems([...items, ...data.items])
+                setItems([...items, ...data.items])
+            }
+        } catch (e) {
+            console.error(e)
+        } finally {
+            setFetching(false)
+        }
     }
 
     const onScroll = () => {
@@ -60,10 +72,25 @@ function Home() {
         return () => window.removeEventListener('scroll', onScroll)
     }, [items])
 
-    return (
+    if (!!fetching)
+        return (
+            <Center minH="2xl" w="full" py={5} justifyItems="center">
+                <Spinner />
+            </Center>
+        )
 
-        <Box py={5}
-            minH={"2xl"}>
+    if (!fetching && !items.length)
+        return (
+            <Center minH="2xl" w="full" py={5} justifyItems="center">
+                No items found.
+            </Center>
+        )
+
+    return (
+        <Box
+            py={5}
+            minH={"2xl"}
+        >
             {/*<Flex mb={5} width="full">*/}
             {/*    <Input />*/}
             {/*    <Select placeholder='Type' width="fit-content">*/}
@@ -75,7 +102,6 @@ function Home() {
             {/*        <option value='option2'>Option 2</option>*/}
             {/*    </Select>*/}
             {/*</Flex>*/}
-
             <SimpleGrid
                 p={1}
                 columns={[2, null, 4]}

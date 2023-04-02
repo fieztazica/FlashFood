@@ -40,12 +40,12 @@ namespace server.Controllers.api
         }
         [HttpGet]
         // GET api/<controller>/5
-        public IHttpActionResult GetByCart()
+        public IHttpActionResult GetMine()
         {
             var UserId = User.Identity.GetUserId();
             var Cartitem = _context.CartItems.Where(s => s.UserId == UserId).ToList();
             List<CartItemViewModel> lstcart = new List<CartItemViewModel>();
-            foreach(var c in Cartitem)
+            foreach (var c in Cartitem)
             {
                 c.Meal = _context.Meals.FirstOrDefault(m => m.Id == c.MealId);
                 lstcart.Add(CartItemViewModel.FromCartItem(c));
@@ -69,10 +69,10 @@ namespace server.Controllers.api
             List<CartItemViewModel> lstcart = new List<CartItemViewModel>();
             if (Meal == null && Meal.AmountLeft < model.Amount)
             {
-                return BadRequest();
+                return BadRequest("The meal is not existed");
             }
             var cartItem = _context.CartItems.FirstOrDefault(a => a.MealId == model.MealId && a.UserId == UserId);
-            if ( cartItem != null)
+            if (cartItem != null)
             {
                 var CartUpdate = _context.CartItems.Where(a => a.UserId == UserId).ToList();
                 cartItem.Amount += model.Amount;
@@ -121,7 +121,7 @@ namespace server.Controllers.api
             var Meal = _context.Meals.FirstOrDefault(a => a.Id == model.MealId);
             if (Meal == null && Meal.AmountLeft < model.Amount)
             {
-                return BadRequest();
+                return BadRequest("The meal is not existed");
             }
             var UserId = User.Identity.GetUserId();
             List<CartItem> Cartitem = _context.CartItems.Where(s => s.UserId == UserId).ToList();
@@ -167,11 +167,11 @@ namespace server.Controllers.api
         }
 
         // DELETE api/<controller>/5
-        public IHttpActionResult Delete(DeleteCartItemBindingModel model)
+        public IHttpActionResult Delete(int mealId)
         {
             var UserId = User.Identity.GetUserId();
             List<CartItem> Cartitem = _context.CartItems.Where(s => s.UserId == UserId).ToList();
-            CartItem DeleteCart = Cartitem.Find(a => a.MealId == model.MealId);
+            CartItem DeleteCart = Cartitem.Find(a => a.MealId == mealId);
             if (DeleteCart == null)
             {
                 return BadRequest();

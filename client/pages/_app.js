@@ -30,7 +30,7 @@ export default function App({ Component, pageProps }) {
                 <meta name="robots" content="index, follow" />
                 <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
             </Head>
-            <ChakraProvider theme={theme}>
+            <ChakraProvider theme={theme} toastOptions={{ defaultOptions: { position: 'top' } }}>
                 <AppContextProvider>
                     {getLayout(<Component {...pageProps} />)}
                 </AppContextProvider>
