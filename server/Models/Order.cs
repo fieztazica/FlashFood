@@ -41,6 +41,7 @@ namespace server.Models
 
         public ApplicationUser User { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; }
+    
 
         public Order()
         {
