@@ -18,14 +18,24 @@ namespace server.Controllers
         // GET: Orders
         public ActionResult Index(string searchString)
         {
-            var orders = from o in db.Orders select o;
+            var orders = db.Orders.OrderByDescending(x => x.OrderAt).Where(x => DbFunctions.TruncateTime(x.OrderAt) == DbFunctions.TruncateTime(DateTime.Now)).Select(x => x);
             if (!String.IsNullOrEmpty(searchString))
             {
                 orders = orders.Where(s => s.Status.Contains(searchString));
             }
             return View(orders.ToList());
         }
-      
+
+        public ActionResult List(string searchString)
+        {
+            var orders = db.Orders.OrderByDescending(x => x.OrderAt).Select(x => x);
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                orders = orders.Where(s => s.Status.Contains(searchString));
+            }
+            return View(orders.ToList());
+        }
+
         // GET: Orders/Details/5
         public ActionResult Details(int? id)
         {
@@ -41,7 +51,7 @@ namespace server.Controllers
             return View(order);
         }
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-     
+
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -74,7 +84,7 @@ namespace server.Controllers
             ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName", order.UserId);
             return View(order);
         }
-     
+
         // POST: Orders/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -94,7 +104,7 @@ namespace server.Controllers
         }
 
         // GET: Orders/Edit/5
-       
+
 
         // GET: Orders/Delete/5
         public ActionResult Delete(int? id)

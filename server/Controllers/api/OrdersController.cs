@@ -202,10 +202,25 @@ namespace server.Controllers.api
         public IHttpActionResult UpdateStatus(int id, string status)
         {
             var Order = _context.Orders.FirstOrDefault(o => o.Id == id);
+
             if (Order == null)
             {
                 return NotFound();
             }
+
+            if (User.IsInRole("Customer"))
+            {
+                if (status != "canceled")
+                    return BadRequest("You can only cancel orders");
+
+                if (Order.UserId != User.Identity.GetUserId())
+                    return BadRequest("This order is not yours!");
+            }
+
+            var acceptedStatuses = new List<string> { "ordered", "canceled", "accepted", "making", "ready" };
+            if (!acceptedStatuses.Contains(status))
+                return BadRequest($"Status {status} is not exist!");
+
             Order.Status = status;
             _context.Orders.AddOrUpdate(Order);
             _context.SaveChanges();
