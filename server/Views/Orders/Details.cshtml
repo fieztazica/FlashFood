@@ -1,4 +1,5 @@
-﻿@model server.Models.Order
+﻿
+@model server.Models.Order
 
 @{
     ViewBag.Title = "Details";
@@ -9,14 +10,15 @@
 
 <div>
     <h4>Order</h4>
+    <p>    @Html.ActionLink("Back to List", "Index") </p>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.User.FirstName)
+            @Html.DisplayNameFor(model => model.Id)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.User.FirstName)
+            @Html.DisplayFor(model => model.Id)
         </dd>
 
         <dt>
@@ -34,7 +36,6 @@
         <dd>
             @Html.DisplayFor(model => model.PaidAt)
         </dd>
-
         <dt>
             @Html.DisplayNameFor(model => model.Total_money)
         </dt>
@@ -42,7 +43,6 @@
         <dd>
             @Html.DisplayFor(model => model.Total_money)
         </dd>
-
         <dt>
             @Html.DisplayNameFor(model => model.Paid)
         </dt>
@@ -50,15 +50,13 @@
         <dd>
             @Html.DisplayFor(model => model.Paid)
         </dd>
-
         <dt>
-            @Html.DisplayNameFor(model => model.Change)
+            @Html.DisplayNameFor(model => model.UserId)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Change)
+            @Html.DisplayFor(model => model.UserId)
         </dd>
-
         <dt>
             @Html.DisplayNameFor(model => model.SellerId)
         </dt>
@@ -66,10 +64,28 @@
         <dd>
             @Html.DisplayFor(model => model.SellerId)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+
 
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "Index") |
+    @Html.ActionLink(
+    linkText: "Items",
+    actionName: "Details",
+    controllerName: "OrderItems",
+    routeValues: new
+        {
+        id = Model.Id
+    },
+    htmlAttributes: null
+)
 </p>

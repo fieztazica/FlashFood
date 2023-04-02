@@ -10,118 +10,116 @@ using server.Models;
 
 namespace server.Controllers
 {
-    [Authorize(Roles = "Admin, Manager")]
-
-    public class MealsController : Controller
+    public class OrderItemsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Meals
-        [AllowAnonymous]
-
-        public ActionResult Index(string searchString)
+        // GET: OrderItems
+        public ActionResult Index()
         {
-
-            var meals = from m in db.Meals select m;
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                meals = meals.Where(s => s.Type.Contains(searchString));
-            }
-
-            return View(meals.ToList());
+            var orderItems = db.OrderItems.Include(o => o.Meal).Include(o => o.Order);
+            return View(orderItems.ToList());
         }
-        // GET: Meals/Details/5
+
+        // GET: OrderItems/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Meal meal = db.Meals.Find(id);
-            if (meal == null)
+            var orderItem = db.OrderItems.Where(s =>s.OrderId == id);
+            if (orderItem == null)
             {
                 return HttpNotFound();
             }
-            return View(meal);
+            return View(orderItem);
         }
 
-        // GET: Meals/Create
+        // GET: OrderItems/Create
         public ActionResult Create()
         {
+            ViewBag.MealId = new SelectList(db.Meals, "Id", "MealId");
+            ViewBag.OrderId = new SelectList(db.Orders, "Id", "OrderId");
             return View();
         }
 
-        // POST: Meals/Create
+        // POST: OrderItems/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Meal meal)
+        public ActionResult Create([Bind(Include = "MealId,OrderId,Amount")] OrderItem orderItem)
         {
             if (ModelState.IsValid)
             {
-                db.Meals.Add(meal);
+                db.OrderItems.Add(orderItem);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(meal);
+            ViewBag.MealId = new SelectList(db.Meals, "Id", "MealId", orderItem.MealId);
+            ViewBag.OrderId = new SelectList(db.Orders, "Id", "OrderId", orderItem.OrderId);
+            return View(orderItem);
         }
 
-        // GET: Meals/Edit/5
+        // GET: OrderItems/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Meal meal = db.Meals.Find(id);
-            if (meal == null)
+            OrderItem orderItem = db.OrderItems.Find(id);
+            if (orderItem == null)
             {
                 return HttpNotFound();
             }
-            return View(meal);
+            ViewBag.MealId = new SelectList(db.Meals, "Id", "MealId", orderItem.MealId);
+            ViewBag.OrderId = new SelectList(db.Orders, "Id", "OrderId", orderItem.OrderId);
+            return View(orderItem);
         }
 
-        // POST: Meals/Edit/5
+        // POST: OrderItems/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Meal meal)
+        public ActionResult Edit([Bind(Include = "MealId,OrderId,Amount")] OrderItem orderItem)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(meal).State = EntityState.Modified;
+                db.Entry(orderItem).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(meal);
+            ViewBag.MealId = new SelectList(db.Meals, "Id", "MealId", orderItem.MealId);
+            ViewBag.OrderId = new SelectList(db.Orders, "Id", "OrderId", orderItem.OrderId);
+            return View(orderItem);
         }
 
-        // GET: Meals/Delete/5
+        // GET: OrderItems/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Meal meal = db.Meals.Find(id);
-            if (meal == null)
+            OrderItem orderItem = db.OrderItems.Find(id);
+            if (orderItem == null)
             {
                 return HttpNotFound();
             }
-            return View(meal);
+            return View(orderItem);
         }
 
-        // POST: Meals/Delete/5
+        // POST: OrderItems/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Meal meal = db.Meals.Find(id);
-            db.Meals.Remove(meal);
+            OrderItem orderItem = db.OrderItems.Find(id);
+            db.OrderItems.Remove(orderItem);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -133,15 +131,6 @@ namespace server.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
-        }
-        public string ProcessUpload(HttpPostedFileBase file)
-        {
-            if (file == null)
-            {
-                return "";
-            }
-            file.SaveAs(Server.MapPath("~/Content/images/" + file.FileName));
-            return "/Content/images/" + file.FileName;
         }
     }
 }
