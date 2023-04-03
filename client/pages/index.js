@@ -23,31 +23,28 @@ import { useAppStates } from '../lib/AppContext'
 import Item from '../components/Item'
 import { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 function Home() {
     const { user, action, api } = useAppStates()
-    const router = useRouter();
     const [items, setItems] = useState([]);
     const [pageNumber, setPageNumber] = useState(1);
-    const [pageSize, setPageSize] = useState(20);
-    const [totalCount, setTotalCount] = useState(0);
-    const [totalPages, setTotalPages] = useState(0);
     const [hasMore, setHasMore] = useState(true);
     const [fetching, setFetching] = useState(false);
 
     useEffect(() => {
-        fetchData(pageNumber)
-    }, [pageNumber])
+        fetchData()
+    }, [])
 
-    const fetchData = async (page) => {
+    const fetchData = async () => {
         try {
-            if (!hasMore) return;
+            //if (!hasMore) return;
+            setPageNumber(pageNumber + 1)
             setFetching(true)
-            const data = await api.getMeals(page);
+            const data = await api.getMeals(pageNumber);
 
             if (data) {
                 setHasMore(data.nextPage)
-
                 setItems([...items, ...data.items])
             }
         } catch (e) {
@@ -56,28 +53,6 @@ function Home() {
             setFetching(false)
         }
     }
-
-    const onScroll = () => {
-        const scrollTop = document.documentElement.scrollTop
-        const scrollHeight = document.documentElement.scrollHeight
-        const clientHeight = document.documentElement.clientHeight
-
-        if (scrollTop + clientHeight >= scrollHeight) {
-            setPageNumber(pageNumber + 1)
-        }
-    }
-
-    useEffect(() => {
-        window.addEventListener('scroll', onScroll)
-        return () => window.removeEventListener('scroll', onScroll)
-    }, [items])
-
-    if (!!fetching)
-        return (
-            <Center minH="2xl" w="full" py={5} justifyItems="center">
-                <Spinner />
-            </Center>
-        )
 
     if (!fetching && !items.length)
         return (
@@ -91,25 +66,24 @@ function Home() {
             py={5}
             minH={"2xl"}
         >
-            {/*<Flex mb={5} width="full">*/}
-            {/*    <Input />*/}
-            {/*    <Select placeholder='Type' width="fit-content">*/}
-            {/*        <option value='option1'>Option 1</option>*/}
-            {/*        <option value='option2'>Option 2</option>*/}
-            {/*    </Select>*/}
-            {/*    <Select placeholder='Type' width="fit-content">*/}
-            {/*        <option value='option1'>Option 1</option>*/}
-            {/*        <option value='option2'>Option 2</option>*/}
-            {/*    </Select>*/}
-            {/*</Flex>*/}
-            <SimpleGrid
-                p={1}
-                columns={[2, 3, 4]}
-                spacing={5}
+            <InfiniteScroll
+                dataLength={items.length} //This is important field to render the next data
+                next={() => fetchData()}
+                hasMore={!!hasMore}
+                loader={
+                    <Center display={ !!fetching ? "flex" : "none" } w="full" py={5} justifyItems="center">
+                        <Spinner />
+                    </Center>
+                }
             >
-                {items.map((item, index) => <Item key={"meal-" + item["Id"]} obj={item}></Item>)}
-            </SimpleGrid>
-
+                <SimpleGrid
+                    p={1}
+                    columns={[2, 3, 4]}
+                    spacing={5}
+                >
+                    {items.map((item, index) => <Item key={"meal-" + item["Id"]} obj={item}></Item>)}
+                </SimpleGrid>
+            </InfiniteScroll>
         </Box>
 
     )
