@@ -77,11 +77,6 @@ namespace server.Controllers.api
                 var CartUpdate = _context.CartItems.Where(a => a.UserId == UserId).ToList();
                 cartItem.Amount += model.Amount;
                 _context.CartItems.AddOrUpdate(cartItem);
-                //Update Meal
-                Meal.AmountLeft -= model.Amount;
-                _context.Meals.AddOrUpdate(Meal);
-                _context.SaveChanges();
-
                 foreach (var c in CartUpdate)
                 {
                     c.Meal = _context.Meals.FirstOrDefault(m => m.Id == c.MealId);
@@ -97,9 +92,7 @@ namespace server.Controllers.api
                 Meal = _context.Meals.FirstOrDefault(a => a.Id == model.MealId),
             };
             _context.CartItems.Add(New_cart);
-            //Update Meal
-            Meal.AmountLeft -= model.Amount;
-            _context.Meals.AddOrUpdate(Meal);
+
             _context.SaveChanges();
 
             var CartNow = _context.CartItems.Where(a => a.UserId == UserId).ToList();
@@ -142,17 +135,7 @@ namespace server.Controllers.api
                 }
                 return Ok(lstcart);
             }
-            //xu ly meal
-            if(model.Amount < EditCart.Amount)
-            {
-                Meal.AmountLeft += (EditCart.Amount - model.Amount);
-                _context.Meals.AddOrUpdate(Meal);
-            }
-            else
-            {
-                Meal.AmountLeft += (model.Amount - EditCart.Amount);
-                _context.Meals.AddOrUpdate(Meal);
-            }
+
             EditCart.Amount = model.Amount;
             _context.CartItems.AddOrUpdate(EditCart);
             _context.SaveChanges();

@@ -162,6 +162,7 @@ namespace server.Controllers.api
                     Amount = item.Amount,
                     Meal = _context.Meals.FirstOrDefault(a => a.Id == item.MealId)
                 };
+                var meal = _context.Meals.FirstOrDefault(a => a.Id == item.MealId);
                 _context.OrderItems.Add(orderItem);
                 var CartItem = _context.CartItems.FirstOrDefault(a => a.MealId == item.MealId && a.UserId == UserId);
                 _context.CartItems.Remove(CartItem);
