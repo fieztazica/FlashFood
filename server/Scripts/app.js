@@ -7,24 +7,27 @@
     self.user = ko.observable();
 
     self.registerEmail = ko.observable();
+    self.registerFn = ko.observable();
+    self.registerLn = ko.observable();
     self.registerPassword = ko.observable();
     self.registerPassword2 = ko.observable();
 
     self.loginEmail = ko.observable();
     self.loginPassword = ko.observable();
+    self.loading = ko.observable();
     self.errors = ko.observableArray([]);
 
     function showError(jqXHR) {
 
         self.result(jqXHR.status + ': ' + jqXHR.statusText);
+        self.loading(false)
 
         var response = jqXHR.responseJSON;
         if (response) {
             if (response.Message) self.errors.push(response.Message);
             if (response.ModelState) {
                 var modelState = response.ModelState;
-                for (var prop in modelState)
-                {
+                for (var prop in modelState) {
                     if (modelState.hasOwnProperty(prop)) {
                         var msgArr = modelState[prop]; // expect array here
                         if (msgArr.length) {
@@ -60,11 +63,14 @@
     self.register = function () {
         self.result('');
         self.errors.removeAll();
+        self.loading(true)
 
         var data = {
             Email: self.registerEmail(),
             Password: self.registerPassword(),
-            ConfirmPassword: self.registerPassword2()
+            ConfirmPassword: self.registerPassword2(),
+            FirstName: self.registerFn(),
+            LastName: self.registerLn(),
         };
 
         $.ajax({
@@ -75,12 +81,14 @@
         }).done(function (data) {
             self.result("Done!");
             location.reload();
+            self.loading(false)
         }).fail(showError);
     }
 
     self.login = function () {
         self.result('');
         self.errors.removeAll();
+        self.loading(true)
 
         var loginData = {
             grant_type: 'password',
@@ -97,7 +105,11 @@
             // Cache the access token in session storage.
             sessionStorage.setItem(tokenKey, data.access_token);
             location.reload();
-        }).fail(showError);
+            self.loading(false)
+        }).fail((e) => {
+            showError(e)
+            self.loading(false)
+        });
     }
 
     self.logout = function () {
