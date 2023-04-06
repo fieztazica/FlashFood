@@ -12,6 +12,7 @@ using server.ViewModels;
 
 namespace server.Controllers
 {
+    [Authorize(Roles = "Admin, Manager, Employee")]
     public class OrdersController : Controller
     {
         private readonly ApplicationDbContext db;
